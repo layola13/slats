@@ -1,7 +1,331 @@
 // PORT-MIRROR: crates/tsrs_core/src/tspath/extension.rs
-// UPSTREAM-LINES: 278
-// PORT-STATUS: pending
-// ITEMS: const EXTENSION_TS, const EXTENSION_TSX, const EXTENSION_DTS, const EXTENSION_JS, const EXTENSION_JSX, const EXTENSION_JSON, const EXTENSION_TS_BUILD_INFO, const EXTENSION_MJS, const EXTENSION_MTS, const EXTENSION_DMTS, const EXTENSION_CJS, const EXTENSION_CTS, const EXTENSION_DCTS, static SUPPORTED_DECLARATION_EXTENSIONS, static SUPPORTED_TS_IMPLEMENTATION_EXTENSIONS, static ALL_SUPPORTED_EXTENSIONS, static SUPPORTED_TS_EXTENSIONS, static SUPPORTED_TS_EXTENSIONS_FLAT, static SUPPORTED_JS_EXTENSIONS, static SUPPORTED_JS_EXTENSIONS_FLAT, static ALL_SUPPORTED_EXTENSIONS_WITH_JSON, static SUPPORTED_TS_EXTENSIONS_WITH_JSON, static SUPPORTED_TS_EXTENSIONS_WITH_JSON_FLAT, static EXTENSIONS_NOT_SUPPORTING_EXTENSIONLESS_RESOLUTION, fn extension_is_ts, fn remove_file_extension, fn remove_any_file_extension, fn try_get_extension_from_path, fn remove_extension, fn file_extension_is_one_of, fn try_extract_ts_extension, fn has_ts_file_extension, fn has_implementation_ts_file_extension, fn has_js_file_extension, fn has_json_file_extension, fn is_declaration_file_name, fn extension_is_one_of, fn get_declaration_file_extension, fn get_declaration_emit_extension_for_path, fn change_any_extension, fn change_extension, fn change_full_extension, fn get_possible_original_input_extension_for_extension
+// UPSTREAM-LINES: 279
+// PORT-STATUS: ported
+// ITEMS: extension constants/lists, extension_is_ts, remove_file_extension, remove_any_file_extension,
+//   try_get_extension_from_path, remove_extension, file_extension_is_one_of, try_extract_ts_extension,
+//   has_ts_file_extension, has_implementation_ts_file_extension, has_js_file_extension,
+//   has_json_file_extension, is_declaration_file_name, extension_is_one_of,
+//   get_declaration_file_extension, get_declaration_emit_extension_for_path, change_any_extension,
+//   change_extension, change_full_extension, get_possible_original_input_extension_for_extension
 //
-// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
-// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+// DEV-003: text is bytes (`&Vec<u8>`); Rust's `&'static str` constants become constructor fns returning
+// owned byte vectors, and borrowed return slices are copies. The `""` not-found sentinel is preserved.
+
+@import "../bytesutil.sla"
+@import "path.sla"
+
+fn extension_ts() -> Vec<u8> { return bytes_from_str(&format("{}", ".ts")); }
+fn extension_tsx() -> Vec<u8> { return bytes_from_str(&format("{}", ".tsx")); }
+fn extension_dts() -> Vec<u8> { return bytes_from_str(&format("{}", ".d.ts")); }
+fn extension_js() -> Vec<u8> { return bytes_from_str(&format("{}", ".js")); }
+fn extension_jsx() -> Vec<u8> { return bytes_from_str(&format("{}", ".jsx")); }
+fn extension_json() -> Vec<u8> { return bytes_from_str(&format("{}", ".json")); }
+fn extension_ts_build_info() -> Vec<u8> { return bytes_from_str(&format("{}", ".tsbuildinfo")); }
+fn extension_mjs() -> Vec<u8> { return bytes_from_str(&format("{}", ".mjs")); }
+fn extension_mts() -> Vec<u8> { return bytes_from_str(&format("{}", ".mts")); }
+fn extension_dmts() -> Vec<u8> { return bytes_from_str(&format("{}", ".d.mts")); }
+fn extension_cjs() -> Vec<u8> { return bytes_from_str(&format("{}", ".cjs")); }
+fn extension_cts() -> Vec<u8> { return bytes_from_str(&format("{}", ".cts")); }
+fn extension_dcts() -> Vec<u8> { return bytes_from_str(&format("{}", ".d.cts")); }
+
+fn list_empty() -> Vec<Vec<u8>> {
+    let out: Vec<Vec<u8>> = Vec::new();
+    return out;
+}
+
+fn supported_declaration_extensions() -> Vec<Vec<u8>> {
+    let out = list_empty();
+    out.push(extension_dts());
+    out.push(extension_dcts());
+    out.push(extension_dmts());
+    return out;
+}
+
+fn supported_ts_implementation_extensions() -> Vec<Vec<u8>> {
+    let out = list_empty();
+    out.push(extension_ts());
+    out.push(extension_tsx());
+    out.push(extension_mts());
+    out.push(extension_cts());
+    return out;
+}
+
+fn supported_ts_extensions_for_extract_extension() -> Vec<Vec<u8>> {
+    let out = list_empty();
+    out.push(extension_dts());
+    out.push(extension_dcts());
+    out.push(extension_dmts());
+    out.push(extension_ts());
+    out.push(extension_tsx());
+    out.push(extension_mts());
+    out.push(extension_cts());
+    return out;
+}
+
+fn supported_ts_extensions_flat() -> Vec<Vec<u8>> {
+    let out = list_empty();
+    out.push(extension_ts());
+    out.push(extension_tsx());
+    out.push(extension_dts());
+    out.push(extension_cts());
+    out.push(extension_dcts());
+    out.push(extension_mts());
+    out.push(extension_dmts());
+    return out;
+}
+
+fn supported_js_extensions_flat() -> Vec<Vec<u8>> {
+    let out = list_empty();
+    out.push(extension_js());
+    out.push(extension_jsx());
+    out.push(extension_mjs());
+    out.push(extension_cjs());
+    return out;
+}
+
+fn extensions_to_remove() -> Vec<Vec<u8>> {
+    let out = list_empty();
+    out.push(extension_dts());
+    out.push(extension_dmts());
+    out.push(extension_dcts());
+    out.push(extension_mjs());
+    out.push(extension_mts());
+    out.push(extension_cjs());
+    out.push(extension_cts());
+    out.push(extension_ts());
+    out.push(extension_js());
+    out.push(extension_tsx());
+    out.push(extension_jsx());
+    out.push(extension_json());
+    return out;
+}
+
+fn extension_is_ts(ext: &Vec<u8>) -> bool {
+    if bytes_equal(ext, &extension_ts()) { return true; };
+    if bytes_equal(ext, &extension_tsx()) { return true; };
+    if bytes_equal(ext, &extension_dts()) { return true; };
+    if bytes_equal(ext, &extension_mts()) { return true; };
+    if bytes_equal(ext, &extension_dmts()) { return true; };
+    if bytes_equal(ext, &extension_cts()) { return true; };
+    if bytes_equal(ext, &extension_dcts()) { return true; };
+    if ext.len() >= 7 {
+        if bytes_starts_with(ext, &bytes_from_str(&format("{}", ".d."))) {
+            return bytes_ends_with(ext, &extension_ts());
+        };
+    };
+    return false;
+}
+
+fn remove_file_extension(path: &Vec<u8>) -> Vec<u8> {
+    let exts = extensions_to_remove();
+    let i = 0usize;
+    while i < exts.len() {
+        if bytes_ends_with(path, &exts[i]) {
+            return bytes_copy_range(path, 0, path.len() - exts[i].len());
+        };
+        i = i + 1;
+    }
+    return bytes_copy_range(path, 0, path.len());
+}
+
+fn remove_extension(path: &Vec<u8>, extension: &Vec<u8>) -> Vec<u8> {
+    return bytes_copy_range(path, 0, path.len() - extension.len());
+}
+
+fn remove_any_file_extension(path: &Vec<u8>) -> Vec<u8> {
+    let without_extension = remove_file_extension(path);
+    if without_extension.len() != path.len() { return without_extension; };
+    let extension = get_any_extension_from_path(path, &list_empty(), false);
+    if extension.len() != 0 { return remove_extension(path, &extension); };
+    return bytes_copy_range(path, 0, path.len());
+}
+
+fn try_get_extension_from_path(path: &Vec<u8>) -> Vec<u8> {
+    let exts = extensions_to_remove();
+    let i = 0usize;
+    while i < exts.len() {
+        if file_extension_is(path, &exts[i]) { return exts[i]; };
+        i = i + 1;
+    }
+    return list_empty_item();
+}
+
+fn list_empty_item() -> Vec<u8> {
+    let out: Vec<u8> = Vec::new();
+    return out;
+}
+
+fn file_extension_is_one_of(path: &Vec<u8>, extensions: &Vec<Vec<u8>>) -> bool {
+    let i = 0usize;
+    while i < extensions.len() {
+        if file_extension_is(path, &extensions[i]) { return true; };
+        i = i + 1;
+    }
+    return false;
+}
+
+fn try_extract_ts_extension(file_name: &Vec<u8>) -> Vec<u8> {
+    let exts = supported_ts_extensions_for_extract_extension();
+    let i = 0usize;
+    while i < exts.len() {
+        if file_extension_is(file_name, &exts[i]) { return exts[i]; };
+        i = i + 1;
+    }
+    return list_empty_item();
+}
+
+fn has_ts_file_extension(path: &Vec<u8>) -> bool {
+    return file_extension_is_one_of(path, &supported_ts_extensions_flat());
+}
+
+fn has_implementation_ts_file_extension(path: &Vec<u8>) -> bool {
+    if !file_extension_is_one_of(path, &supported_ts_implementation_extensions()) { return false; };
+    return !is_declaration_file_name(path);
+}
+
+fn has_js_file_extension(path: &Vec<u8>) -> bool {
+    return file_extension_is_one_of(path, &supported_js_extensions_flat());
+}
+
+fn has_json_file_extension(path: &Vec<u8>) -> bool {
+    return file_extension_is(path, &extension_json());
+}
+
+fn is_declaration_file_name(file_name: &Vec<u8>) -> bool {
+    return get_declaration_file_extension(file_name).len() != 0;
+}
+
+fn extension_is_one_of(ext: &Vec<u8>, extensions: &Vec<Vec<u8>>) -> bool {
+    let i = 0usize;
+    while i < extensions.len() {
+        if bytes_equal(ext, &extensions[i]) { return true; };
+        i = i + 1;
+    }
+    return false;
+}
+
+fn get_declaration_file_extension(file_name: &Vec<u8>) -> Vec<u8> {
+    let base = get_base_file_name(file_name);
+    let decl_exts = supported_declaration_extensions();
+    let i = 0usize;
+    while i < decl_exts.len() {
+        if bytes_ends_with(&base, &decl_exts[i]) { return decl_exts[i]; };
+        i = i + 1;
+    }
+    if bytes_ends_with(&base, &extension_ts()) {
+        let (index, found) = bytes_index_of(&base, &bytes_from_str(&format("{}", ".d.")), 0usize);
+        if found { return bytes_copy_range(&base, index as usize, base.len()); };
+    };
+    return list_empty_item();
+}
+
+fn get_declaration_emit_extension_for_path(path: &Vec<u8>) -> Vec<u8> {
+    let mjs_mts = list_empty();
+    mjs_mts.push(extension_mjs());
+    mjs_mts.push(extension_mts());
+    if file_extension_is_one_of(path, &mjs_mts) { return extension_dmts(); };
+    let cjs_cts = list_empty();
+    cjs_cts.push(extension_cjs());
+    cjs_cts.push(extension_cts());
+    if file_extension_is_one_of(path, &cjs_cts) { return extension_dcts(); };
+    let plain = list_empty();
+    plain.push(extension_ts());
+    plain.push(extension_tsx());
+    plain.push(extension_js());
+    plain.push(extension_jsx());
+    if file_extension_is_one_of(path, &plain) { return extension_dts(); };
+    let ext = get_any_extension_from_path(path, &list_empty(), false);
+    if ext.len() != 0 {
+        let out = bytes_from_str(&format("{}", ".d"));
+        let k = 0usize;
+        while k < ext.len() { out.push(ext[k]); k = k + 1; }
+        let tail = bytes_from_str(&format("{}", ".ts"));
+        k = 0usize;
+        while k < tail.len() { out.push(tail[k]); k = k + 1; }
+        return out;
+    };
+    return extension_dts();
+}
+
+fn concat_bytes(a: &Vec<u8>, b: &Vec<u8>) -> Vec<u8> {
+    let out: Vec<u8> = Vec::new();
+    let i = 0usize;
+    while i < a.len() { out.push(a[i]); i = i + 1; }
+    i = 0;
+    while i < b.len() { out.push(b[i]); i = i + 1; }
+    return out;
+}
+
+fn change_any_extension(path: &Vec<u8>, ext: &Vec<u8>, extensions: &Vec<Vec<u8>>, ignore_case: bool) -> Vec<u8> {
+    let pathext = get_any_extension_from_path(path, extensions, ignore_case);
+    if pathext.len() != 0 {
+        let result = bytes_copy_range(path, 0, path.len() - pathext.len());
+        if ext.len() == 0 { return result; };
+        if ext[0] == 46u8 { return concat_bytes(&result, ext); };
+        return concat_bytes(&concat_bytes(&result, &bytes_from_str(&format("{}", "."))), ext);
+    };
+    return bytes_copy_range(path, 0, path.len());
+}
+
+fn change_extension(path: &Vec<u8>, new_extension: &Vec<u8>) -> Vec<u8> {
+    return change_any_extension(path, new_extension, &extensions_to_remove(), false);
+}
+
+fn prefix_dot_if_needed(extension: &Vec<u8>) -> Vec<u8> {
+    if extension.len() != 0 {
+        if extension[0] == 46u8 { return bytes_copy_range(extension, 0, extension.len()); };
+    };
+    return concat_bytes(&bytes_from_str(&format("{}", ".")), extension);
+}
+
+fn change_full_extension(path: &Vec<u8>, new_extension: &Vec<u8>) -> Vec<u8> {
+    let declaration_extension = get_declaration_file_extension(path);
+    if declaration_extension.len() != 0 {
+        let ext = prefix_dot_if_needed(new_extension);
+        let head = bytes_copy_range(path, 0, path.len() - declaration_extension.len());
+        return concat_bytes(&head, &ext);
+    };
+    return change_extension(path, new_extension);
+}
+
+fn append_owned(list: &Vec<Vec<u8>>, item: Vec<u8>) -> void {
+    list.push(item);
+}
+
+fn get_possible_original_input_extension_for_extension(path: &Vec<u8>) -> Vec<Vec<u8>> {
+    let out = list_empty();
+    let dmts_mjs_mts = list_empty();
+    dmts_mjs_mts.push(extension_dmts());
+    dmts_mjs_mts.push(extension_mjs());
+    dmts_mjs_mts.push(extension_mts());
+    if file_extension_is_one_of(path, &dmts_mjs_mts) {
+        out.push(extension_mts());
+        out.push(extension_mjs());
+        return out;
+    };
+    let dcts_cjs_cts = list_empty();
+    dcts_cjs_cts.push(extension_dcts());
+    dcts_cjs_cts.push(extension_cjs());
+    dcts_cjs_cts.push(extension_cts());
+    if file_extension_is_one_of(path, &dcts_cjs_cts) {
+        out.push(extension_cts());
+        out.push(extension_cjs());
+        return out;
+    };
+    let ext = get_declaration_file_extension(path);
+    if ext.len() != 0 {
+        if !bytes_equal(&ext, &extension_dts()) {
+            let inner_start = 3usize;
+            let inner_end = ext.len() - 3;
+            let inner = bytes_copy_range(&ext, inner_start, inner_end);
+            let dotted = concat_bytes(&bytes_from_str(&format("{}", ".")), &inner);
+            out.push(dotted);
+            return out;
+        };
+    };
+    out.push(extension_tsx());
+    out.push(extension_ts());
+    out.push(extension_jsx());
+    out.push(extension_js());
+    return out;
+}

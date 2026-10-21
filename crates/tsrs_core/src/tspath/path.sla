@@ -1,7 +1,334 @@
 // PORT-MIRROR: crates/tsrs_core/src/tspath/path.rs
 // UPSTREAM-LINES: 1425
-// PORT-STATUS: pending
-// ITEMS: struct Path, fn new, fn as_str, const DIRECTORY_SEPARATOR, enum EncodedRootLength, fn len, fn is_url, fn is_rooted_disk_path, fn is_disk_path_root, fn is_dynamic_file_name, fn path_is_absolute, fn has_trailing_directory_separator, fn combine_paths, fn get_path_components, fn is_volume_character, fn get_encoded_root_length, fn get_root_length, fn get_directory_path, fn get_directory_path, fn get_path_from_path_components, fn normalize_slashes, fn resolve_path, fn resolve_tripleslash_reference, fn get_normalized_path_components, fn get_normalized_absolute_path_without_root, fn get_normalized_absolute_path, fn has_relative_path_segment, fn normalize_path, fn get_canonical_file_name, fn trim_file_path_prefix, fn to_file_name_lower_case, fn to_path, fn remove_trailing_directory_separator, fn remove_trailing_directory_separator, fn remove_trailing_directory_separators, fn ensure_trailing_directory_separator, fn ensure_trailing_directory_separator, fn get_path_components_relative_to, fn get_relative_path_from_directory, fn get_relative_path_from_file, fn convert_to_relative_path, fn get_relative_path_to_directory_or_url, fn get_base_file_name, fn get_any_extension_from_path, fn get_longest_extension_from_path, fn path_is_relative, fn ensure_path_is_non_module_name, fn is_external_module_name_relative, struct ComparePathsOptions, fn get_comparer, fn get_equality_comparer, fn compare_paths, fn compare_paths_case_sensitive, fn compare_paths_case_insensitive, fn contains_path, fn contains_path, fn file_extension_is, fn for_each_ancestor_directory_stopping_at_global_cache, fn for_each_ancestor_directory, fn for_each_ancestor_directory, fn has_extension, fn split_volume_path, fn get_common_parents, fn starts_with_directory, fn compare_number_of_directory_separators
+// PORT-STATUS: partial (path string primitives needed by extension.rs; see PORT-SCOPE)
+// PORT-SCOPE: root length/URL detection, slash normalization, trailing separators, directory/base
+//             file name, extension extraction, extension predicates.
+// ITEMS-PORTED: is_any_directory_separator, is_volume_character, get_file_url_volume_separator_end,
+//   get_encoded_root_length, get_root_length, is_url, is_rooted_disk_path, is_disk_path_root,
+//   is_dynamic_file_name, path_is_absolute, has_trailing_directory_separator, normalize_slashes,
+//   remove_trailing_directory_separator(s), ensure_trailing_directory_separator, get_directory_path,
+//   get_base_file_name, get_any_extension_from_path(+worker), get_longest_extension_from_path,
+//   try_get_extension_from_path_with, file_extension_is, has_extension
+// ITEMS-PENDING: Path struct, combine/resolve/normalize/relative/compare paths, ancestor walkers.
 //
-// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
-// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+// Semantic notes:
+// - DEV-003: `&str` is `&Vec<u8>`; Rust borrowed return slices become owned copies, so the string
+//   helpers allocate. Offsets and byte semantics are identical.
+// - LIM-002: `Option<usize>` is `(u32, bool)`; `EncodedRootLength` (Relative | Disk(n) | Url(n)) is the
+//   pair `(n, kind)` with kind 0 = relative, 1 = disk, 2 = URL (LIM-009).
+
+@import "../bytesutil.sla"
+
+fn is_any_directory_separator(char: u8) -> bool {
+    if char == 47u8 { return true; };
+    if char == 92u8 { return true; };
+    return false;
+}
+
+fn is_volume_character(char: u8) -> bool {
+    let lower = char >= 97u8;
+    let upper = char >= 65u8;
+    if lower {
+        if char <= 122u8 { return true; };
+    };
+    if upper {
+        if char <= 90u8 { return true; };
+    };
+    return false;
+}
+
+fn get_file_url_volume_separator_end(url: &Vec<u8>, start: usize) -> (u32, bool) {
+    if url.len() <= start { return (0u32, false); };
+    let ch0 = url[start];
+    if ch0 == 58u8 { return ((start + 1) as u32, true); };
+    if ch0 == 37u8 {
+        if url.len() > start + 2 {
+            if url[start + 1] == 51u8 {
+                let ch2 = url[start + 2];
+                if ch2 == 97u8 { return ((start + 3) as u32, true); };
+                if ch2 == 65u8 { return ((start + 3) as u32, true); };
+            };
+        };
+    };
+    return (0u32, false);
+}
+
+fn empty_bytes() -> Vec<u8> {
+    let out: Vec<u8> = Vec::new();
+    return out;
+}
+
+fn get_encoded_root_length(path: &Vec<u8>) -> (u32, u8) {
+    let ln = path.len();
+    if ln == 0 { return (0u32, 0u8); };
+    let ch0 = path[0];
+
+    if is_any_directory_separator(ch0) {
+        if ln == 1 { return (1u32, 1u8); };
+        if path[1] != ch0 { return (1u32, 1u8); };
+        let i = 2usize;
+        let found = false;
+        let pos = 0usize;
+        while i < ln {
+            if path[i] == ch0 {
+                pos = i;
+                found = true;
+                break;
+            };
+            i = i + 1;
+        }
+        if !found { return (ln as u32, 1u8); };
+        return ((pos + 1) as u32, 1u8);
+    };
+
+    if is_volume_character(ch0) {
+        if ln > 1 {
+            if path[1] == 58u8 {
+                if ln == 2 { return (2u32, 1u8); };
+                let ch2 = path[2];
+                if ch2 == 47u8 { return (3u32, 1u8); };
+                if ch2 == 92u8 { return (3u32, 1u8); };
+            };
+        };
+    };
+
+    if ch0 == 94u8 {
+        if ln > 1 {
+            if path[1] == 47u8 { return (2u32, 1u8); };
+        };
+    };
+
+    let scheme_end = 0usize;
+    let scheme_found = false;
+    let k = 0usize;
+    while k + 2 < ln {
+        if path[k] == 58u8 {
+            if path[k + 1] == 47u8 {
+                if path[k + 2] == 47u8 {
+                    scheme_end = k;
+                    scheme_found = true;
+                    break;
+                };
+            };
+        };
+        k = k + 1;
+    }
+    if scheme_found {
+        let authority_start = scheme_end + 3usize;
+        let slash = 0usize;
+        let has_slash = false;
+        let s = authority_start;
+        while s < ln {
+            if path[s] == 47u8 {
+                slash = s;
+                has_slash = true;
+                break;
+            };
+            s = s + 1;
+        }
+        if has_slash {
+            let authority_end = slash;
+            let scheme = bytes_copy_range(path, 0, scheme_end);
+            let authority = bytes_copy_range(path, authority_start, authority_end);
+            let is_file = bytes_equal(&scheme, &bytes_from_str(&format("{}", "file")));
+            let empty_authority = authority.len() == 0;
+            let localhost = bytes_equal(&authority, &bytes_from_str(&format("{}", "localhost")));
+            if is_file {
+                if empty_authority || localhost {
+                    if ln > authority_end + 2 {
+                        if is_volume_character(path[authority_end + 1]) {
+                            let (vse, vse_ok) = get_file_url_volume_separator_end(path, authority_end + 2);
+                            if vse_ok {
+                                if vse as usize == ln { return (vse, 2u8); };
+                                if path[vse as usize] == 47u8 { return (vse + 1u32, 2u8); };
+                            };
+                        };
+                    };
+                };
+            };
+            return ((authority_end + 1) as u32, 2u8);
+        };
+        return (ln as u32, 2u8);
+    };
+
+    return (0u32, 0u8);
+}
+
+fn get_root_length(path: &Vec<u8>) -> u32 {
+    let (length, _kind) = get_encoded_root_length(path);
+    return length;
+}
+
+fn is_url(path: &Vec<u8>) -> bool {
+    let (_length, kind) = get_encoded_root_length(path);
+    return kind == 2u8;
+}
+
+fn is_rooted_disk_path(path: &Vec<u8>) -> bool {
+    let (_length, kind) = get_encoded_root_length(path);
+    return kind == 1u8;
+}
+
+fn is_disk_path_root(path: &Vec<u8>) -> bool {
+    let (length, kind) = get_encoded_root_length(path);
+    if kind != 1u8 { return false; };
+    return length as usize == path.len();
+}
+
+fn is_dynamic_file_name(file_name: &Vec<u8>) -> bool {
+    if file_name.len() < 2 { return false; };
+    if file_name[0] != 94u8 { return false; };
+    return file_name[1] == 47u8;
+}
+
+fn path_is_absolute(path: &Vec<u8>) -> bool {
+    let (_length, kind) = get_encoded_root_length(path);
+    return kind != 0u8;
+}
+
+fn has_trailing_directory_separator(path: &Vec<u8>) -> bool {
+    if path.len() == 0 { return false; };
+    return is_any_directory_separator(path[path.len() - 1]);
+}
+
+fn normalize_slashes(path: &Vec<u8>) -> Vec<u8> {
+    let out: Vec<u8> = Vec::new();
+    let i = 0usize;
+    while i < path.len() {
+        if path[i] == 92u8 {
+            out.push(47u8);
+        } else {
+            out.push(path[i]);
+        };
+        i = i + 1;
+    }
+    return out;
+}
+
+fn remove_trailing_directory_separator(path: &Vec<u8>) -> Vec<u8> {
+    if has_trailing_directory_separator(path) {
+        return bytes_copy_range(path, 0, path.len() - 1);
+    };
+    return bytes_copy_range(path, 0, path.len());
+}
+
+fn remove_trailing_directory_separators(path: &Vec<u8>) -> Vec<u8> {
+    let current = bytes_copy_range(path, 0, path.len());
+    while has_trailing_directory_separator(&current) {
+        current = remove_trailing_directory_separator(&current);
+    }
+    return current;
+}
+
+fn ensure_trailing_directory_separator(path: &Vec<u8>) -> Vec<u8> {
+    let out = bytes_copy_range(path, 0, path.len());
+    if !has_trailing_directory_separator(path) {
+        out.push(47u8);
+    };
+    return out;
+}
+
+fn get_directory_path(path: &Vec<u8>) -> Vec<u8> {
+    let normalized = normalize_slashes(path);
+    let root_length = get_root_length(&normalized) as usize;
+    if root_length == normalized.len() { return normalized; };
+    let trimmed = remove_trailing_directory_separator(&normalized);
+    let (last, has_last) = bytes_last_index_byte(&trimmed, 47u8);
+    let directory_end = root_length;
+    if has_last {
+        if last as usize > directory_end { directory_end = last as usize; };
+    };
+    return bytes_copy_range(&trimmed, 0, directory_end);
+}
+
+fn get_base_file_name(path: &Vec<u8>) -> Vec<u8> {
+    let normalized = normalize_slashes(path);
+    let root_length = get_root_length(&normalized) as usize;
+    if root_length == normalized.len() { return empty_bytes(); };
+    let trimmed = remove_trailing_directory_separator(&normalized);
+    let root = get_root_length(&trimmed) as usize;
+    let (last, has_last) = bytes_last_index_byte(&trimmed, 47u8);
+    let base_start = root;
+    if has_last {
+        if last as usize + 1 > base_start { base_start = last as usize + 1; };
+    };
+    return bytes_copy_range(&trimmed, base_start, trimmed.len());
+}
+
+fn string_equality_comparer(a: &Vec<u8>, b: &Vec<u8>, ignore_case: bool) -> bool {
+    if !ignore_case { return bytes_equal(a, b); };
+    let lower_a = bytes_ascii_lower(a);
+    let lower_b = bytes_ascii_lower(b);
+    return bytes_equal(&lower_a, &lower_b);
+}
+
+fn strip_leading_dot(extension: &Vec<u8>) -> Vec<u8> {
+    if extension.len() == 0 { return empty_bytes(); };
+    if extension[0] == 46u8 { return bytes_copy_range(extension, 1, extension.len()); };
+    return bytes_copy_range(extension, 0, extension.len());
+}
+
+fn try_get_extension_from_path_with(path: &Vec<u8>, extension: &Vec<u8>, ignore_case: bool) -> Vec<u8> {
+    let without_dot = strip_leading_dot(extension);
+    let len = without_dot.len() + 1;
+    if path.len() >= len {
+        if path[path.len() - len] == 46u8 {
+            let path_extension = bytes_copy_range(path, path.len() - len, path.len());
+            let tail = bytes_copy_range(&path_extension, 1, path_extension.len());
+            if string_equality_comparer(&tail, &without_dot, ignore_case) {
+                return path_extension;
+            };
+        };
+    };
+    return empty_bytes();
+}
+
+fn get_any_extension_from_path_worker(path: &Vec<u8>, extensions: &Vec<Vec<u8>>, ignore_case: bool) -> Vec<u8> {
+    let i = 0usize;
+    while i < extensions.len() {
+        let result = try_get_extension_from_path_with(path, &extensions[i], ignore_case);
+        if result.len() != 0 { return result; };
+        i = i + 1;
+    }
+    return empty_bytes();
+}
+
+fn get_any_extension_from_path(path: &Vec<u8>, extensions: &Vec<Vec<u8>>, ignore_case: bool) -> Vec<u8> {
+    if extensions.len() != 0 {
+        let trimmed = remove_trailing_directory_separator(path);
+        return get_any_extension_from_path_worker(&trimmed, extensions, ignore_case);
+    };
+    let base = get_base_file_name(path);
+    let (index, has_index) = bytes_last_index_byte(&base, 46u8);
+    if !has_index { return empty_bytes(); };
+    return bytes_copy_range(&base, index as usize, base.len());
+}
+
+fn get_longest_extension_from_path(path: &Vec<u8>, extensions: &Vec<Vec<u8>>, ignore_case: bool) -> Vec<u8> {
+    let trimmed = remove_trailing_directory_separator(path);
+    let longest = empty_bytes();
+    let i = 0usize;
+    while i < extensions.len() {
+        if extensions[i].len() > longest.len() {
+            let matched = try_get_extension_from_path_with(&trimmed, &extensions[i], ignore_case);
+            if matched.len() != 0 {
+                longest = matched;
+            } else {
+                bytes_discard(matched);
+            };
+        };
+        i = i + 1;
+    }
+    return longest;
+}
+
+fn file_extension_is(path: &Vec<u8>, extension: &Vec<u8>) -> bool {
+    if path.len() <= extension.len() { return false; };
+    return bytes_ends_with(path, extension);
+}
+
+fn has_extension(file_name: &Vec<u8>) -> bool {
+    let base = get_base_file_name(file_name);
+    let (index, found) = bytes_index_of(&base, &bytes_from_str(&format("{}", ".")), 0usize);
+    return found;
+}

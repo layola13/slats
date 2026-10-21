@@ -1,0 +1,266 @@
+// PORT-MIRROR: crates/tsrs_core/src/tspath/path_test.rs (+ extension.rs has no upstream tests)
+// UPSTREAM-LINES: 961 (ported subset)
+// PORT-STATUS: partial (tests for the ported path primitives and the whole extension module)
+//
+// Byte-vector arguments are built with `lit(&format("{}", "..."))`: `Text` values are move-only and a
+// literal or `format(...)` result is a temporary, so it must be borrowed in place (DEV-009).
+
+@import "../bytesutil.sla"
+@import "path.sla"
+@import "extension.sla"
+
+fn lit(s: &String) -> Vec<u8> {
+    return bytes_from_str(s);
+}
+
+fn expect_bytes(actual: Vec<u8>, expected: Vec<u8>, code: i32) -> void {
+    if !bytes_equal(&actual, &expected) { panic(code); };
+}
+
+fn expect_len(actual: u32, want: u32, code: i32) -> void {
+    if actual != want { panic(code); };
+}
+
+@test "tspath: normalize_slashes"() {
+    expect_bytes(normalize_slashes(&lit(&format("{}", "a"))), lit(&format("{}", "a")), 1);
+    expect_bytes(normalize_slashes(&lit(&format("{}", "a/b"))), lit(&format("{}", "a/b")), 2);
+    expect_bytes(normalize_slashes(&lit(&format("{}", "a\\b"))), lit(&format("{}", "a/b")), 3);
+    expect_bytes(normalize_slashes(&lit(&format("{}", "\\\\server\\path"))), lit(&format("{}", "//server/path")), 4);
+}
+
+@test "tspath: get_root_length"() {
+    let c = 0;
+    expect_len(get_root_length(&lit(&format("{}", "a"))), 0u32, c + 1);
+    expect_len(get_root_length(&lit(&format("{}", "/"))), 1u32, c + 2);
+    expect_len(get_root_length(&lit(&format("{}", "/path"))), 1u32, c + 3);
+    expect_len(get_root_length(&lit(&format("{}", "c:"))), 2u32, c + 4);
+    expect_len(get_root_length(&lit(&format("{}", "c:d"))), 0u32, c + 5);
+    expect_len(get_root_length(&lit(&format("{}", "c:/"))), 3u32, c + 6);
+    expect_len(get_root_length(&lit(&format("{}", "c:\\"))), 3u32, c + 7);
+    expect_len(get_root_length(&lit(&format("{}", "//server"))), 8u32, c + 8);
+    expect_len(get_root_length(&lit(&format("{}", "//server/share"))), 9u32, c + 9);
+    expect_len(get_root_length(&lit(&format("{}", "\\\\server"))), 8u32, c + 10);
+    expect_len(get_root_length(&lit(&format("{}", "\\\\server\\share"))), 9u32, c + 11);
+    expect_len(get_root_length(&lit(&format("{}", "file:///"))), 8u32, c + 12);
+    expect_len(get_root_length(&lit(&format("{}", "file:///path"))), 8u32, c + 13);
+    expect_len(get_root_length(&lit(&format("{}", "file:///c:"))), 10u32, c + 14);
+    expect_len(get_root_length(&lit(&format("{}", "file:///c:d"))), 8u32, c + 15);
+    expect_len(get_root_length(&lit(&format("{}", "file:///c:/path"))), 11u32, c + 16);
+    expect_len(get_root_length(&lit(&format("{}", "file:///c%3a"))), 12u32, c + 17);
+    expect_len(get_root_length(&lit(&format("{}", "file:///c%3ad"))), 8u32, c + 18);
+    expect_len(get_root_length(&lit(&format("{}", "file:///c%3a/path"))), 13u32, c + 19);
+    expect_len(get_root_length(&lit(&format("{}", "file:///c%3A"))), 12u32, c + 20);
+    expect_len(get_root_length(&lit(&format("{}", "file:///c%3Ad"))), 8u32, c + 21);
+    expect_len(get_root_length(&lit(&format("{}", "file:///c%3A/path"))), 13u32, c + 22);
+    expect_len(get_root_length(&lit(&format("{}", "file://localhost"))), 16u32, c + 23);
+    expect_len(get_root_length(&lit(&format("{}", "file://localhost/"))), 17u32, c + 24);
+    expect_len(get_root_length(&lit(&format("{}", "file://localhost/path"))), 17u32, c + 25);
+    expect_len(get_root_length(&lit(&format("{}", "file://localhost/c:"))), 19u32, c + 26);
+    expect_len(get_root_length(&lit(&format("{}", "file://localhost/c:d"))), 17u32, c + 27);
+    expect_len(get_root_length(&lit(&format("{}", "file://localhost/c:/path"))), 20u32, c + 28);
+    expect_len(get_root_length(&lit(&format("{}", "file://localhost/c%3a"))), 21u32, c + 29);
+    expect_len(get_root_length(&lit(&format("{}", "file://localhost/c%3ad"))), 17u32, c + 30);
+    expect_len(get_root_length(&lit(&format("{}", "file://localhost/c%3a/path"))), 22u32, c + 31);
+    expect_len(get_root_length(&lit(&format("{}", "file://localhost/c%3A"))), 21u32, c + 32);
+    expect_len(get_root_length(&lit(&format("{}", "file://localhost/c%3Ad"))), 17u32, c + 33);
+    expect_len(get_root_length(&lit(&format("{}", "file://localhost/c%3A/path"))), 22u32, c + 34);
+    expect_len(get_root_length(&lit(&format("{}", "file://server"))), 13u32, c + 35);
+    expect_len(get_root_length(&lit(&format("{}", "file://server/"))), 14u32, c + 36);
+    expect_len(get_root_length(&lit(&format("{}", "file://server/path"))), 14u32, c + 37);
+    expect_len(get_root_length(&lit(&format("{}", "file://server/c:"))), 14u32, c + 38);
+    expect_len(get_root_length(&lit(&format("{}", "file://server/c:d"))), 14u32, c + 39);
+    expect_len(get_root_length(&lit(&format("{}", "file://server/c:/d"))), 14u32, c + 40);
+    expect_len(get_root_length(&lit(&format("{}", "file://server/c%3a"))), 14u32, c + 41);
+    expect_len(get_root_length(&lit(&format("{}", "file://server/c%3ad"))), 14u32, c + 42);
+    expect_len(get_root_length(&lit(&format("{}", "file://server/c%3a/d"))), 14u32, c + 43);
+    expect_len(get_root_length(&lit(&format("{}", "file://server/c%3A"))), 14u32, c + 44);
+    expect_len(get_root_length(&lit(&format("{}", "file://server/c%3Ad"))), 14u32, c + 45);
+    expect_len(get_root_length(&lit(&format("{}", "file://server/c%3A/d"))), 14u32, c + 46);
+    expect_len(get_root_length(&lit(&format("{}", "http://server"))), 13u32, c + 47);
+    expect_len(get_root_length(&lit(&format("{}", "http://server/path"))), 14u32, c + 48);
+}
+
+@test "tspath: path_is_absolute"() {
+    if !path_is_absolute(&lit(&format("{}", "/path/to/file.ext"))) { panic(1); };
+    if !path_is_absolute(&lit(&format("{}", "c:/path/to/file.ext"))) { panic(2); };
+    if !path_is_absolute(&lit(&format("{}", "file:///path/to/file.ext"))) { panic(3); };
+    if path_is_absolute(&lit(&format("{}", "path/to/file.ext"))) { panic(4); };
+    if path_is_absolute(&lit(&format("{}", "./path/to/file.ext"))) { panic(5); };
+}
+
+@test "tspath: is_url"() {
+    if is_url(&lit(&format("{}", "a"))) { panic(1); };
+    if is_url(&lit(&format("{}", "/"))) { panic(2); };
+    if is_url(&lit(&format("{}", "c:"))) { panic(3); };
+    if is_url(&lit(&format("{}", "c:d"))) { panic(4); };
+    if is_url(&lit(&format("{}", "c:/"))) { panic(5); };
+    if is_url(&lit(&format("{}", "c:\\"))) { panic(6); };
+    if is_url(&lit(&format("{}", "//server"))) { panic(7); };
+    if is_url(&lit(&format("{}", "//server/share"))) { panic(8); };
+    if is_url(&lit(&format("{}", "\\\\server"))) { panic(9); };
+    if is_url(&lit(&format("{}", "\\\\server\\share"))) { panic(10); };
+    if !is_url(&lit(&format("{}", "file:///path"))) { panic(11); };
+    if !is_url(&lit(&format("{}", "file:///c:"))) { panic(12); };
+    if !is_url(&lit(&format("{}", "file:///c:d"))) { panic(13); };
+    if !is_url(&lit(&format("{}", "file:///c:/path"))) { panic(14); };
+    if !is_url(&lit(&format("{}", "file://server"))) { panic(15); };
+    if !is_url(&lit(&format("{}", "file://server/path"))) { panic(16); };
+    if !is_url(&lit(&format("{}", "http://server"))) { panic(17); };
+    if !is_url(&lit(&format("{}", "http://server/path"))) { panic(18); };
+}
+
+@test "tspath: is_rooted_disk_path"() {
+    if is_rooted_disk_path(&lit(&format("{}", "a"))) { panic(1); };
+    if !is_rooted_disk_path(&lit(&format("{}", "/"))) { panic(2); };
+    if !is_rooted_disk_path(&lit(&format("{}", "c:"))) { panic(3); };
+    if is_rooted_disk_path(&lit(&format("{}", "c:d"))) { panic(4); };
+    if !is_rooted_disk_path(&lit(&format("{}", "c:/"))) { panic(5); };
+    if !is_rooted_disk_path(&lit(&format("{}", "c:\\"))) { panic(6); };
+    if !is_rooted_disk_path(&lit(&format("{}", "//server"))) { panic(7); };
+    if !is_rooted_disk_path(&lit(&format("{}", "//server/share"))) { panic(8); };
+    if !is_rooted_disk_path(&lit(&format("{}", "\\\\server"))) { panic(9); };
+    if !is_rooted_disk_path(&lit(&format("{}", "\\\\server\\share"))) { panic(10); };
+    if is_rooted_disk_path(&lit(&format("{}", "file:///path"))) { panic(11); };
+    if is_rooted_disk_path(&lit(&format("{}", "file:///c:"))) { panic(12); };
+    if is_rooted_disk_path(&lit(&format("{}", "file:///c:d"))) { panic(13); };
+    if is_rooted_disk_path(&lit(&format("{}", "file:///c:/path"))) { panic(14); };
+    if is_rooted_disk_path(&lit(&format("{}", "file://server"))) { panic(15); };
+    if is_rooted_disk_path(&lit(&format("{}", "file://server/path"))) { panic(16); };
+    if is_rooted_disk_path(&lit(&format("{}", "http://server"))) { panic(17); };
+    if is_rooted_disk_path(&lit(&format("{}", "http://server/path"))) { panic(18); };
+}
+
+@test "tspath: get_directory_path"() {
+    expect_bytes(get_directory_path(&lit(&format("{}", ""))), lit(&format("{}", "")), 1);
+    expect_bytes(get_directory_path(&lit(&format("{}", "a"))), lit(&format("{}", "")), 2);
+    expect_bytes(get_directory_path(&lit(&format("{}", "a/b"))), lit(&format("{}", "a")), 3);
+    expect_bytes(get_directory_path(&lit(&format("{}", "/"))), lit(&format("{}", "/")), 4);
+    expect_bytes(get_directory_path(&lit(&format("{}", "/a"))), lit(&format("{}", "/")), 5);
+    expect_bytes(get_directory_path(&lit(&format("{}", "/a/"))), lit(&format("{}", "/")), 6);
+    expect_bytes(get_directory_path(&lit(&format("{}", "/a/b"))), lit(&format("{}", "/a")), 7);
+    expect_bytes(get_directory_path(&lit(&format("{}", "/a/b/"))), lit(&format("{}", "/a")), 8);
+    expect_bytes(get_directory_path(&lit(&format("{}", "c:"))), lit(&format("{}", "c:")), 9);
+    expect_bytes(get_directory_path(&lit(&format("{}", "c:d"))), lit(&format("{}", "")), 10);
+    expect_bytes(get_directory_path(&lit(&format("{}", "c:/"))), lit(&format("{}", "c:/")), 11);
+    expect_bytes(get_directory_path(&lit(&format("{}", "c:/path"))), lit(&format("{}", "c:/")), 12);
+    expect_bytes(get_directory_path(&lit(&format("{}", "c:/path/"))), lit(&format("{}", "c:/")), 13);
+    expect_bytes(get_directory_path(&lit(&format("{}", "//server"))), lit(&format("{}", "//server")), 14);
+    expect_bytes(get_directory_path(&lit(&format("{}", "//server/"))), lit(&format("{}", "//server/")), 15);
+    expect_bytes(get_directory_path(&lit(&format("{}", "//server/share"))), lit(&format("{}", "//server/")), 16);
+    expect_bytes(get_directory_path(&lit(&format("{}", "//server/share/"))), lit(&format("{}", "//server/")), 17);
+    expect_bytes(get_directory_path(&lit(&format("{}", "\\\\server"))), lit(&format("{}", "//server")), 18);
+    expect_bytes(get_directory_path(&lit(&format("{}", "\\\\server\\"))), lit(&format("{}", "//server/")), 19);
+    expect_bytes(get_directory_path(&lit(&format("{}", "\\\\server\\share"))), lit(&format("{}", "//server/")), 20);
+    expect_bytes(get_directory_path(&lit(&format("{}", "\\\\server\\share\\"))), lit(&format("{}", "//server/")), 21);
+    expect_bytes(get_directory_path(&lit(&format("{}", "file:///"))), lit(&format("{}", "file:///")), 22);
+    expect_bytes(get_directory_path(&lit(&format("{}", "file:///path"))), lit(&format("{}", "file:///")), 23);
+    expect_bytes(get_directory_path(&lit(&format("{}", "file:///path/"))), lit(&format("{}", "file:///")), 24);
+    expect_bytes(get_directory_path(&lit(&format("{}", "file:///c:"))), lit(&format("{}", "file:///c:")), 25);
+    expect_bytes(get_directory_path(&lit(&format("{}", "file:///c:d"))), lit(&format("{}", "file:///")), 26);
+    expect_bytes(get_directory_path(&lit(&format("{}", "file:///c:/"))), lit(&format("{}", "file:///c:/")), 27);
+    expect_bytes(get_directory_path(&lit(&format("{}", "file:///c:/path"))), lit(&format("{}", "file:///c:/")), 28);
+    expect_bytes(get_directory_path(&lit(&format("{}", "file:///c:/path/"))), lit(&format("{}", "file:///c:/")), 29);
+    expect_bytes(get_directory_path(&lit(&format("{}", "file://server"))), lit(&format("{}", "file://server")), 30);
+    expect_bytes(get_directory_path(&lit(&format("{}", "file://server/"))), lit(&format("{}", "file://server/")), 31);
+    expect_bytes(get_directory_path(&lit(&format("{}", "file://server/path"))), lit(&format("{}", "file://server/")), 32);
+    expect_bytes(get_directory_path(&lit(&format("{}", "file://server/path/"))), lit(&format("{}", "file://server/")), 33);
+    expect_bytes(get_directory_path(&lit(&format("{}", "http://server"))), lit(&format("{}", "http://server")), 34);
+    expect_bytes(get_directory_path(&lit(&format("{}", "http://server/"))), lit(&format("{}", "http://server/")), 35);
+    expect_bytes(get_directory_path(&lit(&format("{}", "http://server/path"))), lit(&format("{}", "http://server/")), 36);
+    expect_bytes(get_directory_path(&lit(&format("{}", "http://server/path/"))), lit(&format("{}", "http://server/")), 37);
+}
+
+@test "tspath: remove_any_file_extension"() {
+    expect_bytes(remove_any_file_extension(&lit(&format("{}", "/src/Component.vue"))), lit(&format("{}", "/src/Component")), 1);
+    expect_bytes(remove_any_file_extension(&lit(&format("{}", "/src/Component.d.ts"))), lit(&format("{}", "/src/Component")), 2);
+    expect_bytes(remove_any_file_extension(&lit(&format("{}", "/src/Component"))), lit(&format("{}", "/src/Component")), 3);
+}
+
+@test "tspath: get_longest_extension_from_path"() {
+    let exts = list_empty();
+    exts.push(lit(&format("{}", ".z")));
+    exts.push(lit(&format("{}", ".y.z")));
+    exts.push(lit(&format("{}", ".other")));
+    expect_bytes(get_longest_extension_from_path(&lit(&format("{}", "/src/Component.y.z")), &exts, false), lit(&format("{}", ".y.z")), 1);
+    expect_bytes(get_longest_extension_from_path(&lit(&format("{}", "/src/Component.z")), &exts, false), lit(&format("{}", ".z")), 2);
+    expect_bytes(get_longest_extension_from_path(&lit(&format("{}", "/src/Component.y.Z")), &exts, false), lit(&format("{}", "")), 3);
+    expect_bytes(get_longest_extension_from_path(&lit(&format("{}", "/src/Component.y.Z")), &exts, true), lit(&format("{}", ".y.Z")), 4);
+}
+
+@test "tspath: untitled path edge cases"() {
+    let c = 0;
+    expect_len(get_root_length(&lit(&format("{}", "^/"))), 2u32, c + 1);
+    expect_len(get_root_length(&lit(&format("{}", "^/untitled/ts-nul-authority/test"))), 2u32, c + 2);
+    expect_len(get_root_length(&lit(&format("{}", "^"))), 0u32, c + 3);
+    expect_len(get_root_length(&lit(&format("{}", "^x"))), 0u32, c + 4);
+    expect_len(get_root_length(&lit(&format("{}", "^^/"))), 0u32, c + 5);
+    expect_len(get_root_length(&lit(&format("{}", "x^/"))), 0u32, c + 6);
+    if !is_rooted_disk_path(&lit(&format("{}", "^/"))) { panic(7); };
+    if is_rooted_disk_path(&lit(&format("{}", "^"))) { panic(8); };
+    if !is_dynamic_file_name(&lit(&format("{}", "^/untitled/a"))) { panic(9); };
+    if is_dynamic_file_name(&lit(&format("{}", "^x"))) { panic(10); };
+}
+
+@test "tspath: extension predicates"() {
+    if !has_ts_file_extension(&lit(&format("{}", "a.ts"))) { panic(1); };
+    if !has_ts_file_extension(&lit(&format("{}", "a.d.ts"))) { panic(2); };
+    if !has_ts_file_extension(&lit(&format("{}", "a.mts"))) { panic(3); };
+    if has_ts_file_extension(&lit(&format("{}", "a.js"))) { panic(4); };
+    if !has_js_file_extension(&lit(&format("{}", "a.jsx"))) { panic(5); };
+    if !has_json_file_extension(&lit(&format("{}", "a.json"))) { panic(6); };
+    if has_json_file_extension(&lit(&format("{}", "a.ts"))) { panic(7); };
+    if !is_declaration_file_name(&lit(&format("{}", "a.d.ts"))) { panic(8); };
+    if is_declaration_file_name(&lit(&format("{}", "a.ts"))) { panic(9); };
+    if !has_implementation_ts_file_extension(&lit(&format("{}", "a.ts"))) { panic(10); };
+    if has_implementation_ts_file_extension(&lit(&format("{}", "a.d.ts"))) { panic(11); };
+    if !extension_is_ts(&lit(&format("{}", ".d.json.ts"))) { panic(12); };
+    if extension_is_ts(&lit(&format("{}", ".js"))) { panic(13); };
+}
+
+@test "tspath: declaration extensions"() {
+    expect_bytes(get_declaration_file_extension(&lit(&format("{}", "a.d.ts"))), lit(&format("{}", ".d.ts")), 1);
+    expect_bytes(get_declaration_file_extension(&lit(&format("{}", "a.d.mts"))), lit(&format("{}", ".d.mts")), 2);
+    expect_bytes(get_declaration_file_extension(&lit(&format("{}", "a.ts"))), lit(&format("{}", "")), 3);
+    expect_bytes(get_declaration_file_extension(&lit(&format("{}", "dir/a.d.css.ts"))), lit(&format("{}", ".d.css.ts")), 4);
+    expect_bytes(get_declaration_emit_extension_for_path(&lit(&format("{}", "a.mts"))), lit(&format("{}", ".d.mts")), 5);
+    expect_bytes(get_declaration_emit_extension_for_path(&lit(&format("{}", "a.cts"))), lit(&format("{}", ".d.cts")), 6);
+    expect_bytes(get_declaration_emit_extension_for_path(&lit(&format("{}", "a.tsx"))), lit(&format("{}", ".d.ts")), 7);
+    expect_bytes(get_declaration_emit_extension_for_path(&lit(&format("{}", "a.css"))), lit(&format("{}", ".d.css.ts")), 8);
+}
+
+@test "tspath: change_extension"() {
+    expect_bytes(change_extension(&lit(&format("{}", "/path/to/file.ts")), &lit(&format("{}", ".js"))), lit(&format("{}", "/path/to/file.js")), 1);
+    // Upstream comment claims "file.d.js", but the code's EXTENSIONS_TO_REMOVE (.d.ts first) strips the
+    // whole declaration suffix, so both Go and Rust produce "file.js"; change_full_extension does too.
+    expect_bytes(change_extension(&lit(&format("{}", "/path/to/file.d.ts")), &lit(&format("{}", ".js"))), lit(&format("{}", "/path/to/file.js")), 2);
+    expect_bytes(change_full_extension(&lit(&format("{}", "file.d.ts")), &lit(&format("{}", ".js"))), lit(&format("{}", "file.js")), 3);
+    expect_bytes(change_full_extension(&lit(&format("{}", "file.ts")), &lit(&format("{}", "js"))), lit(&format("{}", "file.js")), 4);
+    expect_bytes(change_any_extension(&lit(&format("{}", "/path/to/file.ext")), &lit(&format("{}", ".js")), &lit_many_one(&format("{}", ".ext")), false), lit(&format("{}", "/path/to/file.js")), 5);
+}
+
+fn list_item(list: &Vec<Vec<u8>>, index: usize) -> Vec<u8> {
+    let item = list[index];
+    return bytes_copy_range(&item, 0, item.len());
+}
+
+fn lit_many_one(s: &String) -> Vec<Vec<u8>> {
+    let out: Vec<Vec<u8>> = Vec::new();
+    out.push(bytes_from_str(s));
+    return out;
+}
+
+@test "tspath: possible original input extensions"() {
+    let mts = get_possible_original_input_extension_for_extension(&lit(&format("{}", "a.mts")));
+    if mts.len() != 2 { panic(1); };
+    expect_bytes(list_item(&mts, 0), lit(&format("{}", ".mts")), 2);
+    expect_bytes(list_item(&mts, 1), lit(&format("{}", ".mjs")), 3);
+    let plain = get_possible_original_input_extension_for_extension(&lit(&format("{}", "a.js")));
+    if plain.len() != 4 { panic(4); };
+    expect_bytes(list_item(&plain, 0), lit(&format("{}", ".tsx")), 5);
+    expect_bytes(list_item(&plain, 1), lit(&format("{}", ".ts")), 6);
+    expect_bytes(list_item(&plain, 2), lit(&format("{}", ".jsx")), 7);
+    expect_bytes(list_item(&plain, 3), lit(&format("{}", ".js")), 8);
+    let css = get_possible_original_input_extension_for_extension(&lit(&format("{}", "a.d.css.ts")));
+    if css.len() != 1 { panic(9); };
+    expect_bytes(list_item(&css, 0), lit(&format("{}", ".css")), 10);
+}

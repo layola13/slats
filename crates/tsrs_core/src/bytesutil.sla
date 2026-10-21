@@ -1,0 +1,116 @@
+// PORT-MIRROR: (SLA support module; no upstream counterpart)
+// UPSTREAM-LINES: 0
+// PORT-STATUS: ported
+// ITEMS: fn bytes_equal, bytes_starts_with, bytes_ends_with, bytes_index_of, bytes_last_index_byte, bytes_copy_range, bytes_from_str, bytes_ascii_lower
+//
+// DEV-003: Rust `&str` text is carried as `&Vec<u8>` in the port. These are the shared byte helpers used
+// by the `tspath`, `pattern`, `textchange` and `stringeq` ports. Rust's borrowed sub-slices become copies
+// (`bytes_copy_range`), since SLA values are owned and move-only.
+
+fn bytes_equal(a: &Vec<u8>, b: &Vec<u8>) -> bool {
+    if a.len() != b.len() { return false; };
+    let i = 0usize;
+    while i < a.len() {
+        if a[i] != b[i] { return false; };
+        i = i + 1;
+    }
+    return true;
+}
+
+fn bytes_starts_with(a: &Vec<u8>, prefix: &Vec<u8>) -> bool {
+    if a.len() < prefix.len() { return false; };
+    let i = 0usize;
+    while i < prefix.len() {
+        if a[i] != prefix[i] { return false; };
+        i = i + 1;
+    }
+    return true;
+}
+
+fn bytes_ends_with(a: &Vec<u8>, suffix: &Vec<u8>) -> bool {
+    if a.len() < suffix.len() { return false; };
+    let offset = a.len() - suffix.len();
+    let i = 0usize;
+    while i < suffix.len() {
+        if a[offset + i] != suffix[i] { return false; };
+        i = i + 1;
+    }
+    return true;
+}
+
+fn bytes_index_of(hay: &Vec<u8>, needle: &Vec<u8>, from: usize) -> (u32, bool) {
+    if needle.len() == 0 { return (from as u32, true); };
+    if hay.len() < needle.len() { return (0u32, false); };
+    let i = from;
+    while i + needle.len() <= hay.len() {
+        let j = 0usize;
+        let ok = true;
+        while j < needle.len() {
+            if hay[i + j] != needle[j] {
+                ok = false;
+                break;
+            };
+            j = j + 1;
+        }
+        if ok { return (i as u32, true); };
+        i = i + 1;
+    }
+    return (0u32, false);
+}
+
+fn bytes_last_index_byte(a: &Vec<u8>, b: u8) -> (u32, bool) {
+    if a.len() == 0 { return (0u32, false); };
+    let i = a.len() - 1;
+    while true {
+        if a[i] == b { return (i as u32, true); };
+        if i == 0 { break; };
+        i = i - 1;
+    }
+    return (0u32, false);
+}
+
+fn bytes_copy_range(a: &Vec<u8>, start: usize, end: usize) -> Vec<u8> {
+    let out: Vec<u8> = Vec::new();
+    let i = start;
+    while i < end {
+        out.push(a[i]);
+        i = i + 1;
+    }
+    return out;
+}
+
+// Test/DOC helper: turns a Rust-`String` value into the byte vector the port uses.
+fn bytes_from_str(s: &String) -> Vec<u8> {
+    let b = s.bytes();
+    let out: Vec<u8> = Vec::new();
+    let i = 0usize;
+    while i < b.len() {
+        out.push(b[i]);
+        i = i + 1;
+    }
+    return out;
+}
+
+// Consumes an owned byte vector on paths that do not store it, keeping verifier phi states uniform.
+fn bytes_discard(v: Vec<u8>) -> void {
+    let n = v.len();
+    if n == 4294967295u32 { panic(0); };
+}
+
+fn bytes_ascii_lower(s: &Vec<u8>) -> Vec<u8> {
+    let out: Vec<u8> = Vec::new();
+    let i = 0usize;
+    while i < s.len() {
+        let c = s[i];
+        if c >= 65u8 {
+            if c <= 90u8 {
+                out.push(c + 32u8);
+                i = i + 1;
+                continue;
+            };
+        };
+        out.push(c);
+        i = i + 1;
+    }
+    return out;
+}

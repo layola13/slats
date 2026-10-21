@@ -31,6 +31,7 @@ recorded here.
 | DEV-007 | `version_major_minor` dot-scan | constants + `major_minor_of` reference | `VERSION` is compile-time; a non-void fn cannot `panic` in SLA, so the helper returns `[]` for invalid input. |
 | DEV-008 | `a == b` on `String` | `string_eq(&a, &b)` (`stringeq.sla`) | SLA `==` compares buffer identity, not contents (two equal formatted strings compare unequal). |
 | DEV-009 | by-value `String` parameters | bind the argument to a local first | Passing a temporary (e.g. a string literal or `format(...)` result) moves a stack allocation and traps `StackEscape`. |
+| DEV-010 | assignment to an outer local inside a nested `if` | compute with a helper fn and bind once | A Vec reassigned inside a nested block keeps its old value after the block (observed as a silent wrong result), so the port avoids conditional reassignment. |
 
 ## Backend quirks
 
@@ -41,3 +42,6 @@ recorded here.
 - `sla build` writes `<file>.sa`; `sa build-exe <file>.sa -o <bin>` produces the executable.
   `sla build-exe` still fails on `Vec::push`.
 - A statement-position `if` chain must be followed by `;`; a `while` block must not be.
+- `String ==` compares buffer identity; use `string_eq` (DEV-008). `s.bytes()` is safe when bound to a
+  local first (DEV-003).
+- Reassigning a `Vec` local inside a nested `if` does not always take effect (DEV-010).

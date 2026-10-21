@@ -11,6 +11,8 @@
 // - LIM-001: `find_best_pattern_match` takes `&Vec<Pattern>` directly (SLA has no closures), preserving
 //   the prefix-length tie-break and the "exact resets the longest prefix" rule.
 
+@import "bytesutil.sla"
+
 @derive(Copy)
 struct PatternKind { tag: u8, star: u32 }
 
@@ -100,16 +102,6 @@ impl Pattern {
         }
         return out;
     }
-}
-
-fn bytes_equal(a: &Vec<u8>, b: &Vec<u8>) -> bool {
-    if a.len() != b.len() { return false; };
-    let i = 0usize;
-    while i < a.len() {
-        if a[i] != b[i] { return false; };
-        i = i + 1;
-    }
-    return true;
 }
 
 fn find_best_pattern_match(values: &Vec<Pattern>, candidate: &Vec<u8>) -> (Pattern, bool) {
