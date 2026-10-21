@@ -9,6 +9,7 @@
 //   u32::MAX-1 bound is enforced by `SourcePos::new` the same way.
 // - Rust `Option<u32>` returns trap the SLA backend (LIM-002), so they are returned as `(u32, bool)`.
 
+@derive(Copy)
 struct SourcePos { offset: u32 }
 
 impl SourcePos {
@@ -22,40 +23,41 @@ impl SourcePos {
     }
 }
 
-enum TextPos { Synthetic, Source(u32) }
+// Rust `enum TextPos { Synthetic, Source(SourcePos) }`. SLA enums are move-only (LIM-009), so this
+// fieldless-payload enum is a @derive(Copy) struct: the variant tag is `synthetic` and the payload is
+// `offset`. Matching becomes explicit `if`s; the two-variant semantics are preserved.
+@derive(Copy)
+struct TextPos { synthetic: bool, offset: u32 }
+
+// Rust: TextPos::source(offset) associated const fn. SLA resolves `Enum::lowercase(...)` as an enum
+// variant path (LIM-008), so the constructor is a free function.
+fn text_pos_source(offset: u32) -> TextPos {
+    return TextPos { synthetic: false, offset: offset };
+}
+
+fn text_pos_synthetic() -> TextPos {
+    return TextPos { synthetic: true, offset: 0u32 };
+}
 
 impl TextPos {
-    fn source(offset: u32) -> TextPos {
-        return TextPos::Source(offset);
-    }
-
     // Rust: fn source_offset(self) -> Option<u32>  ->  (offset, is_source)
     fn source_offset(self) -> (u32, bool) {
-        match self {
-            TextPos::Synthetic => { return (0u32, false); }
-            TextPos::Source(v) => { return (v, true); }
-        }
+        if self.synthetic { return (0u32, false); };
+        return (self.offset, true);
     }
 
     fn expect_source(self, message: String) -> u32 {
-        match self {
-            TextPos::Synthetic => { return 0u32; }
-            TextPos::Source(v) => { return v; }
-        }
+        if self.synthetic { return 0u32; };
+        return self.offset;
     }
 
     fn is_synthetic(self) -> bool {
-        match self {
-            TextPos::Synthetic => { return true; }
-            TextPos::Source(v) => { return false; }
-        }
+        return self.synthetic;
     }
 
     fn offset_by(self, offset: u32) -> TextPos {
-        match self {
-            TextPos::Synthetic => { return TextPos::Synthetic; }
-            TextPos::Source(v) => { return TextPos::source(v + offset); }
-        }
+        if self.synthetic { return text_pos_synthetic(); };
+        return text_pos_source(self.offset + offset);
     }
 }
 
@@ -67,11 +69,12 @@ fn text_pos_eq(a: TextPos, b: TextPos) -> bool {
     return av == bv;
 }
 
+@derive(Copy)
 struct TextRange { start: TextPos, end_pos: TextPos }
 
 impl TextRange {
     fn new(pos: u32, end: u32) -> TextRange {
-        return TextRange { start: TextPos::source(pos), end_pos: TextPos::source(end) };
+        return TextRange { start: text_pos_source(pos), end_pos: text_pos_source(end) };
     }
 
     fn from_text_pos(pos: TextPos, end: TextPos) -> TextRange {
@@ -79,7 +82,7 @@ impl TextRange {
     }
 
     fn synthetic() -> TextRange {
-        return TextRange { start: TextPos::Synthetic, end_pos: TextPos::Synthetic };
+        return TextRange { start: text_pos_synthetic(), end_pos: text_pos_synthetic() };
     }
 
     fn pos(self) -> TextPos {

@@ -1,0 +1,66 @@
+diff --git a/src/verifier.zig b/src/verifier.zig
+index 6ac99340..938aa5c3 100644
+--- a/src/verifier.zig
++++ b/src/verifier.zig
+@@ -891,6 +891,8 @@ fn mergeJoinMask(left: u16, right: u16) ?u16 {
+         return untracked_mask;
+     }
+ 
++    if (borrowRewriteCompatible(left, right)) return maskOf(.active);
++
+     const merged = left & right;
+     const core_mask = maskOf(.active) | maskOf(.locked_read) | maskOf(.locked_mut) | maskOf(.consumed) | maskOf(.untracked) | maskOf(.fallible) | maskOf(.immutable) | maskOf(.interior_ptr);
+     if ((merged & core_mask) == 0) return null;
+@@ -1016,6 +1018,23 @@ fn snapshotMaskAt(snapshot: *const LabelSnapshot, reg: u32) u16 {
+     return change.state orelse 0;
+ }
+ 
++// The legal "update via move" pattern (`%v = call @f(^%v, ...)`, used by the stdlib
++// VEC_PUSH macro) lets a function reassign a borrowed `&param`. At a loop head the
++// entry snapshot still carries the parameter's borrow bits
++// (Active|Locked_Read|BorrowView) while the back edge carries the reassigned Active
++// value. The value was replaced, so the borrow is dead: treat the two as compatible
++// and merge to Active instead of reporting a false PhiStateConflict.
++fn borrowRewriteCompatible(lhs: u16, rhs: u16) bool {
++    const active_mask = maskOf(.active);
++    if (lhs == rhs) return true;
++    if (lhs != active_mask and rhs != active_mask) return false;
++    const other = if (lhs == active_mask) rhs else lhs;
++    const borrow_bits = maskOf(.locked_read) | maskOf(.locked_mut) | maskOf(.borrow_view) | maskOf(.ffi_borrow);
++    if ((other & active_mask) == 0) return false;
++    if ((other & borrow_bits) == 0) return false;
++    return (other & ~(active_mask | borrow_bits)) == 0;
++}
++
+ fn snapshotStatesCompatible(snapshot: *const LabelSnapshot, state: []const u16) bool {
+     const active_mask: u16 = 0x01;      // maskOf(.active)
+     const untracked_mask: u16 = 0x40;   // maskOf(.untracked)
+@@ -1037,6 +1056,10 @@ fn snapshotStatesCompatible(snapshot: *const LabelSnapshot, state: []const u16)
+         const borrow_active_mask: u16 = 0x01 | 0x10; // active | borrow_view
+         if ((snap_mask == 0 and mask == borrow_active_mask) or (mask == 0 and snap_mask == borrow_active_mask)) continue;
+ 
++        // PATCH: Allow Active ↔ borrowed-parameter state that was rewritten by the
++        // legal `%v = call @f(^%v, ...)` update-via-move pattern at loop back edges.
++        if (borrowRewriteCompatible(snap_mask, mask)) continue;
++
+         // PATCH: Allow Active (0x01) ↔ Untracked (0x40)
+         if (snap_mask == active_mask and mask == untracked_mask) continue;
+         if (mask == active_mask and snap_mask == untracked_mask) continue;
+@@ -1075,6 +1098,9 @@ fn snapshotFirstMismatch(snapshot: *const LabelSnapshot, state: []const u16, sym
+         const borrow_active_mask = maskOf(.active) | maskOf(.borrow_view);
+         if ((snap_mask == 0 and mask == borrow_active_mask) or (mask == 0 and snap_mask == borrow_active_mask)) continue;
+ 
++        // PATCH: update-via-move rewrite (see borrowRewriteCompatible).
++        if (borrowRewriteCompatible(snap_mask, mask)) continue;
++
+         // PATCH: Allow Active ↔ Untracked
+         const untracked_mask = maskOf(.untracked);
+         if ((snap_mask == active_mask and mask == untracked_mask) or (mask == active_mask and snap_mask == untracked_mask)) continue;
+@@ -3956,6 +3982,7 @@ fn verifyBody(
+                                 };
+                                 state[idx] = ret_state;
+                                 flags[idx] = 0;
++
+                             }
+                         }
+                     }

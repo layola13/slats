@@ -2,3 +2,5 @@ target/
 *.sa
 *.sab
 *.bin
+.sa_cache/
+.sla-cache/

@@ -8,6 +8,7 @@
 // SLA has no `#[test]` attribute or slices, so tests are `@test "name"() { }` blocks and segment lists are
 // built with the `segs1..segs4` helpers. Rust's `assert_eq!` becomes `if got != want { panic(code) }`.
 
+@import "../../tsrs_core/src/text.sla"
 @import "spanmap.sla"
 
 fn seeds1(a: Segment) -> Vec<Segment> {
@@ -71,7 +72,7 @@ fn bytes5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
     let (got, fid) = virtual_to_original_span(&m, tr(2u32, 5u32));
     if range_pos(got) != 102u32 { panic(1); };
     if range_end(got) != 105u32 { panic(2); };
-    if !fidelity_eq(fid, Fidelity::Exact) { panic(3); };
+    if !fidelity_eq(fid, fidelity_exact()) { panic(3); };
 }
 
 // spanmap_test.go:40
@@ -80,7 +81,7 @@ fn bytes5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
     let (got, fid) = virtual_to_original_span(&m, tr(3u32, 14u32));
     if range_pos(got) != 60u32 { panic(1); };
     if range_end(got) != 71u32 { panic(2); };
-    if !fidelity_eq(fid, Fidelity::Atom) { panic(3); };
+    if !fidelity_eq(fid, fidelity_atom()) { panic(3); };
 }
 
 // spanmap_test.go:53
@@ -89,7 +90,7 @@ fn bytes5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
     let (got, fid) = virtual_to_original_span(&m, tr(3u32, 6u32));
     if range_pos(got) != 10u32 { panic(1); };
     if range_end(got) != 11u32 { panic(2); };
-    if !fidelity_eq(fid, Fidelity::Atom) { panic(3); };
+    if !fidelity_eq(fid, fidelity_atom()) { panic(3); };
     let (alias, ok) = alias_for_virtual_span(&m, tr(3u32, 6u32));
     if ok == false { panic(4); };
     if !segment_eq(alias, segment(3u32, 6u32, 10u32, 11u32, Kind::alias(), Feature::all())) { panic(5); };
@@ -104,7 +105,7 @@ fn bytes5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
     let (got, fid) = virtual_to_original_span(&m, tr(12u32, 15u32));
     if range_pos(got) != 110u32 { panic(1); };
     if range_end(got) != 110u32 { panic(2); };
-    if !fidelity_eq(fid, Fidelity::None_) { panic(3); };
+    if !fidelity_eq(fid, fidelity_none()) { panic(3); };
 }
 
 // spanmap_test.go:109
@@ -113,7 +114,7 @@ fn bytes5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
     let (got, fid) = virtual_to_original_span(&m, tr(4u32, 4u32));
     if range_pos(got) != 104u32 { panic(1); };
     if range_end(got) != 104u32 { panic(2); };
-    if !fidelity_eq(fid, Fidelity::Exact) { panic(3); };
+    if !fidelity_eq(fid, fidelity_exact()) { panic(3); };
 }
 
 // spanmap_test.go:120
@@ -125,7 +126,7 @@ fn bytes5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
     let (got, fid) = virtual_to_original_span(&m, tr(8u32, 12u32));
     if range_pos(got) != 108u32 { panic(1); };
     if range_end(got) != 122u32 { panic(2); };
-    if !fidelity_eq(fid, Fidelity::Approximate) { panic(3); };
+    if !fidelity_eq(fid, fidelity_approximate()) { panic(3); };
 }
 
 // spanmap_test.go:142
@@ -135,11 +136,11 @@ fn bytes5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
         segment(20u32, 30u32, 200u32, 210u32, Kind::verbatim(), Feature::all()),
     ));
     let (p, f1) = virtual_to_original_position(&m, 4u32);
-    if p != 104u32 || !fidelity_eq(f1, Fidelity::Exact) { panic(1); };
+    if p != 104u32 || !fidelity_eq(f1, fidelity_exact()) { panic(1); };
     let (g, f2) = virtual_to_original_position(&m, 12u32);
-    if g != 110u32 || !fidelity_eq(f2, Fidelity::None_) { panic(2); };
+    if g != 110u32 || !fidelity_eq(f2, fidelity_none()) { panic(2); };
     let (h, f3) = virtual_to_original_position(&m, 20u32);
-    if h != 200u32 || !fidelity_eq(f3, Fidelity::Exact) { panic(3); };
+    if h != 200u32 || !fidelity_eq(f3, fidelity_exact()) { panic(3); };
 }
 
 // spanmap_test.go:191
@@ -166,7 +167,7 @@ fn bytes5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
     let (b, fb) = virtual_to_original_span(&m, tr(20u32, 20u32));
     if range_pos(a) != 120u32 || range_end(a) != 120u32 { panic(1); };
     if range_pos(b) != 130u32 || range_end(b) != 130u32 { panic(2); };
-    if !fidelity_eq(fa, Fidelity::Exact) || !fidelity_eq(fb, Fidelity::Exact) { panic(3); };
+    if !fidelity_eq(fa, fidelity_exact()) || !fidelity_eq(fb, fidelity_exact()) { panic(3); };
 }
 
 // spanmap_test.go:243
@@ -175,7 +176,7 @@ fn bytes5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
     let got = original_to_virtual_spans(&m, tr(102u32, 105u32), Feature::all());
     if len(&got) != 1 { panic(1); };
     if range_pos(got[0].span) != 2u32 || range_end(got[0].span) != 5u32 { panic(2); };
-    if !fidelity_eq(got[0].fidelity, Fidelity::Exact) { panic(3); };
+    if !fidelity_eq(got[0].fidelity, fidelity_exact()) { panic(3); };
 }
 
 // spanmap_test.go:292
@@ -184,7 +185,7 @@ fn bytes5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
     let got = original_to_virtual_positions(&m, 104u32, Feature::all());
     if len(&got) != 1 { panic(1); };
     if got[0].position != 4u32 { panic(2); };
-    if !fidelity_eq(got[0].fidelity, Fidelity::Exact) { panic(3); };
+    if !fidelity_eq(got[0].fidelity, fidelity_exact()) { panic(3); };
 }
 
 // spanmap_test.go:366
@@ -212,9 +213,9 @@ fn bytes5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
     if len(&renamed) != 1 { panic(3); };
     if renamed[0].position != 12u32 { panic(4); };
     let (_, f1) = virtual_to_original_span_for_feature(&m, tr(0u32, 5u32), Feature::rename());
-    if !fidelity_eq(f1, Fidelity::None_) { panic(5); };
+    if !fidelity_eq(f1, fidelity_none()) { panic(5); };
     let (_, f2) = virtual_to_original_span_for_feature(&m, tr(0u32, 5u32), Feature::hover());
-    if !fidelity_eq(f2, Fidelity::Exact) { panic(6); };
+    if !fidelity_eq(f2, fidelity_exact()) { panic(6); };
 }
 
 // spanmap_test.go:559
@@ -256,7 +257,7 @@ fn bytes5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
     let mismatch = new(&seeds1(segment(0u32, 3u32, 0u32, 3u32, Kind::verbatim(), Feature::none())));
     let (err2, bad2) = validate(&mismatch, &virtual_, &original);
     if bad2 == false { panic(2); };
-    if !error_kind_eq(err2.kind, MappingErrorKind::VerbatimMismatch) { panic(3); };
+    if !error_kind_eq(err2.kind, mapping_error_kind_verbatim_mismatch()) { panic(3); };
 
     let overlap = new(&seeds2(
         segment(0u32, 2u32, 0u32, 2u32, Kind::atom(), Feature::none()),
@@ -264,20 +265,20 @@ fn bytes5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
     ));
     let (err3, bad3) = validate(&overlap, &virtual_, &original);
     if bad3 == false { panic(4); };
-    if !error_kind_eq(err3.kind, MappingErrorKind::Overlap) { panic(5); };
+    if !error_kind_eq(err3.kind, mapping_error_kind_overlap()) { panic(5); };
 
     let oob = new(&seeds1(segment(0u32, 3u32, 3u32, 9u32, Kind::atom(), Feature::none())));
     let (err4, bad4) = validate(&oob, &virtual_, &original);
     if bad4 == false { panic(6); };
-    if !error_kind_eq(err4.kind, MappingErrorKind::OutOfBounds) { panic(7); };
+    if !error_kind_eq(err4.kind, mapping_error_kind_out_of_bounds()) { panic(7); };
 
     let bad_kind = new(&seeds1(segment(0u32, 3u32, 1u32, 4u32, kind_from_code(9i32), Feature::none())));
     let (err5, bad5) = validate(&bad_kind, &virtual_, &original);
     if bad5 == false { panic(8); };
-    if !error_kind_eq(err5.kind, MappingErrorKind::Kind_) { panic(9); };
+    if !error_kind_eq(err5.kind, mapping_error_kind_kind()) { panic(9); };
 
     let bad_feature = new(&seeds1(segment(0u32, 3u32, 1u32, 4u32, Kind::atom(), feature_from_bits(1048576u32))));
     let (err6, bad6) = validate(&bad_feature, &virtual_, &original);
     if bad6 == false { panic(10); };
-    if !error_kind_eq(err6.kind, MappingErrorKind::Feature) { panic(11); };
+    if !error_kind_eq(err6.kind, mapping_error_kind_feature()) { panic(11); };
 }

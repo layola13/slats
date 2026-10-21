@@ -20,13 +20,14 @@
 // - LIM-001: SLA has one call namespace, so Rust's same-named nil-receiver free functions take a `_of`
 //   suffix. The methods keep their Rust names.
 // - Rust identifiers that collide with SLA keywords/builtins are suffixed with `_`:
-//   `Fidelity::None` -> `Fidelity::None_`, `MappingErrorKind::Kind` -> `MappingErrorKind::Kind_`.
+//   `Fidelity::None` -> `fidelity_none()`, `MappingErrorKind::Kind` -> `mapping_error_kind_kind()`.
 
 @import "../../tsrs_core/src/text.sla"
 @import "../../tsrs_core/src/goslices.sla"
 
 // Kind describes how positions inside a segment relate the virtual span to the original span.
 // spanmap.go:22 (Go `type Kind int32`: a decoded span map can carry any int32, which Validate reports.)
+@derive(Copy)
 struct Kind { code: i32 }
 
 impl Kind {
@@ -45,6 +46,7 @@ fn kind_from_code(code: i32) -> Kind { return Kind { code: code }; }
 
 // Feature selects which language-service operations may use a segment.
 // spanmap.go:41
+@derive(Copy)
 struct Feature { mask: u32 }
 
 impl Feature {
@@ -80,31 +82,33 @@ fn feature_from_bits(bits: u32) -> Feature { return Feature { mask: bits }; }
 
 // Fidelity describes how faithfully a mapped span reflects the original.
 // spanmap.go:71
-enum Fidelity { Exact, Atom, Approximate, None_ }
+// Rust `enum Fidelity` is fieldless and Copy. SLA enums are move-only (LIM-009), so the discriminant
+// becomes a Copy struct with the same four values and the same predicates.
+@derive(Copy)
+struct Fidelity { code: u32 }
+
+fn fidelity_exact() -> Fidelity { return Fidelity { code: 0u32 }; }
+fn fidelity_atom() -> Fidelity { return Fidelity { code: 1u32 }; }
+fn fidelity_approximate() -> Fidelity { return Fidelity { code: 2u32 }; }
+fn fidelity_none() -> Fidelity { return Fidelity { code: 3u32 }; }
 
 impl Fidelity {
     // spanmap.go:86
-    fn is_exact(self) -> bool { return fidelity_eq(self, Fidelity::Exact); }
+    fn is_exact(self) -> bool { return self.code == 0u32; }
     // spanmap.go:92
-    fn is_single_segment(self) -> bool {
-        return fidelity_eq(self, Fidelity::Exact) || fidelity_eq(self, Fidelity::Atom);
-    }
+    fn is_single_segment(self) -> bool { return self.code == 0u32 || self.code == 1u32; }
     // spanmap.go:98
-    fn is_none(self) -> bool { return fidelity_eq(self, Fidelity::None_); }
+    fn is_none(self) -> bool { return self.code == 3u32; }
 }
 
 fn fidelity_eq(a: Fidelity, b: Fidelity) -> bool {
-    match a {
-        Fidelity::Exact => { match b { Fidelity::Exact => { return true; } Fidelity::Atom => { return false; } Fidelity::Approximate => { return false; } Fidelity::None_ => { return false; } } }
-        Fidelity::Atom => { match b { Fidelity::Exact => { return false; } Fidelity::Atom => { return true; } Fidelity::Approximate => { return false; } Fidelity::None_ => { return false; } } }
-        Fidelity::Approximate => { match b { Fidelity::Exact => { return false; } Fidelity::Atom => { return false; } Fidelity::Approximate => { return true; } Fidelity::None_ => { return false; } } }
-        Fidelity::None_ => { match b { Fidelity::Exact => { return false; } Fidelity::Atom => { return false; } Fidelity::Approximate => { return false; } Fidelity::None_ => { return true; } } }
-    }
+    return a.code == b.code;
 }
 
 // Segment maps the half-open virtual range [VirtualStart, VirtualEnd) to the half-open original range
 // [OriginalStart, OriginalEnd). Features controls language-service participation.
 // spanmap.go:105
+@derive(Copy)
 struct Segment {
     virtual_start: u32,
     virtual_end: u32,
@@ -175,6 +179,7 @@ fn has_feature(seg: Segment, feature: Feature) -> bool { return feature_intersec
 
 // MappedPosition is one virtual projection of an original position and its mapping fidelity.
 // spanmap.go:115
+@derive(Copy)
 struct MappedPosition { position: u32, fidelity: Fidelity }
 
 fn mapped_position_eq(a: MappedPosition, b: MappedPosition) -> bool {
@@ -183,16 +188,31 @@ fn mapped_position_eq(a: MappedPosition, b: MappedPosition) -> bool {
 
 // MappedSpan is one virtual projection of an original range and its mapping fidelity.
 // spanmap.go:121
+@derive(Copy)
 struct MappedSpan { span: TextRange, fidelity: Fidelity }
 
 // SegIndex is Rust's `(Option<usize>, bool)` from segment_index_at: the containing segment (or the one
 // immediately before a gap), whether the index exists, and whether pos is inside the segment.
+@derive(Copy)
 struct SegIndex { index: u32, has_index: bool, inside: bool }
 
 // spanmap.go:140
-enum MappingErrorKind { Overlap, OutOfBounds, VerbatimMismatch, Kind_, Feature }
+// Rust `enum MappingErrorKind`. Copy struct variant tag (LIM-009); codes match the Rust discriminants.
+@derive(Copy)
+struct MappingErrorKind { code: u32 }
+
+fn mapping_error_kind_overlap() -> MappingErrorKind { return MappingErrorKind { code: 0u32 }; }
+fn mapping_error_kind_out_of_bounds() -> MappingErrorKind { return MappingErrorKind { code: 1u32 }; }
+fn mapping_error_kind_verbatim_mismatch() -> MappingErrorKind { return MappingErrorKind { code: 2u32 }; }
+fn mapping_error_kind_kind() -> MappingErrorKind { return MappingErrorKind { code: 3u32 }; }
+fn mapping_error_kind_feature() -> MappingErrorKind { return MappingErrorKind { code: 4u32 }; }
+
+fn error_kind_eq(a: MappingErrorKind, b: MappingErrorKind) -> bool {
+    return a.code == b.code;
+}
 
 // spanmap.go:159
+@derive(Copy)
 struct MappingError { kind: MappingErrorKind, virtual_pos: u32, original_pos: u32 }
 
 fn mapping_error(kind: MappingErrorKind, virtual_pos: u32, original_pos: u32) -> MappingError {
@@ -201,49 +221,36 @@ fn mapping_error(kind: MappingErrorKind, virtual_pos: u32, original_pos: u32) ->
 
 // spanmap.go:166
 fn mapping_error_message(self: MappingError) -> String {
-    match self.kind {
-        MappingErrorKind::Overlap => {
-            return format(
-                "content mapper position mappings overlap or are out of order near virtual offset {}",
-                self.virtual_pos,
-            );
-        }
-        MappingErrorKind::OutOfBounds => {
-            return format(
-                "content mapper position mapping points outside the original content at original offset {}",
-                self.original_pos,
-            );
-        }
-        MappingErrorKind::VerbatimMismatch => {
-            return format(
-                "content mapper verbatim mapping does not match the original content at virtual offset {}, original offset {}",
-                self.virtual_pos,
-                self.original_pos,
-            );
-        }
-        MappingErrorKind::Kind_ => {
-            return format(
-                "content mapper position mapping has an invalid kind at virtual offset {}",
-                self.virtual_pos,
-            );
-        }
-        MappingErrorKind::Feature => {
-            return format(
-                "content mapper position mappings have invalid features near original offset {}",
-                self.original_pos,
-            );
-        }
-    }
-}
-
-fn error_kind_eq(a: MappingErrorKind, b: MappingErrorKind) -> bool {
-    match a {
-        MappingErrorKind::Overlap => { match b { MappingErrorKind::Overlap => { return true; } MappingErrorKind::OutOfBounds => { return false; } MappingErrorKind::VerbatimMismatch => { return false; } MappingErrorKind::Kind_ => { return false; } MappingErrorKind::Feature => { return false; } } }
-        MappingErrorKind::OutOfBounds => { match b { MappingErrorKind::Overlap => { return false; } MappingErrorKind::OutOfBounds => { return true; } MappingErrorKind::VerbatimMismatch => { return false; } MappingErrorKind::Kind_ => { return false; } MappingErrorKind::Feature => { return false; } } }
-        MappingErrorKind::VerbatimMismatch => { match b { MappingErrorKind::Overlap => { return false; } MappingErrorKind::OutOfBounds => { return false; } MappingErrorKind::VerbatimMismatch => { return true; } MappingErrorKind::Kind_ => { return false; } MappingErrorKind::Feature => { return false; } } }
-        MappingErrorKind::Kind_ => { match b { MappingErrorKind::Overlap => { return false; } MappingErrorKind::OutOfBounds => { return false; } MappingErrorKind::VerbatimMismatch => { return false; } MappingErrorKind::Kind_ => { return true; } MappingErrorKind::Feature => { return false; } } }
-        MappingErrorKind::Feature => { match b { MappingErrorKind::Overlap => { return false; } MappingErrorKind::OutOfBounds => { return false; } MappingErrorKind::VerbatimMismatch => { return false; } MappingErrorKind::Kind_ => { return false; } MappingErrorKind::Feature => { return true; } } }
-    }
+    let k = self.kind;
+    if k.code == 0u32 {
+        return format(
+            "content mapper position mappings overlap or are out of order near virtual offset {}",
+            self.virtual_pos,
+        );
+    };
+    if k.code == 1u32 {
+        return format(
+            "content mapper position mapping points outside the original content at original offset {}",
+            self.original_pos,
+        );
+    };
+    if k.code == 2u32 {
+        return format(
+            "content mapper verbatim mapping does not match the original content at virtual offset {}, original offset {}",
+            self.virtual_pos,
+            self.original_pos,
+        );
+    };
+    if k.code == 3u32 {
+        return format(
+            "content mapper position mapping has an invalid kind at virtual offset {}",
+            self.virtual_pos,
+        );
+    };
+    return format(
+        "content mapper position mappings have invalid features near original offset {}",
+        self.original_pos,
+    );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -483,35 +490,35 @@ fn validate(m: &SpanMap, virtual_: &Vec<u8>, original: &Vec<u8>) -> (MappingErro
             || s.virtual_end < s.virtual_start
             || s.virtual_end > virtual_len
         {
-            return (mapping_error(MappingErrorKind::Overlap, s.virtual_start, 0u32), true);
+            return (mapping_error(mapping_error_kind_overlap(), s.virtual_start, 0u32), true);
         };
         previous_virtual_end = s.virtual_end;
         if s.original_end < s.original_start || s.original_end > orig_len {
-            return (mapping_error(MappingErrorKind::OutOfBounds, s.virtual_start, s.original_end), true);
+            return (mapping_error(mapping_error_kind_out_of_bounds(), s.virtual_start, s.original_end), true);
         };
         if !(is_verbatim(s) || is_atom(s) || is_alias(s)) {
-            return (mapping_error(MappingErrorKind::Kind_, s.virtual_start, s.original_start), true);
+            return (mapping_error(mapping_error_kind_kind(), s.virtual_start, s.original_start), true);
         };
         if is_verbatim(s) {
             if s.virtual_end - s.virtual_start != s.original_end - s.original_start {
-                return (mapping_error(MappingErrorKind::VerbatimMismatch, s.virtual_start, s.original_start), true);
+                return (mapping_error(mapping_error_kind_verbatim_mismatch(), s.virtual_start, s.original_start), true);
             };
             let j = 0u32;
             while j < s.virtual_end - s.virtual_start {
                 let vb = virtual_[(s.virtual_start + j) as usize];
                 let ob = original[(s.original_start + j) as usize];
                 if vb != ob {
-                    return (mapping_error(MappingErrorKind::VerbatimMismatch, s.virtual_start, s.original_start), true);
+                    return (mapping_error(mapping_error_kind_verbatim_mismatch(), s.virtual_start, s.original_start), true);
                 };
                 j = j + 1;
             }
         };
         if (feature_bits(s.features) & 4293918720u32) != 0 {
-            return (mapping_error(MappingErrorKind::Feature, s.virtual_start, s.original_start), true);
+            return (mapping_error(mapping_error_kind_feature(), s.virtual_start, s.original_start), true);
         };
         i = i + 1;
     }
-    return (mapping_error(MappingErrorKind::Overlap, 0u32, 0u32), false);
+    return (mapping_error(mapping_error_kind_overlap(), 0u32, 0u32), false);
 }
 
 // spanmap.go:222
@@ -596,16 +603,16 @@ fn virtual_to_original_span(m: &SpanMap, r: TextRange) -> (TextRange, Fidelity) 
                     orig_start_in,
                     seg.original_end,
                 );
-                return (new_text_range(orig_start_in, orig_end_in), Fidelity::Exact);
+                return (new_text_range(orig_start_in, orig_end_in), fidelity_exact());
             };
-            return (new_text_range(seg.original_start, seg.original_end), Fidelity::Atom);
+            return (new_text_range(seg.original_start, seg.original_end), fidelity_atom());
         };
         let pos = insertion_point(m, start_idx);
-        return (new_text_range(pos, pos), Fidelity::None_);
+        return (new_text_range(pos, pos), fidelity_none());
     };
     let orig_start = map_low(m, virtual_start, start_idx);
     let orig_end = umax(map_high(m, virtual_end, end_idx), orig_start);
-    return (new_text_range(orig_start, orig_end), Fidelity::Approximate);
+    return (new_text_range(orig_start, orig_end), fidelity_approximate());
 }
 
 // spanmap.go:287
@@ -643,27 +650,27 @@ fn virtual_span_supports_feature(m: &SpanMap, r: TextRange, feature: Feature) ->
 fn virtual_to_original_span_for_feature(m: &SpanMap, r: TextRange, feature: Feature) -> (TextRange, Fidelity) {
     let (mapped, fidelity) = virtual_to_original_span(m, r);
     if virtual_span_supports_feature(m, r, feature) { return (mapped, fidelity); };
-    return (mapped, Fidelity::None_);
+    return (mapped, fidelity_none());
 }
 
 // spanmap.go:313
 fn virtual_to_original_position(m: &SpanMap, pos: u32) -> (u32, Fidelity) {
     let idx = segment_index_at(m, pos);
-    if idx.inside == false { return (insertion_point(m, idx), Fidelity::None_); };
+    if idx.inside == false { return (insertion_point(m, idx), fidelity_none()); };
     let seg = m.segments[idx.index as usize];
     if is_verbatim(seg) {
         return (
             clamp_u32(seg.original_start + (pos - seg.virtual_start), seg.original_start, seg.original_end),
-            Fidelity::Exact,
+            fidelity_exact(),
         );
     };
-    return (seg.original_start, Fidelity::Atom);
+    return (seg.original_start, fidelity_atom());
 }
 
 // spanmap.go:330
 fn virtual_to_original_position_exact(m: &SpanMap, pos: u32) -> (u32, bool) {
     let (mapped, fidelity) = virtual_to_original_position(m, pos);
-    if !fidelity_eq(fidelity, Fidelity::Exact) { return (mapped, false); };
+    if !fidelity_eq(fidelity, fidelity_exact()) { return (mapped, false); };
     let idx = segment_index_at(m, pos);
     if idx.has_index == false || idx.inside == false { return (mapped, false); };
     if !is_verbatim(m.segments[idx.index as usize]) { return (mapped, false); };
@@ -683,8 +690,11 @@ fn virtual_to_original_position_exact(m: &SpanMap, pos: u32) -> (u32, bool) {
 fn virtual_to_original_position_for_feature(m: &SpanMap, pos: u32, feature: Feature) -> (u32, Fidelity) {
     let (mapped, fidelity) = virtual_to_original_position(m, pos);
     let idx = segment_index_at(m, pos);
-    if idx.inside == false || !supports_feature(m.segments[idx.index as usize], feature) {
-        return (mapped, Fidelity::None_);
+    if idx.inside == false {
+        return (mapped, fidelity_none());
+    };
+    if !supports_feature(m.segments[idx.index as usize], feature) {
+        return (mapped, fidelity_none());
     };
     return (mapped, fidelity);
 }
@@ -761,7 +771,8 @@ fn segment_groups_at_original_position(ix: &OriginalIndex, pos: u32) -> Vec<Segm
         let first = found[i];
         group.push(first);
         i = i + 1;
-        while i < len(&found) && same_original_range(first, found[i]) {
+        while i < len(&found) {
+            if !same_original_range(first, found[i]) { break; };
             group.push(found[i]);
             i = i + 1;
         }
@@ -793,12 +804,12 @@ fn original_to_virtual_positions(m: &SpanMap, pos: u32, feature: Feature) -> Vec
                         seg.virtual_start,
                         seg.virtual_end,
                     ),
-                    fidelity: Fidelity::Exact,
+                    fidelity: fidelity_exact(),
                 }
             } else if group.at_end {
-                MappedPosition { position: seg.virtual_end, fidelity: Fidelity::Atom }
+                MappedPosition { position: seg.virtual_end, fidelity: fidelity_atom() }
             } else {
-                MappedPosition { position: seg.virtual_start, fidelity: Fidelity::Atom }
+                MappedPosition { position: seg.virtual_start, fidelity: fidelity_atom() }
             };
             let duplicate = false;
             let r = 0;
@@ -912,11 +923,11 @@ fn original_to_virtual_spans_in_segments(
                 virtual_start,
                 seg.virtual_end,
             );
-            results.push(MappedSpan { span: new_text_range(virtual_start, virtual_end), fidelity: Fidelity::Exact });
+            results.push(MappedSpan { span: new_text_range(virtual_start, virtual_end), fidelity: fidelity_exact() });
         } else {
             results.push(MappedSpan {
                 span: new_text_range(seg.virtual_start, seg.virtual_end),
-                fidelity: Fidelity::Atom,
+                fidelity: fidelity_atom(),
             });
         };
     }
@@ -969,13 +980,15 @@ fn original_to_virtual_spans(m: &SpanMap, r: TextRange, feature: Feature) -> Vec
             k = k + 1;
             continue;
         };
-        if k + 1 < len(&starts) as u32 && starts[(k + 1) as usize] <= ends[end_index as usize] {
-            k = k + 1;
-            continue;
+        if k + 1 < len(&starts) as u32 {
+            if starts[(k + 1) as usize] <= ends[end_index as usize] {
+                k = k + 1;
+                continue;
+            };
         };
         cross.push(MappedSpan {
             span: new_text_range(virtual_start, ends[end_index as usize]),
-            fidelity: Fidelity::Approximate,
+            fidelity: fidelity_approximate(),
         });
         k = k + 1;
     }
@@ -1001,12 +1014,12 @@ fn original_to_virtual_intersecting_spans(m: &SpanMap, r: TextRange, feature: Fe
                     seg.virtual_start + (start - seg.original_start),
                     seg.virtual_start + (end - seg.original_start),
                 ),
-                fidelity: Fidelity::Exact,
+                fidelity: fidelity_exact(),
             });
         } else {
             results.push(MappedSpan {
                 span: new_text_range(seg.virtual_start, seg.virtual_end),
-                fidelity: Fidelity::Atom,
+                fidelity: fidelity_atom(),
             });
         };
     }
@@ -1077,7 +1090,10 @@ fn is_space(b: u8) -> bool {
 
 fn skip_space(data: &Vec<u8>, pos_: u32) -> u32 {
     let i = pos_;
-    while i < len(data) as u32 && is_space(data[i as usize]) { i = i + 1; }
+    while i < len(data) as u32 {
+        if !is_space(data[i as usize]) { break; };
+        i = i + 1;
+    }
     return i;
 }
 
@@ -1094,7 +1110,9 @@ fn parse_int32(data: &Vec<u8>, pos_: u32) -> (i32, u32, bool) {
     let i = skip_space(data, pos_);
     let negative = false;
     let at = i;
-    if at < len(data) as u32 && data[at as usize] == 45u8 { negative = true; at = at + 1; };
+    if at < len(data) as u32 {
+        if data[at as usize] == 45u8 { negative = true; at = at + 1; };
+    };
     if at >= len(data) as u32 { return (0i32, at, false); };
     let b = data[at as usize];
     if b < 48u8 || b > 57u8 { return (0i32, at, false); };
@@ -1132,7 +1150,9 @@ fn parse_tuple(data: &Vec<u8>, pos_: u32) -> (Vec<i32>, u32, bool) {
     let out: Vec<i32> = Vec::new();
     let cur = i + 1u32;
     let probe = skip_space(data, cur);
-    if probe < len(data) as u32 && data[probe as usize] == 93u8 { return (out, probe + 1u32, true); };
+    if probe < len(data) as u32 {
+        if data[probe as usize] == 93u8 { return (out, probe + 1u32, true); };
+    };
     let at = cur;
     let done = false;
     while done == false {
@@ -1166,7 +1186,9 @@ fn unmarshal_int32_tuples(data: &Vec<u8>) -> Result<Vec<Vec<i32>>, String> {
     if data[at as usize] != 91u8 { return Err(format("json: cannot unmarshal a JSON value into Go [][]int32")); };
     let cur = at + 1u32;
     let probe = skip_space(data, cur);
-    if probe < len(data) as u32 && data[probe as usize] == 93u8 { return Ok(tuples); };
+    if probe < len(data) as u32 {
+        if data[probe as usize] == 93u8 { return Ok(tuples); };
+    };
     let pos = cur;
     let done = false;
     while done == false {
