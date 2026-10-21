@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_declarations/src/supplementalreferences.rs
+// UPSTREAM-LINES: 61
+// PORT-STATUS: pending
+// ITEMS: fn new_supplemental_references_transformer, fn transform_source_file, fn get_diagnostics
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

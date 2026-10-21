@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ast/src/precedence.rs
+// UPSTREAM-LINES: 355
+// PORT-STATUS: pending
+// ITEMS: enum OperatorPrecedence, const Lowest, const Highest, const DisallowComma, const Coalesce, fn get_operator, fn get_expression_precedence, struct OperatorPrecedenceFlags, fn get_operator_precedence, fn get_binary_operator_precedence, fn get_leftmost_expression, enum TypePrecedence, const Lowest, const Highest, fn get_type_node_precedence
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api_transport/src/callbackfs.rs
+// UPSTREAM-LINES: 554
+// PORT-STATUS: pending
+// ITEMS: const CALLBACK_READ_FILE, const CALLBACK_FILE_EXISTS, const CALLBACK_DIRECTORY_EXISTS, const CALLBACK_GET_ACCESSIBLE_ENTRIES, const CALLBACK_REALPATH, const CALLBACK_STAT, const CALLBACK_WRITE_FILE, const CALLBACK_REMOVE_FILE, const CALLBACK_NAMES, fn is_callback_name, struct CallbackConfig, fn parse, struct CallbackFs, fn new, fn set_connection, fn node_file_mode_to_go_file_mode, fn parse_rfc3339
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

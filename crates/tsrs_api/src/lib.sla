@@ -1,0 +1,27 @@
+// PORT-MIRROR: crates/tsrs_api/src/lib.rs
+// UPSTREAM-LINES: 34
+// PORT-STATUS: pending
+// ITEMS: mod batch, mod build, mod config, mod diagnostics, mod handler, mod methods, mod module_resolution, mod paramfields, mod predecode, mod printing, mod program, mod requestfs, mod resolution, mod session, mod snapshots, mod sourcefiles, mod transpile, mod wire, mod checker
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "batch.sla"
+@import "build.sla"
+@import "config.sla"
+@import "diagnostics.sla"
+@import "handler.sla"
+@import "methods.sla"
+@import "module_resolution.sla"
+@import "paramfields.sla"
+@import "predecode.sla"
+@import "printing.sla"
+@import "program.sla"
+@import "requestfs.sla"
+@import "resolution.sla"
+@import "session.sla"
+@import "snapshots.sla"
+@import "sourcefiles.sla"
+@import "transpile.sla"
+@import "wire.sla"
+@import "checker.sla"

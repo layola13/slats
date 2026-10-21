@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_contentmapper/src/hostimpl.rs
+// UPSTREAM-LINES: 2610
+// PORT-STATUS: pending
+// ITEMS: const METHOD_INITIALIZE, const METHOD_OPEN_PROJECT, const METHOD_CLOSE_PROJECT, const METHOD_TRANSFORM, trait ProtocolJson, fn unmarshal, struct InitializeParams, struct InitializeResult, struct OpenProjectParams, struct OpenProjectResult, struct OptionDiagnosticResult, struct CloseProjectParams, struct PositionEncoding, const UTF8, const UTF16, struct TransformParams, struct MappedOutput, struct DiagnosticDirectivePolicy, const Ignore, const Expect, struct UnusedExpectDirectiveDiagnostic, struct DiagnosticDirectives, struct MappedDiagnosticDirective, struct SupplementalOutput, struct TransformResult, struct Diagnostic, struct host, trait Spawner, struct SpawnerFunc, type Logger, struct HostOptions, fn new_host, fn new_host_with_options
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

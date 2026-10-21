@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/checker/handlers_ls.rs
+// UPSTREAM-LINES: 441
+// PORT-STATUS: pending
+// ITEMS: fn get_signature_usages, fn get_referenced_symbols_for_node, fn get_completions_at_position, fn get_import_adder_edits
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

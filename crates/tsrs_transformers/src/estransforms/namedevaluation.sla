@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/estransforms/namedevaluation.rs
+// UPSTREAM-LINES: 749
+// PORT-STATUS: pending
+// ITEMS: fn is_class_named_evaluation_helper_block, fn class_has_explicitly_assigned_name, fn class_has_declared_or_explicitly_assigned_name, fn is_anonymous_function_definition, fn is_named_evaluation, fn is_named_evaluation_and, fn get_assigned_name_of_identifier, fn get_assigned_name_of_property_name, fn create_class_named_evaluation_helper_block, fn inject_class_named_evaluation_helper_block_if_missing, fn finish_transform_named_evaluation, fn transform_named_evaluation_of_property_assignment, fn transform_named_evaluation_of_shorthand_assignment_property, fn transform_named_evaluation_of_variable_declaration, fn transform_named_evaluation_of_parameter_declaration, fn transform_named_evaluation_of_binding_element, fn transform_named_evaluation_of_property_declaration, fn transform_named_evaluation_of_assignment_expression, fn transform_named_evaluation_of_export_assignment, fn transform_named_evaluation
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

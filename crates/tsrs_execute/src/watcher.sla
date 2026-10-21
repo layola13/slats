@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_execute/src/watcher.rs
+// UPSTREAM-LINES: 1219
+// PORT-STATUS: pending
+// ITEMS: const SIGNATURE_JOB_CHUNK, struct Watcher, fn run_watcher, fn do_cycle
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_modulespecifiers/src/types.rs
+// UPSTREAM-LINES: 276
+// PORT-STATUS: pending
+// ITEMS: trait CheckerShape, enum ResultKind, struct ModuleSpecifiersResult, struct ModulePath, trait ModuleSpecifierGenerationHost, struct ExportsModuleNameCache, fn get_or_compute, enum ImportModuleSpecifierPreference, fn as_str, enum ImportModuleSpecifierEndingPreference, fn as_str, struct UserPreferences, struct ModuleSpecifierOptions, enum RelativePreferenceKind, enum ModuleSpecifierEnding, enum MatchingMode, struct ModuleSpecifierPreferences, struct regexPatternCacheKey, static regexPatternCache, struct NodeModulePathParts, enum nodeModulesPathParseState, struct ambientModuleInfo, struct Info, struct pkgJsonDirAttemptResult, struct specPair
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

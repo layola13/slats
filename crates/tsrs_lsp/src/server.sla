@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_lsp/src/server.rs
+// UPSTREAM-LINES: 4086
+// PORT-STATUS: pending
+// ITEMS: struct ServerOptions, type npmInstallFunc, fn new_server, trait Reader, trait Writer, fn to_reader, fn to_writer, struct Server, type asyncWork, fn background_ctx, fn write_stderr_line, fn client_capabilities, fn session, fn set_session_for_test, fn logger_arc, fn init_complete, fn watch_files, fn unwatch_files, fn register_content_mapper_extensions, fn refresh_diagnostics, fn publish_diagnostics, fn send_telemetry, fn is_active, fn refresh_inlay_hints, fn refresh_code_lens, fn progress_start, fn progress_finish, fn get_locale, fn set_locale, fn request_configuration, fn run, fn write_loop, fn send_client_request, fn send_client_request_fire_and_forget, fn send_result, fn send_error, fn send_notification, fn send, fn with_recover, fn set_compiler_options_for_inferred_projects, const USER_FACING_REQUEST_FAILED_ERROR, fn user_facing_request_failed_error, type handlerFunc, struct handlerMap, fn not_yet_ported, fn go_duration_string
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/format/api.rs
+// UPSTREAM-LINES: 301
+// PORT-STATUS: pending
+// ITEMS: enum FormatRequestKind, struct FormatContext, const MAX_INDENT_SIZE, fn with_format_code_settings, fn get_format_code_settings_from_context, fn get_new_line_or_default_from_context, fn format_span, fn format_node_given_indentation, fn format_document, fn format_selection, fn format_on_opening_curly, fn format_on_closing_curly, fn format_on_semicolon, fn format_on_enter
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

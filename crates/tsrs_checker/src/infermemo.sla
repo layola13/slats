@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_checker/src/infermemo.rs
+// UPSTREAM-LINES: 437
+// PORT-STATUS: pending
+// ITEMS: enum InferMemoMode, struct InferMemo, fn new, fn infer_from_types_memo, fn infer_memo_finish
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

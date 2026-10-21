@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_incremental/src/incremental.rs
+// UPSTREAM-LINES: 92
+// PORT-STATUS: pending
+// ITEMS: trait BuildInfoReader, fn register_build_info_read_phases, fn new_build_info_reader, fn new_build_info_reader_with_canonical_diagnostics, fn read_build_info_program
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

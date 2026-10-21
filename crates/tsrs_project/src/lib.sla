@@ -1,0 +1,35 @@
+// PORT-MIRROR: crates/tsrs_project/src/lib.rs
+// UPSTREAM-LINES: 57
+// PORT-STATUS: pending
+// ITEMS: mod background
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "background/mod.sla"
+@import "client.sla"
+@import "extendedconfigcache.sla"
+@import "filechange.sla"
+@import "overlayfs.sla"
+@import "ownercache.sla"
+@import "parsecache.sla"
+@import "programcounter.sla"
+@import "refcountcache.sla"
+@import "snapshotfs.sla"
+@import "watch.sla"
+@import "ata.sla"
+@import "autoimport.sla"
+@import "checkerpool.sla"
+@import "compilerhost.sla"
+@import "configfileregistry.sla"
+@import "configfileregistrybuilder.sla"
+@import "memregions.sla"
+@import "project.sla"
+@import "projectcollection.sla"
+@import "projectcollectionbuilder.sla"
+@import "session.sla"
+@import "snapshot.sla"
+@import "snapshothost.sla"
+@import "projectcollectionbuilder_test.sla"
+@import "projecttestutil.sla"
+@import "session_test.sla"

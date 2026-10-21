@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_module/src/packagejson/json.rs
+// UPSTREAM-LINES: 340
+// PORT-STATUS: pending
+// ITEMS: enum Json, fn first_byte, fn has_duplicate_names, fn parse
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

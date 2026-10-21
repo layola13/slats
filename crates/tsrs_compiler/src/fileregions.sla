@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_compiler/src/fileregions.rs
+// UPSTREAM-LINES: 717
+// PORT-STATUS: pending
+// ITEMS: enum LeafMode, struct LeafSettings, const MAX_DEFAULT_CHECKERS, fn lazy_dts_allowed, fn enable_lazy_dts, fn force_shared_lists, fn leaf_settings_from_env, fn bind_in_file_regions, fn enable, fn parse_task, fn wants_region, fn parse, fn bind, fn classify, fn prepare, fn has_region, fn assert_not_freed, fn pass_done, fn free, fn stats_report
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

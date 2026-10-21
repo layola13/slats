@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ast/src/deepclone.rs
+// UPSTREAM-LINES: 128
+// PORT-STATUS: pending
+// ITEMS: fn deep_clone_node, fn deep_clone_reparse, fn deep_clone_reparse_modifiers
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

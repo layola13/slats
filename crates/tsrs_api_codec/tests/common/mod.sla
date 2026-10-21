@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api_codec/tests/common/mod.rs
+// UPSTREAM-LINES: 235
+// PORT-STATUS: pending
+// ITEMS: fn crate_dir, fn fixtures, fn golden, fn client_golden, fn parse_like_server, fn rd, fn dump, fn first_difference, fn structural, fn diff_lines
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

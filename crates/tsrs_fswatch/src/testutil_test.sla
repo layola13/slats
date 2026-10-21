@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_fswatch/src/testutil_test.rs
+// UPSTREAM-LINES: 406
+// PORT-STATUS: pending
+// ITEMS: type TestResult, struct TestT, fn new, fn cleanup, fn temp_dir, fn run_with_retry, fn run_for_each_watcher, fn is_slow, fn watcher_event_timeout, fn new_tmp_dir, fn sub_path, fn settle_sleep, type subscription, fn subscribe_for, fn subscribe_file_for, fn subscribe_for_opts, struct recordingWatcher, struct recordingState, fn new_recorder, fn deadline, fn callback, fn next, fn drain_quiet, fn wait_for_event, fn wait_for_all, fn take_errs, fn err_count, struct wantEvent, fn want, fn to_want_events, fn expect_event_set, fn expect_event_sequence, fn expect_contains, fn expect_no_buffered_events, fn assert_no_events_for_path, fn assert_event_set, fn assert_event_sequence, fn contains_event, fn filter_events_for_paths, fn noop_callback
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

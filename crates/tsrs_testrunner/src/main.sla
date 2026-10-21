@@ -1,0 +1,26 @@
+// PORT-MIRROR: crates/tsrs_testrunner/src/main.rs
+// UPSTREAM-LINES: 552
+// PORT-STATUS: pending
+// ITEMS: static EXTRA_BASELINES, const EXTRA_TYPES, const EXTRA_SYMBOLS, const EXTRA_JS, const EXTRA_JSMAP, const EXTRA_SOURCEMAP, fn extra_baselines
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "baseline.sla"
+@import "compile.sla"
+@import "compiler_runner.sla"
+@import "diagnosticwriter.sla"
+@import "emit_harness.sla"
+@import "harnessutil.sla"
+@import "materialize.sla"
+@import "options.sla"
+@import "oracle_tests.sla"
+@import "pool.sla"
+@import "report.sla"
+@import "sourcemap_baseline.sla"
+@import "sourcemap_recorder.sla"
+@import "test_case_parser.sla"
+@import "tsbaseline.sla"
+@import "type_symbol_baseline.sla"
+@import "types_dump.sla"
+@import "worker.sla"

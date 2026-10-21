@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/lsutil/organizeimports.rs
+// UPSTREAM-LINES: 852
+// PORT-STATUS: pending
+// ITEMS: type StringComparer, type NodeComparer, fn filter_import_declarations, fn get_detection_lists, fn resolve_organize_imports_sort, fn get_organize_imports_preset_string_comparer, fn get_external_module_name, fn compare_module_specifiers, fn compare_imports_or_require_statements, fn get_named_import_specifier_comparer, fn get_import_specifier_insertion_index, fn get_import_declaration_insert_index, fn get_organize_imports_string_comparer_with_detection, fn detect_named_import_organization_by_sort, fn detect_module_specifier_case_by_sort, fn get_named_import_specifier_comparer_with_detection
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

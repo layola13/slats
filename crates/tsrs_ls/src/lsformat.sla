@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/lsformat.rs
+// UPSTREAM-LINES: 425
+// PORT-STATUS: pending
+// ITEMS: fn provide_format_document, fn provide_format_document_range, fn provide_format_document_on_type, fn get_range_of_enclosing_comment
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

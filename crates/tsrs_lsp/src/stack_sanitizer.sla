@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_lsp/src/stack_sanitizer.rs
+// UPSTREAM-LINES: 123
+// PORT-STATUS: pending
+// ITEMS: fn defeat_generic_secret_regex, fn sanitize_stack_trace
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

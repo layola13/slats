@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/autoimport/util.rs
+// UPSTREAM-LINES: 388
+// PORT-STATUS: pending
+// ITEMS: fn try_get_module_id_and_file_name_of_module_symbol, fn go_unicode_is_lower, fn word_indices, fn get_package_names_in_node_modules, fn get_default_like_export_name_from_declaration, fn get_resolved_package_names, fn add_project_reference_output_mappings, struct checkerPool, fn create_checker_pool, fn get_checker, fn created_count, fn add_package_json_dependencies, type PathFunc, fn get_package_realpath_funcs, fn get_module_resolver
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

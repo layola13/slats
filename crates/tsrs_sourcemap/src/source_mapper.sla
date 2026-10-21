@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_sourcemap/src/source_mapper.rs
+// UPSTREAM-LINES: 411
+// PORT-STATUS: pending
+// ITEMS: trait Host, struct MappedPosition, fn is_source_mapped_position, type SourceMappedPosition, struct DocumentPositionMapper, fn create_document_position_mapper, struct DocumentPosition, fn get_source_position, fn get_generated_position, fn get_document_position_mapper, fn convert_document_to_source_mapper, fn try_parse_raw_source_map, fn try_get_source_mapping_url_, fn try_parse_base64_url
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

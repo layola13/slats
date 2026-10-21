@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_incremental/src/referencemap.rs
+// UPSTREAM-LINES: 159
+// PORT-STATUS: pending
+// ITEMS: struct RefSet, fn flat, fn split, fn len, fn has, fn own, fn shared, fn iter, struct ReferenceMap, fn store_shared_references, fn get_references, fn get_paths_with_references, fn get_referenced_by
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

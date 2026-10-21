@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/change/tracker.rs
+// UPSTREAM-LINES: 1278
+// PORT-STATUS: pending
+// ITEMS: struct NodeOptions, enum LeadingTriviaOption, enum TrailingTriviaOption, enum trackerEditKind, struct trackerEdit, struct nodesInsertedAtStartState, struct Tracker, struct deletedNode, fn new_tracker, fn format_context, fn new_line, fn add_change, fn get_changes, fn to_lsp_edit_range, fn replace_node, fn replace_node_with_nodes, fn replace_range, fn replace_range_with_text, fn replace_text_range_with_text, fn replace_range_with_nodes, fn insert_text_at, fn insert_text, fn insert_node_at, fn insert_nodes_at, fn insert_node_after, fn insert_nodes_after, fn insert_node_before, fn try_insert_type_annotation, fn parenthesize_arrow_parameters, fn insert_modifier_before, fn delete, fn delete_range, fn delete_node, fn delete_node_range, fn insert_node_in_list_after, fn insert_import_specifier_at_index, fn insert_at_top_of_file, fn insert_member_at_start, fn is_separator
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

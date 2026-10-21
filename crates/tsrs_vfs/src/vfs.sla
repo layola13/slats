@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_vfs/src/vfs.rs
+// UPSTREAM-LINES: 225
+// PORT-STATUS: pending
+// ITEMS: trait FS, struct Entries, struct FileMode, fn is_dir, fn is_regular, fn perm, fn type_, struct FileInfo, fn name, fn size, fn mode, fn mod_time, fn is_dir, enum FsError, fn is_not_exist
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

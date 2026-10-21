@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/wildcarddirectories.rs
+// UPSTREAM-LINES: 155
+// PORT-STATUS: pending
+// ITEMS: fn get_wildcard_directories
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

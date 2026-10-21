@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_checker/src/unioncache.rs
+// UPSTREAM-LINES: 432
+// PORT-STATUS: pending
+// ITEMS: enum UnionCacheMode, fn indexed_access_memo_mode, fn union_cache_mode, const MAX_WORDS, struct UnionFrontCache, fn new, fn count_bypass_origin, fn get_union_type_front_cached, fn union_cache_finish
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

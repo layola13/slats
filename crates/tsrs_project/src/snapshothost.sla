@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_project/src/snapshothost.rs
+// UPSTREAM-LINES: 272
+// PORT-STATUS: pending
+// ITEMS: struct SnapshotHost, struct SourceFileLease, fn source_file, fn release, fn next_snapshot_id, fn acquire_source_file, fn acquire_existing_source_file, fn new_snapshot_host, fn new_root_snapshot, fn retain_snapshot, fn clone_snapshot, fn clone_snapshot_with_auto_imports, fn new_root_snapshot_with, fn fs, fn get_current_directory, fn default_library_path, fn close
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

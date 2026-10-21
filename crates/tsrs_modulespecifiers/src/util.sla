@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_modulespecifiers/src/util.rs
+// UPSTREAM-LINES: 577
+// PORT-STATUS: pending
+// ITEMS: fn compare_paths_by_redirect, fn path_is_bare_specifier, fn is_excluded_by_regex, fn string_to_regex, fn ensure_path_is_non_module_name, fn get_js_extension_for_declaration_file_extension, fn try_get_real_file_name_for_non_js_declaration_file_name, fn get_js_extension_for_file, fn extension_from_path, fn try_get_any_file_from_path, fn get_paths_relative_to_root_dirs, fn is_path_relative_to_parent, fn get_relative_path_if_in_same_volume, fn package_json_paths_are_equal, fn prefers_ts_extension, fn index_of_ending, fn replace_first_star, fn get_node_module_path_parts, fn get_node_modules_package_name, fn get_package_name_from_directory, fn process_entrypoint_ending
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

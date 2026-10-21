@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/commandlineoption.rs
+// UPSTREAM-LINES: 470
+// PORT-STATUS: pending
+// ITEMS: enum CommandLineOptionKind, fn as_str, enum DefaultValueDescription, struct CommandLineOption, enum ExtraValidation, const DEFAULT, fn deprecated_keys, fn enum_map, fn elements, fn disallow_null_or_undefined, static COMMAND_LINE_OPTION_ELEMENTS, static COMMAND_LINE_OPTION_ENUM_MAP, static COMMAND_LINE_OPTION_DEPRECATED, enum CompilerOptionsValue, fn is_null, fn as_str, fn as_array, fn as_object, fn as_object_mut, fn is_slice, fn is_string
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

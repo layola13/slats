@@ -1,0 +1,16 @@
+// PORT-MIRROR: crates/tsrs_api_codec/src/lib.rs
+// UPSTREAM-LINES: 23
+// PORT-STATUS: pending
+// ITEMS: mod decoder, mod encoder, mod format, mod handle, mod msgpack, mod positionmap, mod stringtable
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "decoder.sla"
+@import "encoder.sla"
+@import "format.sla"
+@import "generated.sla"
+@import "handle.sla"
+@import "msgpack.sla"
+@import "positionmap.sla"
+@import "stringtable.sla"

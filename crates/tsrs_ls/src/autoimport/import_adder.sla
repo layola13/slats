@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/autoimport/import_adder.rs
+// UPSTREAM-LINES: 607
+// PORT-STATUS: pending
+// ITEMS: type IdToSymbol, trait ImportAdder, fn new_import_adder, fn type_to_auto_importable_type_node, fn type_node_to_auto_importable_type_node, fn try_get_auto_importable_reference_from_type_node
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

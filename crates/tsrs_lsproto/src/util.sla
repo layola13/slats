@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_lsproto/src/util.rs
+// UPSTREAM-LINES: 129
+// PORT-STATUS: pending
+// ITEMS: fn compare_positions, fn compare_ranges, fn as_string, fn as_string, fn compare_diagnostics, fn as_string, fn code_as_string
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

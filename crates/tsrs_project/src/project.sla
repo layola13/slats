@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_project/src/project.rs
+// UPSTREAM-LINES: 901
+// PORT-STATUS: pending
+// ITEMS: const inferredProjectName, const hr, struct ID, struct ConfiguredProjectID, fn path, fn as_id, struct InferredProjectID, type ModuleResolverFactoryRef, fn inferred_project_id, struct SyntheticProjectID, fn new_synthetic_project_id, fn as_id, fn as_id, fn string, fn configured, fn inferred, fn synthetic, fn parse_configured_project_id, fn parse_synthetic_project_id, enum Kind, fn string, enum ProgramUpdateKind, enum PendingReload, struct Project, fn new_configured_project, fn new_inferred_project, fn new_synthetic_project, fn new_inferred_project_command_line, fn new_project, struct CreateProgramResult, fn current_directory, fn display_name, fn id, fn config_file_name, fn config_file_path, fn id_string, fn get_program, fn is_dirty, fn get_project_diagnostics, fn has_file, fn contains_file, fn is_source_from_project_reference, fn set_command_line, fn get_command_line_with_typings_files, fn set_potential_project_reference, fn has_potential_project_reference, fn create_program, fn clone_watchers, fn to_path, fn print, fn get_type_acquisition, fn get_unresolved_imports, fn should_trigger_ata, fn compute_typings_info
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

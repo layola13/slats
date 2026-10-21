@@ -1,0 +1,21 @@
+// PORT-MIRROR: crates/tsrs_fswatch/src/lib.rs
+// UPSTREAM-LINES: 44
+// PORT-STATUS: pending
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "canonicalize.sla"
+@import "debounce.sla"
+@import "event.sla"
+@import "fsevents_darwin.sla"
+@import "fsevents_darwin_ffi.sla"
+@import "inotify_linux.sla"
+@import "kqueue.sla"
+@import "pathcompare.sla"
+@import "pathkey.sla"
+@import "walkdir_unix.sla"
+@import "watcher.sla"
+@import "eventlist_test.sla"
+@import "testutil_test.sla"
+@import "watcher_test.sla"

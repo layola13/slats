@@ -1,0 +1,8 @@
+// PORT-MIRROR: crates/tsrs_spanmap/src/lib.rs
+// UPSTREAM-LINES: 9
+// PORT-STATUS: ported (module wiring)
+//
+// Mirrors Rust's `mod spanmap;` + `#[cfg(test)] mod spanmap_test;` 1:1.
+
+@import "spanmap.sla"
+@import "spanmap_test.sla"

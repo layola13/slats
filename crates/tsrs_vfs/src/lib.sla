@@ -1,0 +1,20 @@
+// PORT-MIRROR: crates/tsrs_vfs/src/lib.rs
+// UPSTREAM-LINES: 18
+// PORT-STATUS: pending
+// ITEMS: mod bundled, mod cachedvfs, mod internal, mod iovfs, mod osvfs, mod trackingvfs, mod vfsmatch, mod vfstest, mod wrapvfs
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "vfs.sla"
+@import "walkdir.sla"
+@import "bundled.sla"
+@import "cachedvfs.sla"
+@import "internal.sla"
+@import "iovfs.sla"
+@import "osvfs.sla"
+@import "trackingvfs.sla"
+@import "vfsmatch.sla"
+@import "vfstest.sla"
+@import "wrapvfs.sla"
+@import "walkdir_test.sla"

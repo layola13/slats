@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_modulespecifiers/src/preferences.rs
+// UPSTREAM-LINES: 331
+// PORT-STATUS: pending
+// ITEMS: fn should_allow_importing_ts_extension, fn uses_extensions_on_imports, fn infer_preference, fn get_module_specifier_ending_preference, fn get_preferred_ending, fn get_allowed_endings_in_preferred_order, fn get_module_specifier_preferences, fn get_allowed_endings_in_preferred_order
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

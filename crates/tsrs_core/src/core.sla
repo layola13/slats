@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_core/src/core.rs
+// UPSTREAM-LINES: 928
+// PORT-STATUS: pending
+// ITEMS: fn apply_debug_stack_limit, fn filter, fn filter_index, fn map, fn try_map, fn map_index, fn map_non_nil, fn map_filtered, fn flat_map, fn same_map, fn same_map_index, fn same, fn some, fn every, fn or, fn find, fn find_last, fn find_index, fn find_last_index, fn first_or_nil, fn last_or_nil, fn element_or_nil, fn first_or_nil_seq, fn first_non_nil, fn first_non_zero, fn concatenate, enum SpliceStart, fn splice, fn count_where, fn replace_element, fn insert_sorted, fn min_all_func, fn append_if_unique, fn memoize, fn if_else, fn or_else, fn coalesce, type ECMALineStarts, fn compute_ecma_line_starts, fn compute_ecma_line_starts_seq, fn count_ecma_line_starts, fn position_to_line_and_byte_offset, type UTF16Offset, fn utf16_len, fn flatten, fn get_script_kind_from_file_name, fn get_default_extension_for_script_kind, fn ensure_script_kind_from_file_name, fn get_spelling_suggestion, fn get_spelling_suggestion_with_max_candidate_count, fn get_spelling_suggestion_for_strings, fn identity, fn index_after, fn index_bytes, fn should_rewrite_module_specifier, fn single_element_slice, fn diff_maps, fn diff_maps_func, fn copy_map_into, fn unordered_equal, fn deduplicate, fn deduplicate_sorted, fn compare_booleans
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

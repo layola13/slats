@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/destructuring.rs
+// UPSTREAM-LINES: 774
+// PORT-STATUS: pending
+// ITEMS: enum FlattenLevel, type CreateAssignmentCallback, fn flatten_destructuring_assignment, fn flatten_destructuring_binding, fn binding_or_assignment_element_assigns_to_name, fn binding_or_assignment_element_contains_non_literal_computed_name, fn get_initializer_of_binding_or_assignment_element
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

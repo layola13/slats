@@ -1,0 +1,22 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/lib.rs
+// UPSTREAM-LINES: 65
+// PORT-STATUS: pending
+// ITEMS: mod nodebuilder, mod estransforms, mod inliners, mod jsxtransforms, mod moduletransforms, mod tstransforms
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "chain.sla"
+@import "emithost.sla"
+@import "modifiervisitor.sla"
+@import "resolver.sla"
+@import "transformer.sla"
+@import "utilities.sla"
+@import "destructuring.sla"
+@import "estransforms/mod.sla"
+@import "inliners/mod.sla"
+@import "jsxtransforms/mod.sla"
+@import "moduletransforms/mod.sla"
+@import "tstransforms/mod.sla"
+@import "emit_test.sla"
+@import "utilities_test.sla"

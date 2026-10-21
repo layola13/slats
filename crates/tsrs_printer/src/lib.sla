@@ -1,0 +1,27 @@
+// PORT-MIRROR: crates/tsrs_printer/src/lib.rs
+// UPSTREAM-LINES: 104
+// PORT-STATUS: pending
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "changetrackerwriter.sla"
+@import "emitcontext.sla"
+@import "emitflags.sla"
+@import "emittextwriter.sla"
+@import "factory.sla"
+@import "factory_2.sla"
+@import "generatedidentifierflags.sla"
+@import "helpers.sla"
+@import "helpers_defs.sla"
+@import "namegenerator.sla"
+@import "printer_1.sla"
+@import "printer_2.sla"
+@import "printer_3.sla"
+@import "semicolon_writer.sla"
+@import "singlelinestringwriter.sla"
+@import "syntheticfile.sla"
+@import "textwriter.sla"
+@import "utilities.sla"
+@import "printer_test.sla"
+@import "utilities_test.sla"

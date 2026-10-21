@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/commandlineparser_test.rs
+// UPSTREAM-LINES: 560
+// PORT-STATUS: pending
+// ITEMS: fn repo_root, fn reference_baseline, fn check_baseline, struct TestCommandLineParser, fn parse_command_line_test_worker
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

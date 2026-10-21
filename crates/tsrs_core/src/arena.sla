@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_core/src/arena.rs
+// UPSTREAM-LINES: 1877
+// PORT-STATUS: pending
+// ITEMS: const MAX_FREE_SIZE, const POISON, struct Arena, struct Residency, struct Checkpoint, fn new, fn is_region, fn track_drop, fn alloc_layout, fn alloc_with, fn alloc_slice_copy, fn alloc_vec, fn alloc_str, fn capacity, fn residency, fn used_ranges, fn pop_free, fn push_free, fn bump_epoch, fn checkpoint, fn rewindable_now, fn poison_mode, const fn, fn free_block, fn rewind, static CURRENT, struct RegionInner, struct Region, fn new, fn new_scratch, fn new_scratch_in_large_slabs, fn retire_on_free, fn enter, fn containing, fn containing_all, fn on_free, fn adopt_owner, fn allocated_bytes, fn trim, fn chunks, fn used_bytes, fn forget_drops, fn ptr_eq, fn escaped, fn mark_escaped, struct RegionScope, fn take_spare_arena, fn no_scope_open, fn no_scope_open_at_exit, fn give_spare_arena, fn trim_own_arena_tail, fn current_region, fn note_escape, fn route_by_owner, fn enter_thread_arena, fn enter_owner, fn enter_table_owner, struct ScratchScope, fn enter_scratch, fn escape_scratch, fn escape_scratch_one_level, struct DiagnosticRoute, fn route_diagnostics, fn escape_for_diagnostic, fn scratch_active, fn scratch_contains, fn scratch_arena, fn flush_retired
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

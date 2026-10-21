@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/checker/params.rs
+// UPSTREAM-LINES: 348
+// PORT-STATUS: pending
+// ITEMS: fn object, struct Params, fn new, fn raw, fn u64, fn u64_typed, fn u32, fn opt_u32, fn i32, fn bool, fn string, fn array, fn u32_array, fn string_array, fn project, fn document, fn opt_document, fn documents, fn symbol_ref, fn symbol_refs, struct DocumentIdentifier, fn to_file_name, fn display, const SYMBOL_OWNER_KIND_FILE, const SYMBOL_OWNER_KIND_SNAPSHOT, struct SymbolReference, fn file_path
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

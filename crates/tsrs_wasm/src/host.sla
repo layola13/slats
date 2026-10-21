@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_wasm/src/host.rs
+// UPSTREAM-LINES: 353
+// PORT-STATUS: pending
+// ITEMS: const OP_READ, const OP_STAT, const OP_READ_DIR, const OP_REALPATH, const OP_WRITE, const OP_APPEND, const OP_REMOVE, const OP_CHTIMES, enum HostError, fn call, mod test_host, static FILES, static FAIL_WRITES, fn call, struct HostFs, fn new
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

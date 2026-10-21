@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/lsutil/children.rs
+// UPSTREAM-LINES: 148
+// PORT-STATUS: pending
+// ITEMS: fn get_last_child, fn get_last_token, fn get_last_visited_child, fn get_first_token, fn assert_has_real_position
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ipc/src/jsonrpc/jsonrpc.rs
+// UPSTREAM-LINES: 405
+// PORT-STATUS: pending
+// ITEMS: const ERR_INVALID_JSONRPC_VERSION, struct ID, fn new_id_string, fn new_id_int, fn string, struct ResponseError, fn string, const CODE_PARSE_ERROR, const CODE_INVALID_REQUEST, const CODE_METHOD_NOT_FOUND, const CODE_INVALID_PARAMS, const CODE_INTERNAL_ERROR, struct Message, fn is_request, fn is_notification, fn is_response, fn marshal, fn unmarshal, struct RequestMessage, fn marshal, struct ResponseMessage, fn marshal, fn marshal_request_message, fn marshal_response_message
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

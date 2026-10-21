@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_parser/src/utilities.rs
+// UPSTREAM-LINES: 68
+// PORT-STATUS: pending
+// ITEMS: fn get_language_variant, fn token_is_identifier_or_keyword, fn token_is_identifier_or_keyword_or_greater_than, fn get_jsdoc_comment_ranges, fn is_keyword_or_punctuation, fn is_jsdoc_like_text
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

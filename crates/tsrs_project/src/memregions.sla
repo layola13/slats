@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_project/src/memregions.rs
+// UPSTREAM-LINES: 98
+// PORT-STATUS: pending
+// ITEMS: struct programOwner, fn new, fn log_region
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

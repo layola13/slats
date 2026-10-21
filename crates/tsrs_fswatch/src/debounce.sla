@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_fswatch/src/debounce.rs
+// UPSTREAM-LINES: 233
+// PORT-STATUS: pending
+// ITEMS: const defaultMinWaitTime, const defaultMaxWaitTime, struct debounce, fn new, fn add, fn remove, fn trigger, fn write_started, fn write_finished, fn hold_leading_edge
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

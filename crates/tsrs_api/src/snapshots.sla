@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/snapshots.rs
+// UPSTREAM-LINES: 712
+// PORT-STATUS: pending
+// ITEMS: fn to_uri, fn project_response, fn handle_create_snapshot, fn handle_update_snapshot, fn handle_release, fn handle_get_default_project_for_file, struct ScopedFs, fn wrap
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

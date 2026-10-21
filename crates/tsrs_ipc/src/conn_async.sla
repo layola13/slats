@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ipc/src/conn_async.rs
+// UPSTREAM-LINES: 424
+// PORT-STATUS: pending
+// ITEMS: const METHOD_GET_SERVER_TIMING, const METHOD_RESET_SERVER_TIMING, struct AsyncConn, fn new_async_conn, fn new_async_conn_with_protocol
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

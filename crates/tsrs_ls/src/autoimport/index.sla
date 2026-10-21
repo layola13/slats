@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/autoimport/index.rs
+// UPSTREAM-LINES: 212
+// PORT-STATUS: pending
+// ITEMS: trait Named, struct Index, fn find, fn search_word_prefix, fn index_len, fn insert_as_words, fn clone_filtered
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

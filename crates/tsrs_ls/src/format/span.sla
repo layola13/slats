@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/format/span.rs
+// UPSTREAM-LINES: 2068
+// PORT-STATUS: pending
+// ITEMS: fn find_enclosing_node, fn get_scan_start_position, fn get_own_or_inherited_delta, type RangeContainsError, fn prepare_range_contains_error_function, struct FormatSpanWorker, fn new_format_span_worker, fn execute, enum LineAction, fn is_string_or_regular_expression_or_template_literal, fn get_indentation_string, struct DynamicIndenter, type DynamicIndenterRef
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

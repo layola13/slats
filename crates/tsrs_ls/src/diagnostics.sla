@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/diagnostics.rs
+// UPSTREAM-LINES: 172
+// PORT-STATUS: pending
+// ITEMS: fn get_all_diagnostics, fn provide_diagnostics, fn to_lsp_diagnostics
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

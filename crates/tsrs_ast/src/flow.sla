@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ast/src/flow.rs
+// UPSTREAM-LINES: 159
+// PORT-STATUS: pending
+// ITEMS: struct FlowFlags, struct FlowNode, fn new, fn flags, fn node, fn text_index, fn antecedent, fn antecedents, fn set_antecedents, struct FlowList, type FlowLabel, struct FlowSwitchClauseData, fn new_flow_switch_clause_data, fn is_empty, struct FlowReduceLabelData, fn new_flow_reduce_label_data
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_testrunner/src/diagnosticwriter.rs
+// UPSTREAM-LINES: 641
+// PORT-STATUS: pending
+// ITEMS: struct FileLike, fn new, struct Diag, fn len, fn compare_diagnostics, fn compute_ecma_line_starts, fn utf16_len, fn compute_line_of_position, fn get_ecma_line_and_utf16_character_of_position, fn get_ecma_line_of_position, struct FormattingOptions, fn format_diagnostics_with_color_and_context, fn format_diagnostic_with_color_and_context, fn flatten_diagnostic_message, fn write_flattened_diagnostic_message, type FormattedWriter, fn write_with_style_and_reset, fn write_location, fn write_error_summary_text, fn write_format_diagnostics, fn write_format_diagnostic
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

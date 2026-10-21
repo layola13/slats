@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/lsconv/converters.rs
+// UPSTREAM-LINES: 1088
+// PORT-STATUS: pending
+// ITEMS: type GetLineMap, struct Converters, struct MappedSpan, struct MappedPosition, trait Script, enum AnyScript, fn new_converters, fn to_lsp_range, fn to_lsp_range_for_feature, fn to_lsp_position, fn to_lsp_position_for_feature, fn to_lsp_location, fn to_lsp_location_for_feature, fn from_lsp_range, fn from_lsp_range_for_source_file, fn from_lsp_range_intersecting_for_source_file, fn from_lsp_position, fn from_lsp_position_for_source_file, fn from_lsp_range_to_original, fn language_kind_to_script_kind, fn file_name_to_document_uri, fn line_and_character_to_position, fn position_to_line_and_character, fn snap_to_char_boundary, fn diagnostic_to_lsp_pull, fn diagnostic_to_lsp_push, struct OriginalTextScript
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

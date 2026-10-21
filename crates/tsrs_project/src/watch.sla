@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_project/src/watch.rs
+// UPSTREAM-LINES: 613
+// PORT-STATUS: pending
+// ITEMS: const minWatchLocationDepth, const allWatchKinds, struct watchRegistry, fn new_watch_registry, fn acquire, fn release, fn mark_pending, fn clear_pending, fn is_pending, struct PatternsAndIgnored, fn file_system_watcher_glob_string, struct WatcherID, type ComputeGlobPatterns, struct WatchedFiles, fn new_watched_files, fn new_watched_files_for_paths, struct Watchers, fn watchers, fn name, fn watch_kind, fn input, fn clone_with, trait WatchedFilesExt, fn create_resolution_lookup_glob_mapper, fn get_typings_locations_globs, fn get_path_components_for_watching, fn get_recursive_glob_pattern
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

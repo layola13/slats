@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_checker/src/workcensus.rs
+// UPSTREAM-LINES: 918
+// PORT-STATUS: pending
+// ITEMS: fn slow_threshold_ns, fn census_path, enum Cat, enum CKey, struct Stat, struct Span, struct Timing, struct Census, fn bucket, fn new, fn begin, fn end, fn record, fn charge_bookkeeping, fn now_ns, fn charge_since, fn count, fn rel_kind, fn type_identity, fn census_enabled, fn census_write_report, fn census_on, fn census_mut, fn census_begin, fn census_end, fn census_collect, fn census_report
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

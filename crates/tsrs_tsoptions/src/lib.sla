@@ -1,0 +1,35 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/lib.rs
+// UPSTREAM-LINES: 53
+// PORT-STATUS: pending
+// ITEMS: mod gojson, mod outputpaths, mod tsoptionstest
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "commandlineoption.sla"
+@import "commandlineparser.sla"
+@import "contentmappers.sla"
+@import "declsbuild.sla"
+@import "declscompiler.sla"
+@import "declstypeacquisition.sla"
+@import "declswatch.sla"
+@import "diagnostics.sla"
+@import "enummaps.sla"
+@import "errors.sla"
+@import "namemap.sla"
+@import "parsedbuildcommandline.sla"
+@import "parsedcommandline.sla"
+@import "parsedoptions.sla"
+@import "parsinghelpers.sla"
+@import "tsconfigparsing.sla"
+@import "wildcarddirectories.sla"
+@import "gojson.sla"
+@import "outputpaths.sla"
+@import "tsoptionstest.sla"
+@import "commandlineparser_test.sla"
+@import "contentmappers_test.sla"
+@import "decls_test.sla"
+@import "parsinghelpers_test.sla"
+@import "testutil.sla"
+@import "tsconfigparsing_test.sla"
+@import "wildcarddirectories_test.sla"

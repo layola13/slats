@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/lsutil/utilities.rs
+// UPSTREAM-LINES: 195
+// PORT-STATUS: pending
+// ITEMS: fn probably_uses_semicolons, fn should_use_uri_style_node_core_modules, fn quote_preference_from_string, fn get_quote_preference, fn module_symbol_to_valid_identifier, fn module_specifier_to_valid_identifier, fn is_non_contextual_keyword
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

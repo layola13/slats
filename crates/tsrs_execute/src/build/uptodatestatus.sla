@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_execute/src/build/uptodatestatus.rs
+// UPSTREAM-LINES: 184
+// PORT-STATUS: pending
+// ITEMS: enum upToDateStatusType, struct inputOutputName, struct fileAndTime, struct inputOutputFileAndTime, struct upstreamErrors, enum statusData, struct upToDateStatus, fn new, fn with, fn is_error, fn is_pseudo_build, fn input_output_file_and_time, fn input_output_name, fn oldest_output_file_name, fn upstream_errors, fn data_string, fn after, fn before
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

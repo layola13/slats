@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_projectutil/src/logging/logcollector.rs
+// UPSTREAM-LINES: 85
+// PORT-STATUS: pending
+// ITEMS: trait LogCollector, struct logCollector, fn new_test_logger
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_declarations/src/util.rs
+// UPSTREAM-LINES: 203
+// PORT-STATUS: pending
+// ITEMS: fn needs_scope_marker, fn can_have_literal_initializer, fn can_produce_diagnostics, fn can_reuse_modifier_nodes, fn is_declaration_and_not_visible, fn get_binding_name_visible, fn is_enclosing_declaration, fn is_always_type, fn mask_modifier_flags, fn unwrap_parenthesized_expression, fn is_private_method_type_parameter, fn should_emit_function_properties, fn get_effective_base_type_node, fn is_scope_marker, fn has_scope_marker
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

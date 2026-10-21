@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_core/src/semver/version.rs
+// UPSTREAM-LINES: 532
+// PORT-STATUS: pending
+// ITEMS: fn is_letter_fold, fn is_digit, fn is_identifier_or_dot_char, fn span, fn match_numeric_component, fn find_version_like_submatch, fn version_regexp_find_string_submatch, fn prerelease_regexp_match_string, fn build_reg_exp_match_string, fn numeric_identifier_reg_exp_match_string, struct Version, static VERSION_ZERO, fn increment_major, fn increment_minor, fn increment_patch, const COMPARISON_LESS_THAN, const COMPARISON_EQUAL_TO, const COMPARISON_GREATER_THAN, fn compare, fn compare_pre_release_identifiers, fn compare_pre_release_identifier, fn string, fn try_parse_version, fn must_parse, fn get_uint_component
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

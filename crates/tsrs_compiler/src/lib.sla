@@ -1,0 +1,34 @@
+// PORT-MIRROR: crates/tsrs_compiler/src/lib.rs
+// UPSTREAM-LINES: 62
+// PORT-STATUS: pending
+// ITEMS: mod diagnosticwriter
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "affinity.sla"
+@import "checker_program.sla"
+@import "checkerpool.sla"
+@import "contentmapper_test.sla"
+@import "diagnosticwriter.sla"
+@import "emithost.sla"
+@import "emitter.sla"
+@import "file_include.sla"
+@import "fileloader.sla"
+@import "fileregions.sla"
+@import "filesparser.sla"
+@import "host.sla"
+@import "includeprocessor.sla"
+@import "modulespecifiers_oracle_test.sla"
+@import "outputpaths.sla"
+@import "processing_diagnostic.sla"
+@import "program.sla"
+@import "program_emit.sla"
+@import "program_test.sla"
+@import "programlike.sla"
+@import "programregions.sla"
+@import "projectreferencedtsfakinghost.sla"
+@import "projectreferencefilemapper.sla"
+@import "projectreferenceparser.sla"
+@import "sharedgraph.sla"
+@import "splitcheck.sla"

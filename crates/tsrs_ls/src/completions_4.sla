@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/completions_4.rs
+// UPSTREAM-LINES: 1826
+// PORT-STATUS: pending
+// ITEMS: fn resolve_completion_item, fn create_completion_details, fn create_completion_details_for_symbol, fn get_import_statement_completion_info, fn has_doc_comment, fn get_jsdoc_tag_at_position, fn try_get_type_expression_from_tag, fn js_doc_completion_info, fn get_jsdoc_tag_name_completions, fn get_jsdoc_tag_completions, fn get_jsdoc_parameter_completions, fn get_jsdoc_parameter_name_completions, fn get_exhaustive_case_snippets, struct snippetPrinter, fn print_unescaped_node, fn print_and_format_node, fn print_and_format_node_with_settings, fn create_snippet_printer
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

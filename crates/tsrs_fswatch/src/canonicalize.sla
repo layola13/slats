@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_fswatch/src/canonicalize.rs
+// UPSTREAM-LINES: 91
+// PORT-STATUS: pending
+// ITEMS: fn canonicalize_path, fn path_comparer, fn path_comparer_for_path, const nativePathFolding, fn fold_native_path, fn canonicalize_path, fn path_comparer, fn path_comparer_for_path
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

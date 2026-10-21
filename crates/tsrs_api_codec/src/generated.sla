@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api_codec/src/generated.rs
+// UPSTREAM-LINES: 2606
+// PORT-STATUS: pending
+// ITEMS: fn node_data_type, fn children_property_mask, fn node_common_data, fn record_node_strings, fn record_extended_data, fn create_string_node, fn create_extended_node, fn create_children_node
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

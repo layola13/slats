@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ast/src/identifier.rs
+// UPSTREAM-LINES: 325
+// PORT-STATUS: pending
+// ITEMS: const NO_SOURCE_TEXT, fn register_source_text, fn unregister_source_text, struct Identifier, fn text, fn text_len, fn flow_node, fn set_flow_node, fn is_source_text, fn clone_node, fn new_identifier, fn new_source_identifier, fn check_source_identifier_loc
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

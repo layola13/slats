@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_testrunner/src/harnessutil.rs
+// UPSTREAM-LINES: 331
+// PORT-STATUS: pending
+// ITEMS: const TEST_LIB_FOLDER, struct TestFile, type TestConfiguration, struct NamedTestConfiguration, struct HarnessOptions, enum OptKind, struct OptionDecl, struct OptionTable, fn get_command_line_option, fn get_config_name_from_file_name, fn enumerate_files, fn get_file_based_test_configurations
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

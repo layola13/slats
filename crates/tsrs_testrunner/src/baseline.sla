@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_testrunner/src/baseline.rs
+// UPSTREAM-LINES: 190
+// PORT-STATUS: pending
+// ITEMS: const NO_CONTENT, enum Class, const ALL, fn as_str, fn parse, fn baseline_matches, fn diagnostic_keys, fn classify, fn first_difference, fn unified_diff, fn first_hunk, fn diff_text
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

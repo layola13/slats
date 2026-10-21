@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_testrunner/src/compiler_runner.rs
+// UPSTREAM-LINES: 470
+// PORT-STATUS: pending
+// ITEMS: const SRC_FOLDER, const SUITES, static SKIPPED_TESTS, fn repo_root, fn testdata_path, fn reference_baseline_path, fn read_reference_baseline, fn read_reference_extra_baseline, fn extract_dts_block, fn enumerate_test_files, fn decode_bytes, fn read_test_file, struct TestItem, fn id, fn configured_name, fn baseline_stem, fn get_configurations, fn expand_test_file, fn find_configuration, enum Outcome, struct SourceMapBaselines, struct TypesAndSymbols, struct SplitUnits, fn split_units
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

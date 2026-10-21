@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_vfs/src/vfsmatch/vfsmatch.rs
+// UPSTREAM-LINES: 1053
+// PORT-STATUS: pending
+// ITEMS: enum Usage, const UNLIMITED_DEPTH, fn read_directory, fn is_implicit_glob, struct SpecMatcher, fn match_string, fn match_index, fn new_spec_matcher
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

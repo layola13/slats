@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_contentmappertest/src/spawner.rs
+// UPSTREAM-LINES: 66
+// PORT-STATUS: pending
+// ITEMS: fn serve, fn new_spawner, fn new_spawner_with_project_lifecycle
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

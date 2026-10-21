@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_execute/src/tsctests/sys.rs
+// UPSTREAM-LINES: 785
+// PORT-STATUS: pending
+// ITEMS: const FAKE_TS_VERSION, const FAKE_TIME_STAMP, struct TestClock, fn new, fn now, struct testFs, struct TestSys, fn new, fn map_fs, fn fs_from_file_map, fn baseline_programs, fn serialize_state, fn get_output, fn clear_output, fn changed_paths, fn baseline_fs_with_diff, fn sanitize_internal_symbol_name
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

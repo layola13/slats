@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/lsutil/symbol_display.rs
+// UPSTREAM-LINES: 492
+// PORT-STATUS: pending
+// ITEMS: enum ScriptElementKind, struct ScriptElementKindModifier, const None, fn strings, const FILE_EXTENSION_KIND_MODIFIERS, fn get_symbol_kind, fn get_symbol_modifiers
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

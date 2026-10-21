@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_compiler/src/affinity.rs
+// UPSTREAM-LINES: 354
+// PORT-STATUS: pending
+// ITEMS: const MIN_CHECKERS, const LARGE_MIN_CHECKERS, const LARGE_PROGRAM_FILES, fn applies, struct ModuleAffinity, fn new, fn affinities, fn place, fn refine
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

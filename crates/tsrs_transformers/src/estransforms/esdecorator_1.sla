@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/estransforms/esdecorator_1.rs
+// UPSTREAM-LINES: 1543
+// PORT-STATUS: pending
+// ITEMS: enum lexicalEntryKind, struct lexicalEntry, struct memberInfo, struct classInfo, struct esDecoratorTransformer, fn new_es_decorator_transformer, fn enter_class, fn exit_class, fn enter_class_element, fn exit_class_element, fn enter_name, fn exit_name, fn enter_other, fn exit_other, fn outer_this_visit, fn visit, fn modifier_visitor_visit, fn class_element_visitor_visit, fn discarded_value_visit, fn non_constructor_class_element_visit, fn constructor_class_element_visit, fn export_stripping_modifier_visit, fn get_helper_variable_name, fn create_helper_variable, fn create_let, fn create_class_info, fn transform_class_like, fn emit_member_info_declarations, fn is_decorated_class_like, fn prepare_constructor, fn transform_constructor_body_worker, fn finish_class_element
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

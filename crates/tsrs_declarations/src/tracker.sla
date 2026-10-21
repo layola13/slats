@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_declarations/src/tracker.rs
+// UPSTREAM-LINES: 339
+// PORT-STATUS: pending
+// ITEMS: fn pop_error_fallback_node, fn push_error_fallback_node, fn report_cyclic_structure_error, fn report_inaccessible_this_error, fn report_inaccessible_unique_symbol_error, fn is_bound_expando, fn is_child_of_bound_expando, fn report_inference_fallback, fn report_likely_unsafe_import_required_error, fn report_non_serializable_property, fn report_nonlocal_augmentation, fn report_private_in_base_of_class_expression, fn report_truncation_error, fn error_fallback_node, fn error_location, fn error_declaration_name_with_fallback, fn track_symbol, fn handle_symbol_accessibility_error, fn create_diagnostic_for_node, fn add_diagnostic, fn new_symbol_tracker
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_lsproto/src/structcodec.rs
+// UPSTREAM-LINES: 209
+// PORT-STATUS: pending
+// ITEMS: fn struct_members, fn field, fn field_non_null, fn opt, fn opt_non_null, fn check_required, fn arm, fn arm_buffered, fn value_str, struct DiscriminatedStructDecoder, fn scan_discriminated_struct, fn discriminator_str, fn invalid_discriminator, fn unmarshal_discriminated_arm, fn cmp_compare
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

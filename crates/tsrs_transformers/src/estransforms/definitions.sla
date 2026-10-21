@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/estransforms/definitions.rs
+// UPSTREAM-LINES: 69
+// PORT-STATUS: pending
+// ITEMS: fn es_decorator_and_class_fields, fn new_esnext_transformer, fn new_es2021_transformer, fn new_es2020_transformer, fn new_es2019_transformer, fn new_es2018_transformer, fn new_es2017_transformer, fn new_es2016_transformer, fn get_es_transformer
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

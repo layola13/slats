@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/commandlineparser.rs
+// UPSTREAM-LINES: 585
+// PORT-STATUS: pending
+// ITEMS: fn alternate_mode, fn options_declarations, fn unknown_option_diagnostic, fn unknown_did_you_mean_diagnostic, struct CommandLineParser, fn parse_command_line, fn parse_build_command_line, fn parse_command_line_worker, fn parse_strings, fn get_input_option_name, fn parse_response_file, fn try_read_file, fn parse_option_value, fn parse_list_type_option, fn parse_list_type_option, fn convert_json_option_of_enum_type
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

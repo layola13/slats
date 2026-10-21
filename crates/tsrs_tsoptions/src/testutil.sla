@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/testutil.rs
+// UPSTREAM-LINES: 269
+// PORT-STATUS: pending
+// ITEMS: fn compiler_options_to_json, fn build_options_to_json, fn type_acquisition_to_json, fn option_value_to_json, fn write_format_diagnostics, fn format_diagnostics_with_color_and_context
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

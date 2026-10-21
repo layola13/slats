@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/declscompiler.rs
+// UPSTREAM-LINES: 1519
+// PORT-STATUS: pending
+// ITEMS: static OPTIONS_DECLARATIONS, static COMMON_OPTIONS_WITH_BUILD, static OPTIONS_FOR_COMPILER, fn compiler_options_affect_semantic_diagnostics, fn compiler_options_affect_declaration_path, fn compiler_options_affect_emit
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

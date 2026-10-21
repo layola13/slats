@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_module/src/util.rs
+// UPSTREAM-LINES: 210
+// PORT-STATUS: pending
+// ITEMS: static TYPE_SCRIPT_VERSION, const INFERRED_TYPES_CONTAINING_FILE, fn is_applicable_versioned_types_key, fn parse_node_module_from_path, fn parse_package_name, fn mangle_scoped_package_name, fn unmangle_scoped_package_name, fn get_types_package_name, fn get_package_name_from_types_package_name, fn compare_pattern_keys, fn get_resolution_diagnostic, fn try_get_js_extension_for_file
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

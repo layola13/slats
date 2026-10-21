@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api_transport/src/timing.rs
+// UPSTREAM-LINES: 92
+// PORT-STATUS: pending
+// ITEMS: const METHOD_GET_SERVER_TIMING, const METHOD_RESET_SERVER_TIMING, struct ServerRequestTiming, struct ServerTimingTotals, struct ServerTimingInfo, struct TimingCollector, fn record, fn snapshot, fn reset, fn server_timing_snapshot
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

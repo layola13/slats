@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_execute/src/watchmanager/mod.rs
+// UPSTREAM-LINES: 568
+// PORT-STATUS: pending
+// ITEMS: trait WatchBackend, struct WatchDirectoryRequest, struct FsWatchBackend, struct WatchState, struct WatchManager, fn new, fn lock, fn set_debug_log, fn debug_log, fn debug, fn set_backend, fn ensure_default_backend, fn drain_events, fn queue_changes, fn force_overflow, fn close_all_watches, fn resolve_desired_dirs, fn reconcile_watches, fn is_path_under_watch, fn watched_dirs, fn run_loop, fn stop, struct DirWatchSet, fn new, fn set, fn has, fn covered, fn dirs, fn is_in_node_modules, fn should_ignore_watch_path, fn can_watch_directory, fn perceived_os_root_length_for_watching
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

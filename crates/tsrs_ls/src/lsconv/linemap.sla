@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/lsconv/linemap.rs
+// UPSTREAM-LINES: 98
+// PORT-STATUS: pending
+// ITEMS: type LSPLineStarts, struct LSPLineMap, fn compute_lsp_line_starts, fn compute_index_of_line_start
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,12 @@
+// PORT-MIRROR: crates/tsrs_wasm/src/lib.rs
+// UPSTREAM-LINES: 113
+// PORT-STATUS: pending
+// ITEMS: const REQUEST_JSON_DIAGNOSTICS, const REQUEST_CASE_INSENSITIVE, const REQUEST_TTY, fn run
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "host.sla"
+@import "json.sla"
+@import "sys.sla"
+@import "tests.sla"

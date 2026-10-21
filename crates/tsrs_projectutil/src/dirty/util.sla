@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_projectutil/src/dirty/util.rs
+// UPSTREAM-LINES: 21
+// PORT-STATUS: pending
+// ITEMS: fn clone_map_if_nil
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

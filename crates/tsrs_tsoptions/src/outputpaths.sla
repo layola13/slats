@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/outputpaths.rs
+// UPSTREAM-LINES: 473
+// PORT-STATUS: pending
+// ITEMS: fn get_computed_common_source_directory, fn get_common_source_directory, trait OutputPathsHost, struct OutputPaths, fn declaration_file_path, fn js_file_path, fn source_map_file_path, fn declaration_map_path, struct ForceEmitPaths, fn get_output_paths_for, fn for_each_emitted_file, fn get_output_js_file_name, fn get_output_js_file_name_worker, fn get_output_declaration_file_name_worker, fn get_output_extension, fn get_declaration_emit_output_file_path, fn change_to_declaration_extension, fn get_source_file_path_in_new_dir, fn get_source_file_path_in_new_dir_worker, fn get_own_emit_output_file_path, fn get_source_map_file_path, fn get_build_info_file_name
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

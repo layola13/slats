@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_compiler/src/sharedgraph.rs
+// UPSTREAM-LINES: 224
+// PORT-STATUS: pending
+// ITEMS: fn enabled, fn seed_positions, fn enter_checker, struct Base, fn note_fresh_checker, fn start_seed, fn try_base, fn fork_into, fn fresh_fork, fn debug_regions
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

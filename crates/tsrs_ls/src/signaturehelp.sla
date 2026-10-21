@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/signaturehelp.rs
+// UPSTREAM-LINES: 1942
+// PORT-STATUS: pending
+// ITEMS: const SIGNATURE_HELP_TRIGGER_CHARACTERS, const SIGNATURE_HELP_RETRIGGER_CHARACTERS, struct callInvocation, struct typeArgsInvocation, struct contextualInvocation, struct invocation, fn provide_signature_help, fn get_signature_help_items, struct argumentListInfo, fn get_immediately_containing_argument_info
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

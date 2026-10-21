@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/enummaps.rs
+// UPSTREAM-LINES: 432
+// PORT-STATUS: pending
+// ITEMS: static LIB_MAP, static LIBS, static LIB_FILES_SET, fn get_lib_file_name, static MODULE_RESOLUTION_OPTION_MAP, static TARGET_OPTION_MAP, static MODULE_OPTION_MAP, static MODULE_DETECTION_OPTION_MAP, static JSX_OPTION_MAP, static NEW_LINE_OPTION_MAP, static TARGET_TO_LIB_MAP, fn target_to_lib_map, fn get_default_lib_file_name, static WATCH_FILE_ENUM_MAP, static WATCH_DIRECTORY_ENUM_MAP, static FALLBACK_ENUM_MAP
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

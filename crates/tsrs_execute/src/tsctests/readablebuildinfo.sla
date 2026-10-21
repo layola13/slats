@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_execute/src/tsctests/readablebuildinfo.rs
+// UPSTREAM-LINES: 295
+// PORT-STATUS: pending
+// ITEMS: fn to_readable_file_emit_kind, fn to_readable_build_info
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

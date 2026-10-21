@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/change/delete.rs
+// UPSTREAM-LINES: 473
+// PORT-STATUS: pending
+// ITEMS: fn delete_declaration, fn start_position_to_delete_node_in_list, fn positions_are_on_same_line
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

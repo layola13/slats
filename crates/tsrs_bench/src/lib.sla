@@ -1,0 +1,9 @@
+// PORT-MIRROR: crates/tsrs_bench/src/lib.rs
+// UPSTREAM-LINES: 228
+// PORT-STATUS: pending
+// ITEMS: const PROJECTS, fn project_config, struct Compilation, fn assert_completed, struct PreparedProject, fn load, fn invocation, fn verify, fn default_invocation, struct BenchmarkSystem, fn compile
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "snapshot.sla"

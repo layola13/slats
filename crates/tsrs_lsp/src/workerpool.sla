@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_lsp/src/workerpool.rs
+// UPSTREAM-LINES: 104
+// PORT-STATUS: pending
+// ITEMS: const WORKER_STACK_SIZE, fn go, fn max_idle_threads, fn threads, fn run_or_exit
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

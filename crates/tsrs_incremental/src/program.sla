@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_incremental/src/program.rs
+// UPSTREAM-LINES: 883
+// PORT-STATUS: pending
+// ITEMS: enum SignatureUpdateKind, struct Program, fn new_program, struct TestingData, enum SemanticDiagnosticsState, fn new_from_snapshot, fn get_testing_data, fn testing_semantic_diagnostics_state, fn testing_updated_signature_kind, fn begin_nested_emit, fn take_nested_emit_time, fn compiler_program, fn compute_placeholder_signatures, fn drop_replaced, fn free_replaced, fn for_each_diagnostic_file, fn copy_diagnostics, fn get_program, fn has_changed_dts_file, fn p, fn emit_build_info, fn package_json_lookup_paths
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_module/src/packagejson/exportsorimports.rs
+// UPSTREAM-LINES: 94
+// PORT-STATUS: pending
+// ITEMS: enum ObjectKind, struct ExportsOrImports, fn from_json, fn as_object, fn as_array, fn is_subpaths, fn is_imports, fn is_conditions
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

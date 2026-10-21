@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_module/src/resolver.rs
+// UPSTREAM-LINES: 3780
+// PORT-STATUS: pending
+// ITEMS: struct Resolved, struct Tracer, struct DiagAndArgs, struct ResolutionState, fn get_compiler_options_with_redirect, struct DefaultResolver, struct ResolverOptions, fn new, fn new_resolver, fn new_from_resolution_data, fn get_resolution_data, fn get_package_scope_for_path, fn resolve_type_reference_directive, fn resolve_module_name, fn resolve_module_name_from_directory, fn resolve_package_directory, fn get_conditions, fn move_to_next_directory_separator_if_available, struct ParsedPatterns, fn get_parsed_patterns_for_paths, fn try_parse_patterns, fn match_pattern_or_exact, fn resolve_config, fn get_automatic_type_directive_names, enum Ending, struct ResolvedEntrypoint, fn symlink_or_realpath, fn get_entrypoints_from_package_json_info
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

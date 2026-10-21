@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/autoimport/export.rs
+// UPSTREAM-LINES: 240
+// PORT-STATUS: pending
+// ITEMS: struct ModuleID, struct ExportID, enum ExportSyntax, fn string, struct Export, fn name, fn is_renameable, fn ambient_module_name, fn is_unresolved_alias, fn symbol_to_export
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

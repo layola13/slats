@@ -1,0 +1,16 @@
+// PORT-MIRROR: crates/tsrs_execute/src/lib.rs
+// UPSTREAM-LINES: 12
+// PORT-STATUS: pending
+// ITEMS: mod build, mod execute, mod sys, mod tsc, mod watcher, mod watchmanager
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "build/mod.sla"
+@import "execute.sla"
+@import "sys.sla"
+@import "tsc/mod.sla"
+@import "tsctests/mod.sla"
+@import "watcher.sla"
+@import "watchmanager/mod.sla"
+@import "watchmem.sla"

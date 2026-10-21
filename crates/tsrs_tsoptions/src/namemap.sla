@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/namemap.rs
+// UPSTREAM-LINES: 63
+// PORT-STATUS: pending
+// ITEMS: static COMPILER_NAME_MAP, static BUILD_NAME_MAP, static WATCH_NAME_MAP, fn get_name_map_from_list, struct NameMap, fn get, fn get_from_short, fn get_option_declaration_from_name
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

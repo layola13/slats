@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/batch.rs
+// UPSTREAM-LINES: 206
+// PORT-STATUS: pending
+// ITEMS: const DEFAULT_MAX_RESPONSE_BYTES_PER_PAGE, fn base64_encode, fn base64_decode, fn handle_batch_requests
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

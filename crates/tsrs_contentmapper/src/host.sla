@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_contentmapper/src/host.rs
+// UPSTREAM-LINES: 630
+// PORT-STATUS: pending
+// ITEMS: enum TransformErrorKind, struct TransformError, fn new_transform_error, fn error, fn unwrap, enum DiagnosticDirectiveErrorKind, struct DiagnosticDirectiveError, fn error, struct InvalidVirtualExtensionError, fn error, enum ProjectErrorKind, struct ProjectError, fn error, enum InitializeErrorKind, struct InitializeError, struct SupplementalFileCollisionError, fn error, fn error, struct TransformResultFiles, struct MappedResult, struct Request, struct ProjectSpec, struct OptionDiagnostic, struct OperationTiming, struct MapperTimings, struct Timings, fn since, trait Project, trait Host, const ERR_PROJECT_UNAVAILABLE, enum Error, fn error, fn unwrap, fn as_transform_error, fn as_diagnostic_directive_error, fn as_invalid_virtual_extension_error, fn as_project_error, fn as_initialize_error, fn as_supplemental_file_collision_error, fn as_mapping_error, fn is_project_unavailable, fn is, fn quote
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

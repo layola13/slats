@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_parser/src/reparser.rs
+// UPSTREAM-LINES: 1078
+// PORT-STATUS: pending
+// ITEMS: fn finish_reparsed_node, fn finish_mutated_node, fn add_deep_clone_reparse, fn add_transformed_reparse, fn check_non_identifier_name, fn reparse_tags, fn reparse_unhosted, fn reparse_jsdoc_signature, fn reparse_jsdoc_type_literal, fn reparse_jsdoc_comment, fn gather_type_parameters, fn reparse_hosted, fn make_question_if_optional, fn make_new_cast, fn create_export_modifier, fn get_innermost_name_of_jsdoc_namespace, fn wrap_in_jsdoc_namespace
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/program.rs
+// UPSTREAM-LINES: 277
+// PORT-STATUS: pending
+// ITEMS: fn resolve_source_file, enum DiagnosticKind, fn handle_get_diagnostics, fn handle_get_config_file_parsing_diagnostics, fn handle_get_program_diagnostics, fn handle_get_global_diagnostics, fn handle_get_source_file_names, fn handle_emit, fn handle_emit_to_string, fn handle_selected_files_emit, fn handle_get_config_file_names, fn handle_get_source_file_metadata
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

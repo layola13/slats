@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_declarations/src/transform_3.rs
+// UPSTREAM-LINES: 914
+// PORT-STATUS: pending
+// ITEMS: fn ensure_modifiers, fn ensure_modifier_flags, fn ensure_type_params, fn update_param_list, fn ensure_parameter, fn ensure_no_initializer, fn visit_binding_name, fn transform_import_equals_declaration, fn transform_import_declaration, fn transform_jsdoc_type_expression, fn transform_jsdoc_type_literal, fn transform_jsdoc_property_tag, fn transform_jsdoc_all_type, fn transform_jsdoc_nullable_type, fn transform_jsdoc_non_nullable_type, fn transform_jsdoc_variadic_type, fn transform_jsdoc_optional_type, fn get_name_expression_preferring_identifier, fn is_not_declare_modifier, fn strip_declare_modifiers, fn visit_cjs_export_assignments, fn visit_nested_expression, fn transform_expando_assignment, fn get_expando_host_id, fn transform_expando_host, fn create_full_expando_block, fn extract_expando_host_params, fn try_get_property_name
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

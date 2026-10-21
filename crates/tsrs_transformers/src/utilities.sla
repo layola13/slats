@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/utilities.rs
+// UPSTREAM-LINES: 441
+// PORT-STATUS: pending
+// ITEMS: fn is_generated_identifier, fn is_helper_name, fn is_local_name, fn is_export_name, fn is_identifier_reference, fn convert_binding_pattern_to_assignment_pattern, fn convert_variable_declaration_to_assignment_expression, fn single_or_many, fn is_simple_copiable_expression, fn is_original_node_single_line, fn is_simple_inlineable_expression, fn find_super_statement_index_path, fn get_super_call_from_statement, fn move_range_past_modifiers, fn move_range_past_decorators, fn get_non_assignment_operator_for_compound_assignment, fn is_super_call, fn is_empty_object_literal, fn is_empty_array_literal
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

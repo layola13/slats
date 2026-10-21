@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_printer/src/generatedidentifierflags.rs
+// UPSTREAM-LINES: 61
+// PORT-STATUS: pending
+// ITEMS: struct GeneratedIdentifierFlags, fn kind, fn is_auto, fn is_loop, fn is_unique, fn is_node, fn is_reserved_in_nested_scopes, fn is_optimistic, fn is_file_level, fn has_allow_name_substitution
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

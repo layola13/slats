@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_checker/src/relater_types.rs
+// UPSTREAM-LINES: 285
+// PORT-STATUS: pending
+// ITEMS: struct SignatureCheckMode, struct MinArgumentCountFlags, struct IntersectionState, struct RecursionFlags, struct ExpandingFlags, struct RelationComparisonResult, struct DiagnosticAndArguments, struct ErrorOutputContainer, type ErrorReporter, enum RecursionId, struct Relation, const RELATION_RESULT_BITS, enum RelationKey, fn pair, struct PackedHashKey, struct TypeDiscriminator, trait Discriminator, struct errorState, struct ErrorChain, struct RelaterStackEntry, fn new, struct Relater, fn as_p, fn worker_comparer
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

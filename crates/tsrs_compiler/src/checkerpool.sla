@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_compiler/src/checkerpool.rs
+// UPSTREAM-LINES: 2544
+// PORT-STATUS: pending
+// ITEMS: trait CheckerPool, struct CheckerHandle, fn from_raw, fn release, struct PooledChecker, fn new, fn as_non_null, fn into_inner, const CHECKER_STACK_SIZE, struct SlotChecker, struct CheckerScope, struct RetiredCheckers, fn parse_memory_size, fn set_max_memory_from_cli, struct poolState, fn file_times_path, fn write_file_times, fn thread_cpu_seconds, fn thread_cpu_seconds, struct checkerPool, fn new, fn get_checker_exclusive, fn get_checker_for_file_non_exclusive, fn get_checker_for_file_exclusive, fn get_checker_non_exclusive, fn state, fn checker_count, fn checker_index_of_file, fn for_each_checker_parallel, fn get_global_diagnostics, fn for_each_checker_group_do, fn for_each_checker_group_do_ex, fn owner_at, fn tsgo_default_check_slots, fn set_checker_cost_cache_from_cli, fn write_cost_cache, enum CheckerAssignment, fn set_checker_assignment_from_cli, fn use_go_default_checker_count, fn checker_count_upper_bound
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

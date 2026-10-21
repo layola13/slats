@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/hover.rs
+// UPSTREAM-LINES: 1785
+// PORT-STATUS: pending
+// ITEMS: fn provide_hover, fn get_quick_info_and_documentation_for_symbol, fn documentation_location_mapper, type DocumentationLocationMapper, fn get_documentation_from_declaration, struct SymbolDisplayInfo, fn get_quick_info_and_declaration_at_location
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

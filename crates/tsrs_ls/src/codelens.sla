@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/codelens.rs
+// UPSTREAM-LINES: 366
+// PORT-STATUS: pending
+// ITEMS: fn provide_code_lenses, fn resolve_code_lens
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_lsproto/src/error.rs
+// UPSTREAM-LINES: 123
+// PORT-STATUS: pending
+// ITEMS: enum ErrorTag, struct Error, fn new, fn tagged, fn wrap_code, fn wrap, fn is, fn is_code, fn is_eof, fn as_error_code
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

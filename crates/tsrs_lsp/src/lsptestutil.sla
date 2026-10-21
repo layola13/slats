@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_lsp/src/lsptestutil.rs
+// UPSTREAM-LINES: 371
+// PORT-STATUS: pending
+// ITEMS: type ServerRequestHandler, type ServerNotificationHandler, struct LSPClient, struct closeClient, fn close, fn new_lsp_client, fn write_msg, fn send_request, fn send_notification, fn set_compiler_options_for_inferred_projects, fn acknowledge_registrations, fn test_server_options
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

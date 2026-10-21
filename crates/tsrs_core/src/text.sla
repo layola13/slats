@@ -1,0 +1,171 @@
+// PORT-MIRROR: crates/tsrs_core/src/text.rs
+// UPSTREAM-LINES: 354
+// PORT-STATUS: ported
+// PORT-SCOPE: SourcePos, TextPos, TextRange and the constructors spanmap depends on.
+//             The remaining text.rs items stay pending (see PORT_STATUS.md).
+//
+// Semantic notes (see PORTING.md):
+// - Rust `NonZeroU32` niche encoding is an implementation detail; the offset is stored directly and the
+//   u32::MAX-1 bound is enforced by `SourcePos::new` the same way.
+// - Rust `Option<u32>` returns trap the SLA backend (LIM-002), so they are returned as `(u32, bool)`.
+
+struct SourcePos { offset: u32 }
+
+impl SourcePos {
+    fn new(offset: u32) -> SourcePos {
+        if offset > 4294967294u32 { return SourcePos { offset: 4294967294u32 }; };
+        return SourcePos { offset: offset };
+    }
+
+    fn get(self) -> u32 {
+        return self.offset;
+    }
+}
+
+enum TextPos { Synthetic, Source(u32) }
+
+impl TextPos {
+    fn source(offset: u32) -> TextPos {
+        return TextPos::Source(offset);
+    }
+
+    // Rust: fn source_offset(self) -> Option<u32>  ->  (offset, is_source)
+    fn source_offset(self) -> (u32, bool) {
+        match self {
+            TextPos::Synthetic => { return (0u32, false); }
+            TextPos::Source(v) => { return (v, true); }
+        }
+    }
+
+    fn expect_source(self, message: String) -> u32 {
+        match self {
+            TextPos::Synthetic => { return 0u32; }
+            TextPos::Source(v) => { return v; }
+        }
+    }
+
+    fn is_synthetic(self) -> bool {
+        match self {
+            TextPos::Synthetic => { return true; }
+            TextPos::Source(v) => { return false; }
+        }
+    }
+
+    fn offset_by(self, offset: u32) -> TextPos {
+        match self {
+            TextPos::Synthetic => { return TextPos::Synthetic; }
+            TextPos::Source(v) => { return TextPos::source(v + offset); }
+        }
+    }
+}
+
+fn text_pos_eq(a: TextPos, b: TextPos) -> bool {
+    let (av, aok) = a.source_offset();
+    let (bv, bok) = b.source_offset();
+    if aok != bok { return false; };
+    if aok == false { return true; };
+    return av == bv;
+}
+
+struct TextRange { start: TextPos, end_pos: TextPos }
+
+impl TextRange {
+    fn new(pos: u32, end: u32) -> TextRange {
+        return TextRange { start: TextPos::source(pos), end_pos: TextPos::source(end) };
+    }
+
+    fn from_text_pos(pos: TextPos, end: TextPos) -> TextRange {
+        return TextRange { start: pos, end_pos: end };
+    }
+
+    fn synthetic() -> TextRange {
+        return TextRange { start: TextPos::Synthetic, end_pos: TextPos::Synthetic };
+    }
+
+    fn pos(self) -> TextPos {
+        return self.start;
+    }
+
+    fn end(self) -> TextPos {
+        return self.end_pos;
+    }
+
+    // Rust: fn source_pos(self) -> Option<u32>
+    fn source_pos(self) -> (u32, bool) {
+        return self.start.source_offset();
+    }
+
+    // Rust: fn source_end(self) -> Option<u32>
+    fn source_end(self) -> (u32, bool) {
+        return self.end_pos.source_offset();
+    }
+
+    // Rust: fn len(self) -> Option<u32>
+    fn len(self) -> (u32, bool) {
+        let (p, pok) = self.start.source_offset();
+        let (e, eok) = self.end_pos.source_offset();
+        if pok == false || eok == false { return (0u32, false); };
+        if e < p { return (0u32, true); };
+        return (e - p, true);
+    }
+
+    fn is_valid(self) -> bool {
+        let (p, pok) = self.start.source_offset();
+        let (e, eok) = self.end_pos.source_offset();
+        if pok == false || eok == false { return false; };
+        return p <= e;
+    }
+
+    fn contains(self, pos: TextPos) -> bool {
+        let (p, pok) = self.start.source_offset();
+        let (e, eok) = self.end_pos.source_offset();
+        let (q, qok) = pos.source_offset();
+        if pok == false || eok == false || qok == false { return false; };
+        return p <= q && q < e;
+    }
+
+    fn contains_inclusive(self, pos: TextPos) -> bool {
+        let (p, pok) = self.start.source_offset();
+        let (e, eok) = self.end_pos.source_offset();
+        let (q, qok) = pos.source_offset();
+        if pok == false || eok == false || qok == false { return false; };
+        return p <= q && q <= e;
+    }
+
+    fn contains_exclusive(self, pos: TextPos) -> bool {
+        let (p, pok) = self.start.source_offset();
+        let (e, eok) = self.end_pos.source_offset();
+        let (q, qok) = pos.source_offset();
+        if pok == false || eok == false || qok == false { return false; };
+        return p < q && q < e;
+    }
+
+    fn with_pos(self, pos: TextPos) -> TextRange {
+        return TextRange::from_text_pos(pos, self.end_pos);
+    }
+
+    fn with_end(self, end: TextPos) -> TextRange {
+        return TextRange::from_text_pos(self.start, end);
+    }
+
+    fn overlaps(self, t2: TextRange) -> bool {
+        let (a, aok) = self.start.source_offset();
+        let (b, bok) = self.end_pos.source_offset();
+        let (c, cok) = t2.start.source_offset();
+        let (d, dok) = t2.end_pos.source_offset();
+        if aok == false || bok == false || cok == false || dok == false { return false; };
+        return a < d && c < b;
+    }
+}
+
+fn text_range_eq(a: TextRange, b: TextRange) -> bool {
+    return text_pos_eq(a.pos(), b.pos()) && text_pos_eq(a.end(), b.end());
+}
+
+fn new_text_range(pos: u32, end: u32) -> TextRange {
+    return TextRange::new(pos, end);
+}
+
+fn undefined_text_range() -> TextRange {
+    return TextRange::synthetic();
+}

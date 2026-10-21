@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/checker/dispatch.rs
+// UPSTREAM-LINES: 324
+// PORT-STATUS: pending
+// ITEMS: fn handle, const CHECKER_METHODS, fn is_checker_method
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

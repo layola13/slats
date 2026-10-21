@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/predecode.rs
+// UPSTREAM-LINES: 781
+// PORT-STATUS: pending
+// ITEMS: fn exact_compiler_options_ints, fn exact_build_options_ints, fn raw_value_at, fn predecode, fn enter_request, struct RequestGuard, fn exact_u64, fn exact_i64, fn current_batch_params
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

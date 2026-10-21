@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_checker/src/pseudotypenodebuilder.rs
+// UPSTREAM-LINES: 1077
+// PORT-STATUS: pending
+// ITEMS: fn pseudo_type_to_node_with_checker_fallback, fn pseudo_type_to_node, fn pseudo_parameters_to_node_list, fn pseudo_parameter_to_node, fn pseudo_type_equivalent_to_type, fn pseudo_parameters_equivalent_to_parameters, fn is_structural_pseudo_type, fn pseudo_return_type_matches_predicate, fn pseudo_type_to_type
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/checker/handlers_symbols.rs
+// UPSTREAM-LINES: 429
+// PORT-STATUS: pending
+// ITEMS: fn get_symbol_at_position, fn get_symbols_at_positions, fn get_symbol_at_location, fn get_symbols_at_locations, fn get_symbol_of_source_file, fn get_symbols_of_source_files, enum SymbolTypeQuery, fn get_type_of_symbol, fn get_types_of_symbols, fn resolve_name, fn get_symbols_in_scope, fn get_shorthand_assignment_value_symbol, fn get_export_specifier_local_target_symbol, enum AliasQuery, fn alias_query, fn get_fully_qualified_name, fn get_exports_of_module, fn get_member_in_module_exports, fn get_jsdoc_tags, fn get_documentation_comment, fn is_readonly_symbol, fn get_references_to_symbol_in_file, enum SymbolProperty, fn symbol_property, enum SymbolTableProperty, fn symbol_table_property
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

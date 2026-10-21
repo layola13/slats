@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/moduletransforms/commonjsmodule_4.rs
+// UPSTREAM-LINES: 1059
+// PORT-STATUS: pending
+// ITEMS: fn visit_for_statement, fn visit_for_in_or_of_statement, fn visit_expression_statement, fn visit_void_expression, fn visit_parenthesized_expression, fn visit_partially_emitted_expression, fn visit_binary_expression, fn visit_destructuring_assignment, fn visit_assignment_property, fn visit_shorthand_assignment_property, fn visit_assignment_rest_property, fn visit_assignment_rest_element, fn visit_assignment_element, fn visit_prefix_unary_expression, fn visit_postfix_unary_expression, fn visit_call_expression, fn visit_tagged_template_expression, fn visit_shorthand_property_assignment, fn visit_identifier, fn visit_expression_identifier, fn get_exports
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

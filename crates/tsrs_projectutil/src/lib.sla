@@ -1,0 +1,10 @@
+// PORT-MIRROR: crates/tsrs_projectutil/src/lib.rs
+// UPSTREAM-LINES: 5
+// PORT-STATUS: pending
+// ITEMS: mod dirty, mod logging
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "dirty/mod.sla"
+@import "logging/mod.sla"

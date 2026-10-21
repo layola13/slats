@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/checker/symbol_index.rs
+// UPSTREAM-LINES: 100
+// PORT-STATUS: pending
+// ITEMS: fn source_file_symbol
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

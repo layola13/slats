@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_core/src/stringutil/norm.rs
+// UPSTREAM-LINES: 78
+// PORT-STATUS: pending
+// ITEMS: fn unicode_is_mn, fn unicode_is_upper, fn norm_nfd_string
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

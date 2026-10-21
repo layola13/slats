@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/gojson.rs
+// UPSTREAM-LINES: 469
+// PORT-STATUS: pending
+// ITEMS: trait GoJson, fn compiler_options_to_go_json, fn compiler_option_to_go_json, fn compiler_options_integer_fields, const BUILD_OPTIONS_INTEGER_FIELDS, fn compiler_options_from_go_json, fn type_acquisition_to_go_json, fn build_options_to_go_json, fn build_options_from_go_json, fn project_reference_to_go_json, fn project_reference_from_go_json
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

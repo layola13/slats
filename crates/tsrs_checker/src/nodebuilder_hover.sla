@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_checker/src/nodebuilder_hover.rs
+// UPSTREAM-LINES: 911
+// PORT-STATUS: pending
+// ITEMS: fn is_expanding, fn expand_symbol_for_hover, fn expand_enum_decl, fn enum_member_initializer, fn expand_class_decl, fn add_class_modifiers, fn type_elements_to_class_elements, fn expand_interface_decl, fn hover_heritage_clauses, fn serialize_properties_with_truncation, fn serialize_constructors, fn serialize_index_signatures_of_type, fn serialize_namespace_member, fn expand_module_decl, fn serialize_type_alias_for_namespace, fn filter_inherited_properties, fn is_namespace_member, fn is_hash_private
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

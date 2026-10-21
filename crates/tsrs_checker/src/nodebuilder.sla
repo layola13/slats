@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_checker/src/nodebuilder.rs
+// UPSTREAM-LINES: 524
+// PORT-STATUS: pending
+// ITEMS: fn emit_context, fn enter_context, fn propagate_verbosity_out, fn pop_context, fn exit_context, fn exit_context_slice, fn exit_context_check, fn index_info_to_index_signature_declaration, fn serialize_return_type_for_signature, fn serialize_type_parameters_for_signature, fn serialize_type_for_declaration, fn serialize_type_for_expression, fn signature_to_signature_declaration, fn expand_symbol_for_hover, fn simplify_class_declaration, fn simplify_modifiers, fn symbol_to_entity_name, fn symbol_to_expression, fn symbol_to_node, fn symbol_to_parameter_declaration, fn symbol_to_type_parameter_declarations, fn type_parameter_to_declaration, fn type_predicate_to_type_predicate_node, fn type_to_type_node, fn try_js_type_node_to_type_node, fn new_node_builder, fn new_node_builder_ex, fn get_node_builder, fn get_node_builder_ex
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

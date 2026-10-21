@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/source_map.rs
+// UPSTREAM-LINES: 220
+// PORT-STATUS: pending
+// ITEMS: fn source_file_range_to_lsp_location, fn source_file_range_to_lsp_location_for_feature, fn get_mapped_location, struct script, fn get_script, fn try_get_source_position, fn try_get_source_position_worker, fn try_get_generated_position, fn try_get_generated_position_worker
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

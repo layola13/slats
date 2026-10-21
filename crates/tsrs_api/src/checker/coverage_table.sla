@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/checker/coverage_table.rs
+// UPSTREAM-LINES: 182
+// PORT-STATUS: pending
+// ITEMS: const PINNED_METHODS
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

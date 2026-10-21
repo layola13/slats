@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/handler.rs
+// UPSTREAM-LINES: 103
+// PORT-STATUS: pending
+// ITEMS: enum ErrorKind, struct ApiError, fn invalid_request, fn client, fn unsupported, fn internal, type ApiResult, enum Response, fn null, trait Handler, trait ClientConn
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

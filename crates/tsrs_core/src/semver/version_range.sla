@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_core/src/semver/version_range.rs
+// UPSTREAM-LINES: 1467
+// PORT-STATUS: pending
+// ITEMS: fn logical_or_reg_exp_split, fn whitespace_reg_exp_split, fn partial_reg_exp_find_string_submatch, fn hyphen_reg_exp_find_string_submatch, fn range_reg_exp_find_string_submatch, struct VersionRange, struct VersionComparator, enum ComparatorOperator, fn as_str, fn string, fn format_disjunction, fn format_alternative, fn format_comparator, fn test, fn test_disjunction, fn test_alternative, fn test_comparator, fn try_parse_version_range, fn parse_alternatives, fn parse_hyphen, struct PartialVersion, fn parse_partial, fn parse_comparator, fn is_wildcard
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,27 @@
+// PORT-MIRROR: crates/tsrs_contentmappertest/src/lib.rs
+// UPSTREAM-LINES: 38
+// PORT-STATUS: pending
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "component.sla"
+@import "diagnostic_code_collision.sla"
+@import "duplicate.sla"
+@import "duplicate_projection.sla"
+@import "dynamic_verbatim.sla"
+@import "editing.sla"
+@import "failing.sla"
+@import "hoisting.sla"
+@import "lisp.sla"
+@import "manifest.sla"
+@import "protocol.sla"
+@import "registry.sla"
+@import "spawner.sla"
+@import "supplemental.sla"
+@import "supplemental_diagnostics.sla"
+@import "supplemental_globals.sla"
+@import "supplemental_module.sla"
+@import "synthesizing.sla"
+@import "transforming.sla"
+@import "verbatim.sla"

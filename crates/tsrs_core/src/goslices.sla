@@ -1,0 +1,74 @@
+// PORT-MIRROR: crates/tsrs_core/src/goslices.rs
+// UPSTREAM-LINES: 589
+// PORT-STATUS: partial (spanmap dependencies only)
+// PORT-SCOPE: binary_search_func / sort_func specializations for u32. The Segment specializations live in
+//             tsrs_spanmap (spanmap.sla) because SLA, unlike Rust, has no generic parameters over a type that
+//             is declared in another package (LIM-003); Rust's monomorphization is reproduced by hand.
+//
+// Semantic notes (see PORTING.md):
+// - Go's pdqsort is not stable. The port uses a stable merge sort (DEV-001): it is a strict refinement for equal
+//   keys, so every consumer that observes only a total order behaves identically, and equal-key ordering becomes
+//   deterministic instead of Go's unstable order.
+// - SLA has no closures, so Rust's comparator parameters become explicit monomorphic functions, which is the
+//   same specialization Rust's generic instantiation performs.
+
+fn copy_u32(src: &Vec<u32>) -> Vec<u32> {
+    let out: Vec<u32> = Vec::new();
+    let i = 0;
+    while i < len(src) { out.push(src[i]); i = i + 1; }
+    return out;
+}
+
+fn merge_u32(left: &Vec<u32>, right: &Vec<u32>) -> Vec<u32> {
+    let out: Vec<u32> = Vec::new();
+    let i = 0;
+    let j = 0;
+    while i < len(left) && j < len(right) {
+        if right[j] < left[i] { out.push(right[j]); j = j + 1; }
+        else { out.push(left[i]); i = i + 1; };
+    }
+    while i < len(left) { out.push(left[i]); i = i + 1; }
+    while j < len(right) { out.push(right[j]); j = j + 1; }
+    return out;
+}
+
+// Rust: goslices::sort_func(&mut Vec<u32>, |a, b| a.cmp(b))
+fn sort_u32(values: &Vec<u32>) -> Vec<u32> {
+    if len(values) <= 1 { return copy_u32(values); };
+    let mid = len(values) / 2;
+    let left: Vec<u32> = Vec::new();
+    let right: Vec<u32> = Vec::new();
+    let i = 0;
+    while i < len(values) {
+        if i < mid { left.push(values[i]); } else { right.push(values[i]); };
+        i = i + 1;
+    }
+    let sorted_left = sort_u32(&left);
+    let sorted_right = sort_u32(&right);
+    return merge_u32(&sorted_left, &sorted_right);
+}
+
+// Rust: goslices::binary_search_func(values, target, cmp) -> (index, found)
+fn binary_search_u32(values: &Vec<u32>, target: u32) -> (u32, bool) {
+    let lo = 0u32;
+    let hi = len(values) as u32;
+    while lo < hi {
+        let mid = lo + (hi - lo) / 2;
+        let v = values[mid as usize];
+        if v < target { lo = mid + 1; }
+        else if v > target { hi = mid; }
+        else { return (mid, true); };
+    }
+    return (lo, false);
+}
+
+// Rust: slice::partition_point(|&e| e < target)
+fn lower_bound_u32(values: &Vec<u32>, target: u32) -> u32 {
+    let lo = 0u32;
+    let hi = len(values) as u32;
+    while lo < hi {
+        let mid = lo + (hi - lo) / 2;
+        if values[mid as usize] < target { lo = mid + 1; } else { hi = mid; };
+    }
+    return lo;
+}

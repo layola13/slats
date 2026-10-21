@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_cli/src/signals.rs
+// UPSTREAM-LINES: 79
+// PORT-STATUS: pending
+// ITEMS: fn notify_interrupts, fn on_interrupt
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

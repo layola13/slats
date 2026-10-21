@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/autoimport/extract.rs
+// UPSTREAM-LINES: 737
+// PORT-STATUS: pending
+// ITEMS: type ToPathFunc, struct symbolExtractor, struct exportExtractor, struct extractorStats, fn stats, struct checkerLease, fn new_symbol_extractor, fn new_export_extractor, fn extract_from_file, fn extract_from_symbol
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,13 @@
+// PORT-MIRROR: crates/tsrs_sourcemap/src/lib.rs
+// UPSTREAM-LINES: 12
+// PORT-STATUS: pending
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "decoder.sla"
+@import "generator.sla"
+@import "lineinfo.sla"
+@import "source.sla"
+@import "source_mapper.sla"
+@import "util.sla"

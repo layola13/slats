@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/change/trackerimpl.rs
+// UPSTREAM-LINES: 686
+// PORT-STATUS: pending
+// ITEMS: fn get_text_changes_from_changes, fn get_adjusted_range, fn get_adjusted_start_position, fn get_adjusted_end_position, fn get_insertion_position_at_source_file_top, fn text_edits_conflict, fn get_format_code_settings_for_writing, fn has_comments_before_line_break, fn need_semicolon_between
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

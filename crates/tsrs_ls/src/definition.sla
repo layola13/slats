@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/definition.rs
+// UPSTREAM-LINES: 756
+// PORT-STATUS: pending
+// ITEMS: fn provide_definition, fn provide_definition_worker, fn provide_definition_at_position, fn provide_type_definition, fn combine_definition_responses, fn get_declaration_name_for_keyword, fn create_definition_locations, fn lsp_range_contains, fn create_location_from_file_and_range, fn get_declarations_from_location, fn try_get_signature_declaration
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

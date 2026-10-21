@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_fswatch/src/event.rs
+// UPSTREAM-LINES: 322
+// PORT-STATUS: pending
+// ITEMS: struct EventKind, const Update, const Delete, struct Event, fn new, struct eventEntry, struct eventList, fn create, fn update, fn update_at, fn update_watch_root_at, fn remove, fn remove_and_get_sequence, fn remove_at, fn remove_watch_root_at, fn size, fn get_events, fn drain, fn drain_for_sequences, fn drain_entries, fn set_error, fn has_error, fn get_error, fn sequence, fn event_since
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

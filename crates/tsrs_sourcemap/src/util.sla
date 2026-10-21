@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_sourcemap/src/util.rs
+// UPSTREAM-LINES: 31
+// PORT-STATUS: pending
+// ITEMS: fn try_get_source_mapping_url
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_checker/src/printer_types.rs
+// UPSTREAM-LINES: 261
+// PORT-STATUS: pending
+// ITEMS: trait SymbolTracker, struct Flags, struct InternalFlags, enum SymbolAccessibility, enum TypeReferenceSerializationKind, struct SymbolAccessibilityResult, struct VerbosityContext, struct accessibleSymbolChainContext, struct SymbolTrackerImpl, type Seq
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

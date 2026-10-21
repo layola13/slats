@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_testrunner/src/options.rs
+// UPSTREAM-LINES: 518
+// PORT-STATUS: pending
+// ITEMS: fn get_command_line_option, fn get_harness_option, fn tsoptions_option_table, fn get_option_value, fn set_options_from_test_config, fn parse_test_ts_config, fn test_compiler_options, fn unsupported_reason
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

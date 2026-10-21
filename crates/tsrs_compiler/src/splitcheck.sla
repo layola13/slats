@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_compiler/src/splitcheck.rs
+// UPSTREAM-LINES: 368
+// PORT-STATUS: pending
+// ITEMS: const LIB_MIN_SHARE_PERCENT, struct SplitConfig, fn split_config, fn statement_pieces, struct SplitFile, fn new, fn is_shadow, fn queued_pieces, fn run_queued_piece, fn run_owner, fn shadow_compare, fn report_stats, fn piece_counts
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

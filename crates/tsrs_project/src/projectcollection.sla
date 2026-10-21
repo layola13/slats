@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_project/src/projectcollection.rs
+// UPSTREAM-LINES: 458
+// PORT-STATUS: pending
+// ITEMS: struct ProjectCollection, struct APIState, fn clone_state, fn equals, struct apiOpenedFile, fn new_project_collection, fn config_file_registry, fn configured_project, fn get_project, fn configured_projects, fn synthetic_projects, fn projects_by_id, fn projects, fn language_service_projects, fn inferred_project, fn get_language_service_projects_containing_file, fn get_open_configured_projects, fn get_default_project, fn clone_collection, fn open_file_paths, fn find_default_configured_project_from_program_inclusion
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

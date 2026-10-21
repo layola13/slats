@@ -1,0 +1,20 @@
+// PORT-MIRROR: crates/tsrs_lsproto/src/lib.rs
+// UPSTREAM-LINES: 26
+// PORT-STATUS: pending
+// ITEMS: mod json, mod jsonrpc
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "baseproto.sla"
+@import "error.sla"
+@import "json.sla"
+@import "jsonrpc/mod.sla"
+@import "lsp.sla"
+@import "lsp_generated.sla"
+@import "lsproto_jsonrpc.sla"
+@import "structcodec.sla"
+@import "util.sla"
+@import "baseproto_test.sla"
+@import "lsp_json_test.sla"
+@import "lsp_test.sla"

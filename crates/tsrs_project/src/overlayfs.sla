@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_project/src/overlayfs.rs
+// UPSTREAM-LINES: 889
+// PORT-STATUS: pending
+// ITEMS: type Hash128, fn hash_string_128, type ToPath, type OverlayMap, trait FileContent, trait FileHandle, struct fileBase, fn new, struct cachedFile, fn new_cached_file, fn new_cached_file_handle, struct Overlay, fn new_overlay, fn text, fn original_file_name, fn span_map, fn original_text, fn compute_matches_disk_text, enum FsRef, fn fs, struct overlayFS, trait LayeredFileSystem, trait RebasableFileSystem, fn new_overlay_fs, fn layer_overlay_file_system, fn process_changes
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

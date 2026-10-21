@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/format/indent.rs
+// UPSTREAM-LINES: 1169
+// PORT-STATUS: pending
+// ITEMS: fn get_indentation_for_node, fn get_indentation, fn find_first_non_whitespace_column, fn find_first_non_whitespace_character_and_column, fn child_starts_on_the_same_line_with_else_in_if_statement, fn get_containing_list, fn should_indent_child_node, fn node_will_indent_child, fn child_is_unindented_branch_of_conditional_expression, fn argument_starts_on_same_line_as_previous_argument
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

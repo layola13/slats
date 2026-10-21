@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_declarations/src/transform_2.rs
+// UPSTREAM-LINES: 1274
+// PORT-STATUS: pending
+// ITEMS: fn transform_common_js_export, fn transform_common_js_export_worker, fn wrap_in_cjs_export_namespace, fn is_common_js_alias_export, fn transform_class_expression_to_declaration, fn rewrite_module_specifier, fn preserve_js_doc, fn preserve_partial_js_doc, fn remove_all_comments, fn ensure_type, fn should_print_with_initializer, fn check_entity_name_visibility, fn transform_top_level_declaration, fn transform_type_alias_declaration, fn transform_interface_declaration, fn transform_function_declaration, fn transform_module_declaration, fn strip_export_modifiers, fn build_class_members, fn transform_class_declaration, fn visit_this_property_assignments, fn is_class_extending_null, fn collect_this_property_assignments, fn walk_binding_pattern, fn transform_variable_statement, fn transform_enum_declaration
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

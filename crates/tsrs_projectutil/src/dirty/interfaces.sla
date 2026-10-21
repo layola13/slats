@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_projectutil/src/dirty/interfaces.rs
+// UPSTREAM-LINES: 95
+// PORT-STATUS: pending
+// ITEMS: trait Cloneable, struct Shared, fn new, fn ptr_eq, fn as_ptr, fn arc, fn make_mut, fn clone_shared, trait Value
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

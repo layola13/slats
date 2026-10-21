@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_core/src/frozen.rs
+// UPSTREAM-LINES: 462
+// PORT-STATUS: pending
+// ITEMS: struct FrozenCell, const fn, fn borrow, fn borrow_mut, fn borrow_mut_locked, fn replace, fn get_mut, fn into_inner, struct FrozenRef, struct FrozenRefMut, struct OwnedCell, const fn, fn set, fn replace, fn get, struct OwnedSliceCell, fn new, fn get, fn set, struct OwnedStrCell, fn new, fn get, fn set, struct OwnedTaggedStrCell, fn new, fn get, fn set, fn tags, fn set_tags, struct OwnedPSliceCell, fn new, fn get, fn set
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

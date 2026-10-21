@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api_codec/src/encoder.rs
+// UPSTREAM-LINES: 779
+// PORT-STATUS: pending
+// ITEMS: enum EncodeError, struct NodeIndexTable, fn new, fn get_index, fn node, fn len, fn is_empty, struct EncodeContext, fn append_u32s, fn has_modifiers, trait Present, fn present, fn source_file_hash, fn set_source_file_lease, fn set_source_file_id, fn encode_source_file, fn encode_node, fn build_node_index_table, fn record_extended_data_source_file, fn record_extended_data_template_head, fn record_extended_data_template_middle, fn record_extended_data_template_tail, fn record_extended_data_string_literal, fn record_extended_data_numeric_literal, fn record_extended_data_big_int_literal, fn record_extended_data_regular_expression_literal, fn record_extended_data_no_substitution_template_literal, fn node_common_data_synthetic_expression
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

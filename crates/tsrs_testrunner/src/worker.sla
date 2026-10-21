@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_testrunner/src/worker.rs
+// UPSTREAM-LINES: 384
+// PORT-STATUS: pending
+// ITEMS: const WORKER_STACK_SIZE, struct PanicInfo, fn install_panic_hook, struct ItemResult, struct ExtraResult, const EXTRA_KINDS, fn results_dir, fn run_item, fn extra_result, fn write_artifacts, fn write_extra_artifacts, fn parse_item_line, fn format_item_line, fn worker_main, fn take_last_panic_message
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ipc/src/error.rs
+// UPSTREAM-LINES: 79
+// PORT-STATUS: pending
+// ITEMS: enum ErrorTag, struct Error, fn new, fn tagged, fn wrap, fn join, fn with_suffix, fn is, fn eof
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

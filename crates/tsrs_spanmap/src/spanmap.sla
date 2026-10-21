@@ -1,0 +1,1221 @@
+// PORT-MIRROR: crates/tsrs_spanmap/src/spanmap.rs
+// UPSTREAM-LINES: 1235
+// PORT-STATUS: ported
+//
+// Package spanmap provides bidirectional span-aware mapping between a content mapper's virtual text
+// and its original, untransformed source. Unlike a source map, which records point correspondences and
+// leaves spans and "no origin" implicit, a SpanMap records explicit segments for the parts of the
+// virtual text that correspond to the original; positions not covered by any segment are synthesized
+// (virtual content with no original counterpart). All positions are absolute byte offsets, matching
+// the compiler's source TextRange model.
+//
+// Semantic notes (see PORTING.md for the full table):
+// - LIM-002: Rust `Option<T>` return values trap the SLA backend, so every Option result is a
+//   `(T, bool)` pair, and `Option<usize>` indices are a `SegIndex` with explicit flags.
+// - DEV-002: Rust `OnceLock<OriginalIndex>` memoization becomes an eagerly built index in `new`
+//   (identical results, no interior mutability in SLA).
+// - DEV-003: `&str` byte views are miscompiled in SLA, so text arguments are `&Vec<u8>`; byte offsets,
+//   comparisons and lengths are unchanged.
+// - DEV-004: Rust returns `P<SpanMap>` (refcounted); SLA returns `SpanMap` by value.
+// - LIM-001: SLA has one call namespace, so Rust's same-named nil-receiver free functions take a `_of`
+//   suffix. The methods keep their Rust names.
+// - Rust identifiers that collide with SLA keywords/builtins are suffixed with `_`:
+//   `Fidelity::None` -> `Fidelity::None_`, `MappingErrorKind::Kind` -> `MappingErrorKind::Kind_`.
+
+@import "../../tsrs_core/src/text.sla"
+@import "../../tsrs_core/src/goslices.sla"
+
+// Kind describes how positions inside a segment relate the virtual span to the original span.
+// spanmap.go:22 (Go `type Kind int32`: a decoded span map can carry any int32, which Validate reports.)
+struct Kind { code: i32 }
+
+impl Kind {
+    // KindVerbatim segments are length-preserving.
+    fn verbatim() -> Kind { return Kind { code: 0 }; }
+    // KindAtom segments map a virtual span to an original span as a whole.
+    fn atom() -> Kind { return Kind { code: 1 }; }
+    // KindAlias has atom geometry and asserts both texts name the same logical entity.
+    fn alias() -> Kind { return Kind { code: 2 }; }
+    fn equals(self, other: Kind) -> bool { return self.code == other.code; }
+}
+
+// Rust can construct `Kind(code)` anywhere; SLA struct literals do not cross module boundaries (LIM-005),
+// so the decoded constructor is exported.
+fn kind_from_code(code: i32) -> Kind { return Kind { code: code }; }
+
+// Feature selects which language-service operations may use a segment.
+// spanmap.go:41
+struct Feature { mask: u32 }
+
+impl Feature {
+    fn hover() -> Feature { return Feature { mask: 1 }; }
+    fn signature_help() -> Feature { return Feature { mask: 2 }; }
+    fn completion() -> Feature { return Feature { mask: 4 }; }
+    fn definition() -> Feature { return Feature { mask: 8 }; }
+    fn type_definition() -> Feature { return Feature { mask: 16 }; }
+    fn implementation() -> Feature { return Feature { mask: 32 }; }
+    fn references() -> Feature { return Feature { mask: 64 }; }
+    fn document_highlights() -> Feature { return Feature { mask: 128 }; }
+    fn rename() -> Feature { return Feature { mask: 256 }; }
+    fn call_hierarchy() -> Feature { return Feature { mask: 512 }; }
+    fn code_actions() -> Feature { return Feature { mask: 1024 }; }
+    fn formatting() -> Feature { return Feature { mask: 2048 }; }
+    fn inlay_hints() -> Feature { return Feature { mask: 4096 }; }
+    fn semantic_tokens() -> Feature { return Feature { mask: 8192 }; }
+    fn folding_ranges() -> Feature { return Feature { mask: 16384 }; }
+    fn selection_ranges() -> Feature { return Feature { mask: 32768 }; }
+    fn linked_editing() -> Feature { return Feature { mask: 65536 }; }
+    fn auto_insert() -> Feature { return Feature { mask: 131072 }; }
+    fn document_symbols() -> Feature { return Feature { mask: 262144 }; }
+    fn code_lens() -> Feature { return Feature { mask: 524288 }; }
+    fn all() -> Feature { return Feature { mask: 1048575 }; }
+    fn none() -> Feature { return Feature { mask: 0 }; }
+    fn from_bits_retain(bits: u32) -> Feature { return Feature { mask: bits }; }
+    fn bits(self) -> u32 { return self.mask; }
+    fn intersects(self, other: Feature) -> bool { return (self.mask & other.mask) != 0; }
+    fn equals(self, other: Feature) -> bool { return self.mask == other.mask; }
+}
+
+fn feature_from_bits(bits: u32) -> Feature { return Feature { mask: bits }; }
+
+// Fidelity describes how faithfully a mapped span reflects the original.
+// spanmap.go:71
+enum Fidelity { Exact, Atom, Approximate, None_ }
+
+impl Fidelity {
+    // spanmap.go:86
+    fn is_exact(self) -> bool { return fidelity_eq(self, Fidelity::Exact); }
+    // spanmap.go:92
+    fn is_single_segment(self) -> bool {
+        return fidelity_eq(self, Fidelity::Exact) || fidelity_eq(self, Fidelity::Atom);
+    }
+    // spanmap.go:98
+    fn is_none(self) -> bool { return fidelity_eq(self, Fidelity::None_); }
+}
+
+fn fidelity_eq(a: Fidelity, b: Fidelity) -> bool {
+    match a {
+        Fidelity::Exact => { match b { Fidelity::Exact => { return true; } Fidelity::Atom => { return false; } Fidelity::Approximate => { return false; } Fidelity::None_ => { return false; } } }
+        Fidelity::Atom => { match b { Fidelity::Exact => { return false; } Fidelity::Atom => { return true; } Fidelity::Approximate => { return false; } Fidelity::None_ => { return false; } } }
+        Fidelity::Approximate => { match b { Fidelity::Exact => { return false; } Fidelity::Atom => { return false; } Fidelity::Approximate => { return true; } Fidelity::None_ => { return false; } } }
+        Fidelity::None_ => { match b { Fidelity::Exact => { return false; } Fidelity::Atom => { return false; } Fidelity::Approximate => { return false; } Fidelity::None_ => { return true; } } }
+    }
+}
+
+// Segment maps the half-open virtual range [VirtualStart, VirtualEnd) to the half-open original range
+// [OriginalStart, OriginalEnd). Features controls language-service participation.
+// spanmap.go:105
+struct Segment {
+    virtual_start: u32,
+    virtual_end: u32,
+    original_start: u32,
+    original_end: u32,
+    kind: Kind,
+    features: Feature,
+}
+
+fn segment(
+    virtual_start: u32,
+    virtual_end: u32,
+    original_start: u32,
+    original_end: u32,
+    kind: Kind,
+    features: Feature,
+) -> Segment {
+    return Segment {
+        virtual_start: virtual_start,
+        virtual_end: virtual_end,
+        original_start: original_start,
+        original_end: original_end,
+        kind: kind,
+        features: features,
+    };
+}
+
+fn zero_segment() -> Segment {
+    return segment(0u32, 0u32, 0u32, 0u32, Kind::verbatim(), Feature::none());
+}
+
+fn segment_eq(a: Segment, b: Segment) -> bool {
+    return a.virtual_start == b.virtual_start
+        && a.virtual_end == b.virtual_end
+        && a.original_start == b.original_start
+        && a.original_end == b.original_end
+        && kind_eq(a.kind, b.kind)
+        && feature_eq(a.features, b.features);
+}
+
+fn kind_eq(a: Kind, b: Kind) -> bool {
+    let x = a;
+    let y = b;
+    return x.equals(y);
+}
+
+fn feature_eq(a: Feature, b: Feature) -> bool {
+    let x = a;
+    let y = b;
+    return x.equals(y);
+}
+
+fn feature_bits(f: Feature) -> u32 {
+    let x = f;
+    return x.bits();
+}
+
+fn feature_intersects(a: Feature, b: Feature) -> bool {
+    let x = a;
+    let y = b;
+    return x.intersects(y);
+}
+
+fn is_verbatim(seg: Segment) -> bool { return kind_eq(seg.kind, Kind::verbatim()); }
+fn is_atom(seg: Segment) -> bool { return kind_eq(seg.kind, Kind::atom()); }
+fn is_alias(seg: Segment) -> bool { return kind_eq(seg.kind, Kind::alias()); }
+fn has_feature(seg: Segment, feature: Feature) -> bool { return feature_intersects(seg.features, feature); }
+
+// MappedPosition is one virtual projection of an original position and its mapping fidelity.
+// spanmap.go:115
+struct MappedPosition { position: u32, fidelity: Fidelity }
+
+fn mapped_position_eq(a: MappedPosition, b: MappedPosition) -> bool {
+    return a.position == b.position && fidelity_eq(a.fidelity, b.fidelity);
+}
+
+// MappedSpan is one virtual projection of an original range and its mapping fidelity.
+// spanmap.go:121
+struct MappedSpan { span: TextRange, fidelity: Fidelity }
+
+// SegIndex is Rust's `(Option<usize>, bool)` from segment_index_at: the containing segment (or the one
+// immediately before a gap), whether the index exists, and whether pos is inside the segment.
+struct SegIndex { index: u32, has_index: bool, inside: bool }
+
+// spanmap.go:140
+enum MappingErrorKind { Overlap, OutOfBounds, VerbatimMismatch, Kind_, Feature }
+
+// spanmap.go:159
+struct MappingError { kind: MappingErrorKind, virtual_pos: u32, original_pos: u32 }
+
+fn mapping_error(kind: MappingErrorKind, virtual_pos: u32, original_pos: u32) -> MappingError {
+    return MappingError { kind: kind, virtual_pos: virtual_pos, original_pos: original_pos };
+}
+
+// spanmap.go:166
+fn mapping_error_message(self: MappingError) -> String {
+    match self.kind {
+        MappingErrorKind::Overlap => {
+            return format(
+                "content mapper position mappings overlap or are out of order near virtual offset {}",
+                self.virtual_pos,
+            );
+        }
+        MappingErrorKind::OutOfBounds => {
+            return format(
+                "content mapper position mapping points outside the original content at original offset {}",
+                self.original_pos,
+            );
+        }
+        MappingErrorKind::VerbatimMismatch => {
+            return format(
+                "content mapper verbatim mapping does not match the original content at virtual offset {}, original offset {}",
+                self.virtual_pos,
+                self.original_pos,
+            );
+        }
+        MappingErrorKind::Kind_ => {
+            return format(
+                "content mapper position mapping has an invalid kind at virtual offset {}",
+                self.virtual_pos,
+            );
+        }
+        MappingErrorKind::Feature => {
+            return format(
+                "content mapper position mappings have invalid features near original offset {}",
+                self.original_pos,
+            );
+        }
+    }
+}
+
+fn error_kind_eq(a: MappingErrorKind, b: MappingErrorKind) -> bool {
+    match a {
+        MappingErrorKind::Overlap => { match b { MappingErrorKind::Overlap => { return true; } MappingErrorKind::OutOfBounds => { return false; } MappingErrorKind::VerbatimMismatch => { return false; } MappingErrorKind::Kind_ => { return false; } MappingErrorKind::Feature => { return false; } } }
+        MappingErrorKind::OutOfBounds => { match b { MappingErrorKind::Overlap => { return false; } MappingErrorKind::OutOfBounds => { return true; } MappingErrorKind::VerbatimMismatch => { return false; } MappingErrorKind::Kind_ => { return false; } MappingErrorKind::Feature => { return false; } } }
+        MappingErrorKind::VerbatimMismatch => { match b { MappingErrorKind::Overlap => { return false; } MappingErrorKind::OutOfBounds => { return false; } MappingErrorKind::VerbatimMismatch => { return true; } MappingErrorKind::Kind_ => { return false; } MappingErrorKind::Feature => { return false; } } }
+        MappingErrorKind::Kind_ => { match b { MappingErrorKind::Overlap => { return false; } MappingErrorKind::OutOfBounds => { return false; } MappingErrorKind::VerbatimMismatch => { return false; } MappingErrorKind::Kind_ => { return true; } MappingErrorKind::Feature => { return false; } } }
+        MappingErrorKind::Feature => { match b { MappingErrorKind::Overlap => { return false; } MappingErrorKind::OutOfBounds => { return false; } MappingErrorKind::VerbatimMismatch => { return false; } MappingErrorKind::Kind_ => { return false; } MappingErrorKind::Feature => { return true; } } }
+    }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Local specializations of goslices::sort_func (LIM-003: no generics across packages).
+
+fn copy_segments(src: &Vec<Segment>) -> Vec<Segment> {
+    let out: Vec<Segment> = Vec::new();
+    let i = 0;
+    while i < len(src) { out.push(src[i]); i = i + 1; }
+    return out;
+}
+
+fn merge_by_virtual_start(left: &Vec<Segment>, right: &Vec<Segment>) -> Vec<Segment> {
+    let out: Vec<Segment> = Vec::new();
+    let i = 0;
+    let j = 0;
+    while i < len(left) && j < len(right) {
+        if right[j].virtual_start < left[i].virtual_start {
+            out.push(right[j]);
+            j = j + 1;
+        } else {
+            out.push(left[i]);
+            i = i + 1;
+        };
+    }
+    while i < len(left) { out.push(left[i]); i = i + 1; }
+    while j < len(right) { out.push(right[j]); j = j + 1; }
+    return out;
+}
+
+// spanmap.go:222: Go's pdqsort with `a.virtual_start.cmp(&b.virtual_start)`; stable here (DEV-001).
+fn sort_segments_by_virtual_start(segs: &Vec<Segment>) -> Vec<Segment> {
+    if len(segs) <= 1 { return copy_segments(segs); };
+    let mid = len(segs) / 2;
+    let left: Vec<Segment> = Vec::new();
+    let right: Vec<Segment> = Vec::new();
+    let i = 0;
+    while i < len(segs) {
+        if i < mid { left.push(segs[i]); } else { right.push(segs[i]); };
+        i = i + 1;
+    }
+    let sorted_left = sort_segments_by_virtual_start(&left);
+    let sorted_right = sort_segments_by_virtual_start(&right);
+    return merge_by_virtual_start(&sorted_left, &sorted_right);
+}
+
+fn segment_less_by_original(a: Segment, b: Segment) -> bool {
+    if a.original_start != b.original_start { return a.original_start < b.original_start; };
+    if a.original_end != b.original_end { return a.original_end < b.original_end; };
+    return a.virtual_start < b.virtual_start;
+}
+
+fn merge_by_original(left: &Vec<Segment>, right: &Vec<Segment>) -> Vec<Segment> {
+    let out: Vec<Segment> = Vec::new();
+    let i = 0;
+    let j = 0;
+    while i < len(left) && j < len(right) {
+        if segment_less_by_original(right[j], left[i]) {
+            out.push(right[j]);
+            j = j + 1;
+        } else {
+            out.push(left[i]);
+            i = i + 1;
+        };
+    }
+    while i < len(left) { out.push(left[i]); i = i + 1; }
+    while j < len(right) { out.push(right[j]); j = j + 1; }
+    return out;
+}
+
+fn sort_segments_for_original_index(segs: &Vec<Segment>) -> Vec<Segment> {
+    if len(segs) <= 1 { return copy_segments(segs); };
+    let mid = len(segs) / 2;
+    let left: Vec<Segment> = Vec::new();
+    let right: Vec<Segment> = Vec::new();
+    let i = 0;
+    while i < len(segs) {
+        if i < mid { left.push(segs[i]); } else { right.push(segs[i]); };
+        i = i + 1;
+    }
+    let sorted_left = sort_segments_for_original_index(&left);
+    let sorted_right = sort_segments_for_original_index(&right);
+    return merge_by_original(&sorted_left, &sorted_right);
+}
+
+fn copy_spans(src: &Vec<MappedSpan>) -> Vec<MappedSpan> {
+    let out: Vec<MappedSpan> = Vec::new();
+    let i = 0;
+    while i < len(src) { out.push(src[i]); i = i + 1; }
+    return out;
+}
+
+fn merge_spans_by_pos(left: &Vec<MappedSpan>, right: &Vec<MappedSpan>) -> Vec<MappedSpan> {
+    let out: Vec<MappedSpan> = Vec::new();
+    let i = 0;
+    let j = 0;
+    while i < len(left) && j < len(right) {
+        let lp = left[i].span.source_pos().0;
+        let rp = right[j].span.source_pos().0;
+        if rp < lp { out.push(right[j]); j = j + 1; }
+        else { out.push(left[i]); i = i + 1; };
+    }
+    while i < len(left) { out.push(left[i]); i = i + 1; }
+    while j < len(right) { out.push(right[j]); j = j + 1; }
+    return out;
+}
+
+fn sort_spans_by_pos(values: &Vec<MappedSpan>) -> Vec<MappedSpan> {
+    if len(values) <= 1 { return copy_spans(values); };
+    let mid = len(values) / 2;
+    let left: Vec<MappedSpan> = Vec::new();
+    let right: Vec<MappedSpan> = Vec::new();
+    let i = 0;
+    while i < len(values) {
+        if i < mid { left.push(values[i]); } else { right.push(values[i]); };
+        i = i + 1;
+    }
+    let sorted_left = sort_spans_by_pos(&left);
+    let sorted_right = sort_spans_by_pos(&right);
+    return merge_spans_by_pos(&sorted_left, &sorted_right);
+}
+
+// Rust: slice::partition_point(|s| s.virtual_start < pos)
+fn lower_bound_virtual_start(segs: &Vec<Segment>, pos: u32) -> u32 {
+    let lo = 0u32;
+    let hi = len(segs) as u32;
+    while lo < hi {
+        let mid = lo + (hi - lo) / 2;
+        if segs[mid as usize].virtual_start < pos { lo = mid + 1; } else { hi = mid; };
+    }
+    return lo;
+}
+
+// Rust: slice::partition_point(|s| s.original_start < pos)
+fn lower_bound_original_start(segs: &Vec<Segment>, pos: u32) -> u32 {
+    let lo = 0u32;
+    let hi = len(segs) as u32;
+    while lo < hi {
+        let mid = lo + (hi - lo) / 2;
+        if segs[mid as usize].original_start < pos { lo = mid + 1; } else { hi = mid; };
+    }
+    return lo;
+}
+
+// Rust: slice::partition_point(|s| s.original_start <= pos)
+fn upper_bound_original_start(segs: &Vec<Segment>, pos: u32) -> u32 {
+    let lo = 0u32;
+    let hi = len(segs) as u32;
+    while lo < hi {
+        let mid = lo + (hi - lo) / 2;
+        if segs[mid as usize].original_start <= pos { lo = mid + 1; } else { hi = mid; };
+    }
+    return lo;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Numeric helpers (SLA: no Ord::clamp, no wrapping_add).
+
+fn clamp_u32(v: u32, lo: u32, hi: u32) -> u32 {
+    if v < lo { return lo; };
+    if v > hi { return hi; };
+    return v;
+}
+
+fn umax(a: u32, b: u32) -> u32 { if a > b { return a; }; return b; }
+
+fn umin(a: u32, b: u32) -> u32 { if a < b { return a; }; return b; }
+
+fn wrapping_add_u32(a: u32, b: u32) -> u32 {
+    if b > 4294967295u32 - a { return a - (4294967295u32 - b) - 1u32; };
+    return a + b;
+}
+
+fn wrapping_sub_u32(a: u32, b: u32) -> u32 {
+    if b > a { return 4294967295u32 - (b - a) + 1u32; };
+    return a - b;
+}
+
+// Rust: TextRange::pos()/end() with expect_source for span maps.
+fn source_range(range: TextRange) -> (u32, u32) {
+    let p = range.pos();
+    let e = range.end();
+    let (pv, _pok) = p.source_offset();
+    let (ev, _eok) = e.source_offset();
+    return (pv, ev);
+}
+
+// spanmap.go:654
+struct OriginalIndex {
+    segments: Vec<Segment>,
+    leaf_count: u32,
+    max_ends: Vec<u32>,
+}
+
+// spanmap.go:725
+struct SegmentGroupAtOriginalPosition { segments: Vec<Segment>, at_end: bool }
+
+// spanmap.go:663 (eager here, DEV-002)
+fn build_original_index(segs: &Vec<Segment>) -> OriginalIndex {
+    let sorted = sort_segments_for_original_index(segs);
+    let leaf_count = 1u32;
+    while leaf_count < len(&sorted) as u32 { leaf_count = leaf_count * 2; }
+    let max_ends: Vec<u32> = Vec::new();
+    let i = 0;
+    while i < 2 * leaf_count { max_ends.push(0u32); i = i + 1; }
+    let k = 0;
+    while k < len(&sorted) {
+        max_ends[leaf_count as usize + k] = sorted[k].original_end;
+        k = k + 1;
+    }
+    let n = leaf_count - 1;
+    while n >= 1 {
+        let l = max_ends[(2u32 * n) as usize];
+        let r = max_ends[(2u32 * n + 1u32) as usize];
+        max_ends[n as usize] = umax(l, r);
+        n = n - 1;
+    }
+    return OriginalIndex { segments: sorted, leaf_count: leaf_count, max_ends: max_ends };
+}
+
+// spanmap.go:129
+struct SpanMap {
+    segments: Vec<Segment>,
+    // Go `origOnce` + `originalIndex`: built eagerly in `new` (DEV-002).
+    original_index: OriginalIndex,
+}
+
+// spanmap.go:188
+fn validate(m: &SpanMap, virtual_: &Vec<u8>, original: &Vec<u8>) -> (MappingError, bool) {
+    let virtual_len = len(virtual_) as u32;
+    let orig_len = len(original) as u32;
+    let previous_virtual_end = 0u32;
+    let i = 0;
+    while i < len(&m.segments) {
+        let s = m.segments[i];
+        if s.virtual_start < previous_virtual_end
+            || s.virtual_end < s.virtual_start
+            || s.virtual_end > virtual_len
+        {
+            return (mapping_error(MappingErrorKind::Overlap, s.virtual_start, 0u32), true);
+        };
+        previous_virtual_end = s.virtual_end;
+        if s.original_end < s.original_start || s.original_end > orig_len {
+            return (mapping_error(MappingErrorKind::OutOfBounds, s.virtual_start, s.original_end), true);
+        };
+        if !(is_verbatim(s) || is_atom(s) || is_alias(s)) {
+            return (mapping_error(MappingErrorKind::Kind_, s.virtual_start, s.original_start), true);
+        };
+        if is_verbatim(s) {
+            if s.virtual_end - s.virtual_start != s.original_end - s.original_start {
+                return (mapping_error(MappingErrorKind::VerbatimMismatch, s.virtual_start, s.original_start), true);
+            };
+            let j = 0u32;
+            while j < s.virtual_end - s.virtual_start {
+                let vb = virtual_[(s.virtual_start + j) as usize];
+                let ob = original[(s.original_start + j) as usize];
+                if vb != ob {
+                    return (mapping_error(MappingErrorKind::VerbatimMismatch, s.virtual_start, s.original_start), true);
+                };
+                j = j + 1;
+            }
+        };
+        if (feature_bits(s.features) & 4293918720u32) != 0 {
+            return (mapping_error(MappingErrorKind::Feature, s.virtual_start, s.original_start), true);
+        };
+        i = i + 1;
+    }
+    return (mapping_error(MappingErrorKind::Overlap, 0u32, 0u32), false);
+}
+
+// spanmap.go:222
+fn new(segments: &Vec<Segment>) -> SpanMap {
+    let sorted = sort_segments_by_virtual_start(segments);
+    let index = build_original_index(&sorted);
+    return SpanMap { segments: sorted, original_index: index };
+}
+
+// Rust: `segments(m: Option<&SpanMap>)` free function (LIM-001).
+fn segments_of(m: &SpanMap) -> Vec<Segment> {
+    return copy_segments(&m.segments);
+}
+
+fn segment_index_at(m: &SpanMap, pos: u32) -> SegIndex {
+    let idx = lower_bound_virtual_start(&m.segments, pos);
+    if idx < len(&m.segments) as u32 {
+        if m.segments[idx as usize].virtual_start == pos {
+            return SegIndex { index: idx, has_index: true, inside: true };
+        };
+    };
+    if idx > 0 {
+        let prev = idx - 1;
+        let ps = m.segments[prev as usize];
+        if pos < ps.virtual_end
+            || (prev + 1 == len(&m.segments) as u32 && pos == ps.virtual_end)
+        {
+            return SegIndex { index: prev, has_index: true, inside: true };
+        };
+        return SegIndex { index: prev, has_index: true, inside: false };
+    };
+    return SegIndex { index: 0u32, has_index: false, inside: false };
+}
+
+fn insertion_point(m: &SpanMap, prev: SegIndex) -> u32 {
+    if prev.has_index == false { return 0u32; };
+    return m.segments[prev.index as usize].original_end;
+}
+
+fn map_low(m: &SpanMap, pos: u32, idx: SegIndex) -> u32 {
+    if idx.inside == false { return insertion_point(m, idx); };
+    let seg = m.segments[idx.index as usize];
+    if is_verbatim(seg) {
+        return clamp_u32(seg.original_start + (pos - seg.virtual_start), seg.original_start, seg.original_end);
+    };
+    return seg.original_start;
+}
+
+fn map_high(m: &SpanMap, pos: u32, idx: SegIndex) -> u32 {
+    if idx.inside == false { return insertion_point(m, idx); };
+    let seg = m.segments[idx.index as usize];
+    if is_verbatim(seg) {
+        return clamp_u32(seg.original_start + (pos - seg.virtual_start), seg.original_start, seg.original_end);
+    };
+    return seg.original_end;
+}
+
+// spanmap.go:241
+fn virtual_to_original_span(m: &SpanMap, r: TextRange) -> (TextRange, Fidelity) {
+    let (virtual_start, range_end) = source_range(r);
+    let virtual_end = umax(range_end, virtual_start);
+    if virtual_start == virtual_end {
+        let (position, fidelity) = virtual_to_original_position(m, virtual_start);
+        return (new_text_range(position, position), fidelity);
+    };
+    let start_idx = segment_index_at(m, virtual_start);
+    let end_probe = virtual_end - 1;
+    let end_idx = segment_index_at(m, end_probe);
+    if start_idx.has_index == end_idx.has_index && start_idx.index == end_idx.index
+        && start_idx.inside == end_idx.inside
+    {
+        if start_idx.inside {
+            let seg = m.segments[start_idx.index as usize];
+            if is_verbatim(seg) {
+                let orig_start_in = clamp_u32(
+                    seg.original_start + (virtual_start - seg.virtual_start),
+                    seg.original_start,
+                    seg.original_end,
+                );
+                let orig_end_in = clamp_u32(
+                    seg.original_start + (virtual_end - seg.virtual_start),
+                    orig_start_in,
+                    seg.original_end,
+                );
+                return (new_text_range(orig_start_in, orig_end_in), Fidelity::Exact);
+            };
+            return (new_text_range(seg.original_start, seg.original_end), Fidelity::Atom);
+        };
+        let pos = insertion_point(m, start_idx);
+        return (new_text_range(pos, pos), Fidelity::None_);
+    };
+    let orig_start = map_low(m, virtual_start, start_idx);
+    let orig_end = umax(map_high(m, virtual_end, end_idx), orig_start);
+    return (new_text_range(orig_start, orig_end), Fidelity::Approximate);
+}
+
+// spanmap.go:287
+fn supports_feature(seg: Segment, feature: Feature) -> bool {
+    return has_feature(seg, feature);
+}
+
+fn virtual_span_supports_feature(m: &SpanMap, r: TextRange, feature: Feature) -> bool {
+    let (start, range_end) = source_range(r);
+    let end = umax(range_end, start);
+    if start == end {
+        let idx = segment_index_at(m, start);
+        if idx.inside == false { return false; };
+        return supports_feature(m.segments[idx.index as usize], feature);
+    };
+    let first = segment_index_at(m, start);
+    if first.inside == false { return false; };
+    let index = first.index;
+    let covered_through = start;
+    while index < len(&m.segments) as u32 && covered_through < end {
+        let seg = m.segments[index as usize];
+        if seg.virtual_start > covered_through
+            || seg.virtual_end <= covered_through
+            || !supports_feature(seg, feature)
+        {
+            return false;
+        };
+        covered_through = seg.virtual_end;
+        index = index + 1;
+    }
+    return covered_through >= end;
+}
+
+// spanmap.go:279
+fn virtual_to_original_span_for_feature(m: &SpanMap, r: TextRange, feature: Feature) -> (TextRange, Fidelity) {
+    let (mapped, fidelity) = virtual_to_original_span(m, r);
+    if virtual_span_supports_feature(m, r, feature) { return (mapped, fidelity); };
+    return (mapped, Fidelity::None_);
+}
+
+// spanmap.go:313
+fn virtual_to_original_position(m: &SpanMap, pos: u32) -> (u32, Fidelity) {
+    let idx = segment_index_at(m, pos);
+    if idx.inside == false { return (insertion_point(m, idx), Fidelity::None_); };
+    let seg = m.segments[idx.index as usize];
+    if is_verbatim(seg) {
+        return (
+            clamp_u32(seg.original_start + (pos - seg.virtual_start), seg.original_start, seg.original_end),
+            Fidelity::Exact,
+        );
+    };
+    return (seg.original_start, Fidelity::Atom);
+}
+
+// spanmap.go:330
+fn virtual_to_original_position_exact(m: &SpanMap, pos: u32) -> (u32, bool) {
+    let (mapped, fidelity) = virtual_to_original_position(m, pos);
+    if !fidelity_eq(fidelity, Fidelity::Exact) { return (mapped, false); };
+    let idx = segment_index_at(m, pos);
+    if idx.has_index == false || idx.inside == false { return (mapped, false); };
+    if !is_verbatim(m.segments[idx.index as usize]) { return (mapped, false); };
+    if idx.index > 0 {
+        let previous = m.segments[(idx.index - 1) as usize];
+        if previous.virtual_end == pos
+            && (!is_verbatim(previous)
+                || previous.original_end != m.segments[idx.index as usize].original_start)
+        {
+            return (mapped, false);
+        };
+    };
+    return (mapped, true);
+}
+
+// spanmap.go:350
+fn virtual_to_original_position_for_feature(m: &SpanMap, pos: u32, feature: Feature) -> (u32, Fidelity) {
+    let (mapped, fidelity) = virtual_to_original_position(m, pos);
+    let idx = segment_index_at(m, pos);
+    if idx.inside == false || !supports_feature(m.segments[idx.index as usize], feature) {
+        return (mapped, Fidelity::None_);
+    };
+    return (mapped, fidelity);
+}
+
+// spanmap.go:364
+fn alias_for_virtual_span(m: &SpanMap, r: TextRange) -> (Segment, bool) {
+    let (start, end) = source_range(r);
+    let idx = segment_index_at(m, start);
+    if idx.inside == false { return (zero_segment(), false); };
+    let seg = m.segments[idx.index as usize];
+    if is_alias(seg) && start == seg.virtual_start && end == seg.virtual_end {
+        return (seg, true);
+    };
+    return (zero_segment(), false);
+}
+
+fn same_original_range(left: Segment, right: Segment) -> bool {
+    return left.original_start == right.original_start && left.original_end == right.original_end;
+}
+
+// spanmap.go:693
+fn segments_at_original_position(ix: &OriginalIndex, pos: u32) -> (Vec<Segment>, bool) {
+    let start = lower_bound_original_start(&ix.segments, pos);
+    let results = segments_ending_after_position(ix, start, pos);
+    let end = upper_bound_original_start(&ix.segments, pos);
+    let i = start;
+    while i < end {
+        results.push(ix.segments[i as usize]);
+        i = i + 1;
+    }
+    let found = len(&results) > 0;
+    return (results, found);
+}
+
+// spanmap.go:704
+fn segments_ending_after_position(ix: &OriginalIndex, limit: u32, pos: u32) -> Vec<Segment> {
+    let results: Vec<Segment> = Vec::new();
+    collect_segments_ending_at_or_after(ix, 1u32, 0u32, ix.leaf_count, limit, pos, false, &results);
+    return results;
+}
+
+// spanmap.go:712
+fn collect_segments_ending_at_or_after(
+    ix: &OriginalIndex,
+    node: u32,
+    start: u32,
+    end: u32,
+    limit: u32,
+    pos: u32,
+    include_end: bool,
+    results: &Vec<Segment>,
+) {
+    if start >= limit { return; };
+    if ix.max_ends[node as usize] < pos { return; };
+    if include_end == false && ix.max_ends[node as usize] == pos { return; };
+    if end - start == 1 {
+        results.push(ix.segments[start as usize]);
+        return;
+    };
+    let middle = start + (end - start) / 2;
+    collect_segments_ending_at_or_after(ix, 2u32 * node, start, middle, limit, pos, include_end, results);
+    collect_segments_ending_at_or_after(ix, 2u32 * node + 1u32, middle, end, limit, pos, include_end, results);
+}
+
+// spanmap.go:741
+fn segment_groups_at_original_position(ix: &OriginalIndex, pos: u32) -> Vec<SegmentGroupAtOriginalPosition> {
+    let limit = upper_bound_original_start(&ix.segments, pos);
+    let found: Vec<Segment> = Vec::new();
+    collect_segments_ending_at_or_after(ix, 1u32, 0u32, ix.leaf_count, limit, pos, true, &found);
+    let groups: Vec<SegmentGroupAtOriginalPosition> = Vec::new();
+    let i = 0;
+    while i < len(&found) {
+        let group: Vec<Segment> = Vec::new();
+        let first = found[i];
+        group.push(first);
+        i = i + 1;
+        while i < len(&found) && same_original_range(first, found[i]) {
+            group.push(found[i]);
+            i = i + 1;
+        }
+        if pos <= first.original_end {
+            let at_end = pos == first.original_end && pos != first.original_start;
+            groups.push(SegmentGroupAtOriginalPosition { segments: group, at_end: at_end });
+        };
+    }
+    return groups;
+}
+
+// spanmap.go:431
+fn original_to_virtual_positions(m: &SpanMap, pos: u32, feature: Feature) -> Vec<MappedPosition> {
+    let groups = segment_groups_at_original_position(&m.original_index, pos);
+    let results: Vec<MappedPosition> = Vec::new();
+    if len(&groups) == 0 { return results; };
+    let g = 0;
+    while g < len(&groups) {
+        let group = groups[g];
+        let k = 0;
+        while k < len(&group.segments) {
+            let seg = group.segments[k];
+            k = k + 1;
+            if !supports_feature(seg, feature) { continue; };
+            let mapped = if is_verbatim(seg) {
+                MappedPosition {
+                    position: clamp_u32(
+                        seg.virtual_start + (pos - seg.original_start),
+                        seg.virtual_start,
+                        seg.virtual_end,
+                    ),
+                    fidelity: Fidelity::Exact,
+                }
+            } else if group.at_end {
+                MappedPosition { position: seg.virtual_end, fidelity: Fidelity::Atom }
+            } else {
+                MappedPosition { position: seg.virtual_start, fidelity: Fidelity::Atom }
+            };
+            let duplicate = false;
+            let r = 0;
+            while r < len(&results) {
+                if mapped_position_eq(results[r], mapped) { duplicate = true; break; };
+                r = r + 1;
+            }
+            if duplicate == false { results.push(mapped); };
+        }
+        g = g + 1;
+    }
+    return sort_positions_by_position(&results);
+}
+
+fn copy_positions(src: &Vec<MappedPosition>) -> Vec<MappedPosition> {
+    let out: Vec<MappedPosition> = Vec::new();
+    let i = 0;
+    while i < len(src) { out.push(src[i]); i = i + 1; }
+    return out;
+}
+
+fn merge_positions(left: &Vec<MappedPosition>, right: &Vec<MappedPosition>) -> Vec<MappedPosition> {
+    let out: Vec<MappedPosition> = Vec::new();
+    let i = 0;
+    let j = 0;
+    while i < len(left) && j < len(right) {
+        if right[j].position < left[i].position {
+            out.push(right[j]);
+            j = j + 1;
+        } else {
+            out.push(left[i]);
+            i = i + 1;
+        };
+    }
+    while i < len(left) { out.push(left[i]); i = i + 1; }
+    while j < len(right) { out.push(right[j]); j = j + 1; }
+    return out;
+}
+
+// Rust: goslices::sort_func(&mut results, |a, b| a.position.cmp(&b.position))
+fn sort_positions_by_position(values: &Vec<MappedPosition>) -> Vec<MappedPosition> {
+    if len(values) <= 1 { return copy_positions(values); };
+    let mid = len(values) / 2;
+    let left: Vec<MappedPosition> = Vec::new();
+    let right: Vec<MappedPosition> = Vec::new();
+    let i = 0;
+    while i < len(values) {
+        if i < mid { left.push(values[i]); } else { right.push(values[i]); };
+        i = i + 1;
+    }
+    let sorted_left = sort_positions_by_position(&left);
+    let sorted_right = sort_positions_by_position(&right);
+    return merge_positions(&sorted_left, &sorted_right);
+}
+
+// spanmap.go:585
+fn original_start_projections(segments_: &Vec<Segment>, start: u32, feature: Feature) -> Vec<u32> {
+    let results: Vec<u32> = Vec::new();
+    let i = 0;
+    while i < len(segments_) {
+        let seg = segments_[i];
+        i = i + 1;
+        if !supports_feature(seg, feature) { continue; };
+        if is_verbatim(seg) {
+            results.push(clamp_u32(seg.virtual_start + (start - seg.original_start), seg.virtual_start, seg.virtual_end));
+        } else {
+            results.push(seg.virtual_start);
+        };
+    }
+    return results;
+}
+
+// spanmap.go:613
+fn original_end_projections(segments_: &Vec<Segment>, end: u32, feature: Feature) -> Vec<u32> {
+    let results: Vec<u32> = Vec::new();
+    let i = 0;
+    while i < len(segments_) {
+        let seg = segments_[i];
+        i = i + 1;
+        if !supports_feature(seg, feature) { continue; };
+        if is_verbatim(seg) {
+            results.push(clamp_u32(seg.virtual_start + (end - seg.original_start), seg.virtual_start, seg.virtual_end));
+        } else {
+            results.push(seg.virtual_end);
+        };
+    }
+    return results;
+}
+
+// spanmap.go:629
+fn original_to_virtual_spans_in_segments(
+    segments_: &Vec<Segment>,
+    start: u32,
+    end: u32,
+    feature: Feature,
+) -> Vec<MappedSpan> {
+    let results: Vec<MappedSpan> = Vec::new();
+    let i = 0;
+    while i < len(segments_) {
+        let seg = segments_[i];
+        i = i + 1;
+        if !supports_feature(seg, feature) { continue; };
+        if is_verbatim(seg) {
+            let virtual_start = clamp_u32(
+                seg.virtual_start + (start - seg.original_start),
+                seg.virtual_start,
+                seg.virtual_end,
+            );
+            let virtual_end = clamp_u32(
+                seg.virtual_start + (end - seg.original_start),
+                virtual_start,
+                seg.virtual_end,
+            );
+            results.push(MappedSpan { span: new_text_range(virtual_start, virtual_end), fidelity: Fidelity::Exact });
+        } else {
+            results.push(MappedSpan {
+                span: new_text_range(seg.virtual_start, seg.virtual_end),
+                fidelity: Fidelity::Atom,
+            });
+        };
+    }
+    return results;
+}
+
+// spanmap.go:482
+fn original_to_virtual_spans(m: &SpanMap, r: TextRange, feature: Feature) -> Vec<MappedSpan> {
+    let (start, range_end) = source_range(r);
+    let end = umax(range_end, start);
+    if start == end {
+        let positions = original_to_virtual_positions(m, start, feature);
+        let out: Vec<MappedSpan> = Vec::new();
+        let p = 0;
+        while p < len(&positions) {
+            out.push(MappedSpan {
+                span: new_text_range(positions[p].position, positions[p].position),
+                fidelity: positions[p].fidelity,
+            });
+            p = p + 1;
+        }
+        return out;
+    };
+    let last_character = end - 1;
+    let (start_segments, start_inside) = segments_at_original_position(&m.original_index, start);
+    let (end_segments, end_inside) = segments_at_original_position(&m.original_index, last_character);
+    if start_inside == false || end_inside == false { return Vec::new(); };
+    let containing: Vec<Segment> = Vec::new();
+    let i = 0;
+    while i < len(&start_segments) {
+        let seg = start_segments[i];
+        i = i + 1;
+        if end <= seg.original_end { containing.push(seg); };
+    }
+    if len(&containing) > 0 {
+        let results = original_to_virtual_spans_in_segments(&containing, start, end, feature);
+        if len(&results) > 0 { return sort_spans_by_pos(&results); };
+    };
+    let starts_raw = original_start_projections(&start_segments, start, feature);
+    let ends_raw = original_end_projections(&end_segments, end, feature);
+    if len(&starts_raw) == 0 || len(&ends_raw) == 0 { return Vec::new(); };
+    let starts = sort_u32(&starts_raw);
+    let ends = sort_u32(&ends_raw);
+    let cross: Vec<MappedSpan> = Vec::new();
+    let k = 0;
+    while k < len(&starts) {
+        let virtual_start = starts[k];
+        let end_index = lower_bound_u32(&ends, virtual_start);
+        if end_index == len(&ends) as u32 {
+            k = k + 1;
+            continue;
+        };
+        if k + 1 < len(&starts) as u32 && starts[(k + 1) as usize] <= ends[end_index as usize] {
+            k = k + 1;
+            continue;
+        };
+        cross.push(MappedSpan {
+            span: new_text_range(virtual_start, ends[end_index as usize]),
+            fidelity: Fidelity::Approximate,
+        });
+        k = k + 1;
+    }
+    return cross;
+}
+
+// spanmap.go:539
+fn original_to_virtual_intersecting_spans(m: &SpanMap, r: TextRange, feature: Feature) -> Vec<MappedSpan> {
+    let (range_start, range_end) = source_range(r);
+    if range_start == range_end { return original_to_virtual_spans(m, r, feature); };
+    let results: Vec<MappedSpan> = Vec::new();
+    let i = 0;
+    while i < len(&m.segments) {
+        let seg = m.segments[i];
+        i = i + 1;
+        if !supports_feature(seg, feature) { continue; };
+        let start = umax(range_start, seg.original_start);
+        let end = umin(range_end, seg.original_end);
+        if start >= end { continue; };
+        if is_verbatim(seg) {
+            results.push(MappedSpan {
+                span: new_text_range(
+                    seg.virtual_start + (start - seg.original_start),
+                    seg.virtual_start + (end - seg.original_start),
+                ),
+                fidelity: Fidelity::Exact,
+            });
+        } else {
+            results.push(MappedSpan {
+                span: new_text_range(seg.virtual_start, seg.virtual_end),
+                fidelity: Fidelity::Atom,
+            });
+        };
+    }
+    return results;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Marshal / unmarshal: JSON `[[virtualStart, virtualLen, originalStart, originalLen, kind, features?]]`.
+// spanmap.go:776
+
+fn push_u32(buf: &Vec<u8>, value: u32) {
+    if value == 0 { buf.push(48u8); return; };
+    let digits: Vec<u8> = Vec::new();
+    let v = value;
+    while v > 0 {
+        let d = (v % 10u32) as u8;
+        digits.push(d + 48u8);
+        v = v / 10u32;
+    }
+    let i = len(&digits);
+    while i > 0 {
+        buf.push(digits[(i - 1) as usize]);
+        i = i - 1;
+    }
+}
+
+fn push_i32(buf: &Vec<u8>, value: i32) {
+    if value < 0 {
+        buf.push(45u8);
+        push_u32(buf, (0i32 - value) as u32);
+        return;
+    };
+    push_u32(buf, value as u32);
+}
+
+// spanmap.go:803
+fn marshal(m: &SpanMap) -> Result<Vec<u8>, String> {
+    let out: Vec<u8> = Vec::new();
+    out.push(91u8);
+    let i = 0;
+    while i < len(&m.segments) {
+        let s = m.segments[i];
+        if i > 0 { out.push(44u8); };
+        out.push(91u8);
+        push_u32(&out, s.virtual_start);
+        out.push(44u8);
+        push_u32(&out, wrapping_sub_u32(s.virtual_end, s.virtual_start));
+        out.push(44u8);
+        push_u32(&out, s.original_start);
+        out.push(44u8);
+        push_u32(&out, wrapping_sub_u32(s.original_end, s.original_start));
+        out.push(44u8);
+        push_i32(&out, s.kind.code);
+        if !feature_eq(s.features, Feature::all()) {
+            out.push(44u8);
+            push_u32(&out, feature_bits(s.features));
+        };
+        out.push(93u8);
+        i = i + 1;
+    }
+    out.push(93u8);
+    return Ok(out);
+}
+
+fn is_space(b: u8) -> bool {
+    return b == 32u8 || b == 9u8 || b == 10u8 || b == 13u8;
+}
+
+fn skip_space(data: &Vec<u8>, pos_: u32) -> u32 {
+    let i = pos_;
+    while i < len(data) as u32 && is_space(data[i as usize]) { i = i + 1; }
+    return i;
+}
+
+fn starts_with_null(data: &Vec<u8>, at: u32) -> bool {
+    if at + 4u32 > len(data) as u32 { return false; };
+    return data[at as usize] == 110u8
+        && data[(at + 1u32) as usize] == 117u8
+        && data[(at + 2u32) as usize] == 108u8
+        && data[(at + 3u32) as usize] == 108u8;
+}
+
+// Go int32: optional '-', decimal digits, value in [-2147483648, 2147483647].
+fn parse_int32(data: &Vec<u8>, pos_: u32) -> (i32, u32, bool) {
+    let i = skip_space(data, pos_);
+    let negative = false;
+    let at = i;
+    if at < len(data) as u32 && data[at as usize] == 45u8 { negative = true; at = at + 1; };
+    if at >= len(data) as u32 { return (0i32, at, false); };
+    let b = data[at as usize];
+    if b < 48u8 || b > 57u8 { return (0i32, at, false); };
+    let limit = 2147483647u32;
+    let signed_limit = 2147483648u32;
+    let bound = if negative { signed_limit } else { limit };
+    let value = 0u32;
+    let cur = at;
+    while cur < len(data) as u32 {
+        let c = data[cur as usize];
+        if c < 48u8 || c > 57u8 { break; };
+        let d = (c - 48u8) as u32;
+        if value > bound / 10u32 { return (0i32, cur, false); };
+        let next_value = value * 10u32 + d;
+        if next_value > bound { return (0i32, cur, false); };
+        value = next_value;
+        cur = cur + 1;
+    }
+    if negative {
+        if value == 2147483648u32 { return (-2147483648i32, cur, true); };
+        return ((0i32 - (value as i32)), cur, true);
+    };
+    return (value as i32, cur, true);
+}
+
+fn parse_tuple(data: &Vec<u8>, pos_: u32) -> (Vec<i32>, u32, bool) {
+    let empty: Vec<i32> = Vec::new();
+    let i = skip_space(data, pos_);
+    if i >= len(data) as u32 { return (empty, i, false); };
+    if data[i as usize] == 110u8 {
+        if starts_with_null(data, i) { return (empty, i + 4u32, true); };
+        return (empty, i, false);
+    };
+    if data[i as usize] != 91u8 { return (empty, i, false); };
+    let out: Vec<i32> = Vec::new();
+    let cur = i + 1u32;
+    let probe = skip_space(data, cur);
+    if probe < len(data) as u32 && data[probe as usize] == 93u8 { return (out, probe + 1u32, true); };
+    let at = cur;
+    let done = false;
+    while done == false {
+        let (value, next, ok) = parse_int32(data, at);
+        if ok == false { return (out, next, false); };
+        out.push(value);
+        at = skip_space(data, next);
+        if at >= len(data) as u32 { return (out, at, false); };
+        if data[at as usize] == 44u8 { at = at + 1; }
+        else if data[at as usize] == 93u8 { return (out, at + 1u32, true); }
+        else { return (out, at, false); };
+    }
+    return (out, at, false);
+}
+
+// Go `json.Unmarshal(data, &tuples)` with `tuples [][]int32`.
+fn unmarshal_int32_tuples(data: &Vec<u8>) -> Result<Vec<Vec<i32>>, String> {
+    let tuples: Vec<Vec<i32>> = Vec::new();
+    if len(data) == 0 { return Err(format("jsontext: unexpected end of JSON input")); };
+    let i = 0;
+    while i < len(data) {
+        let b = data[i];
+        if b == 46u8 || b == 101u8 || b == 69u8 {
+            return Err(format("json: cannot unmarshal a JSON value into Go [][]int32"));
+        };
+        i = i + 1;
+    }
+    let at = skip_space(data, 0u32);
+    if at >= len(data) as u32 { return Err(format("jsontext: unexpected end of JSON input")); };
+    if starts_with_null(data, at) { return Ok(tuples); };
+    if data[at as usize] != 91u8 { return Err(format("json: cannot unmarshal a JSON value into Go [][]int32")); };
+    let cur = at + 1u32;
+    let probe = skip_space(data, cur);
+    if probe < len(data) as u32 && data[probe as usize] == 93u8 { return Ok(tuples); };
+    let pos = cur;
+    let done = false;
+    while done == false {
+        let (tuple, next, ok) = parse_tuple(data, pos);
+        if ok == false { return Err(format("json: cannot unmarshal a JSON value into Go []int32")); };
+        tuples.push(tuple);
+        pos = skip_space(data, next);
+        if pos >= len(data) as u32 { return Err(format("jsontext: unexpected end of JSON input")); };
+        if data[pos as usize] == 44u8 { pos = pos + 1; }
+        else if data[pos as usize] == 93u8 { return Ok(tuples); }
+        else { return Err(format("jsontext: invalid character in JSON array")); };
+    }
+    return Err(format("jsontext: invalid JSON"));
+}
+
+// spanmap.go:776
+fn unmarshal(data: &Vec<u8>) -> Result<SpanMap, String> {
+    let parsed = unmarshal_int32_tuples(data);
+    let tuples = match parsed {
+        Ok(v) => { v }
+        Err(e) => { return Err(e); }
+    };
+    let segs: Vec<Segment> = Vec::new();
+    let i = 0;
+    while i < len(&tuples) {
+        let t = tuples[i];
+        if len(&t) != 5 && len(&t) != 6 {
+            return Err(format("span map segment {}: expected 5 or 6 values, got {}", i, len(&t)));
+        };
+        if t[0] < 0 { return Err(format("span map segment {}: negative virtual start", i)); };
+        if t[1] < 0 { return Err(format("span map segment {}: negative virtual length", i)); };
+        if t[2] < 0 { return Err(format("span map segment {}: negative original start", i)); };
+        if t[3] < 0 { return Err(format("span map segment {}: negative original length", i)); };
+        let virtual_start = t[0] as u32;
+        let virtual_len = t[1] as u32;
+        let original_start = t[2] as u32;
+        let original_len = t[3] as u32;
+        let features = if len(&t) == 6 { Feature::from_bits_retain(t[5] as u32) } else { Feature::all() };
+        let kind = Kind { code: t[4] };
+        let seg = segment(
+            virtual_start,
+            wrapping_add_u32(virtual_start, virtual_len),
+            original_start,
+            wrapping_add_u32(original_start, original_len),
+            kind,
+            features,
+        );
+        segs.push(seg);
+        i = i + 1;
+    }
+    return Ok(new(&segs));
+}

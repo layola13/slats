@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_core/src/stringutil/norm_generated.rs
+// UPSTREAM-LINES: 491
+// PORT-STATUS: pending
+// ITEMS: static UNICODE_MN, static UNICODE_UPPER
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

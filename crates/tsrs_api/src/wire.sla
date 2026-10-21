@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/wire.rs
+// UPSTREAM-LINES: 208
+// PORT-STATUS: pending
+// ITEMS: struct Obj, fn new, fn set, fn set_opt, fn set_omitempty, fn build, fn s, fn n, fn b, fn strings, struct Params, fn object, fn get, fn document, fn has, fn u64, fn opt_u64, fn str, fn bool, fn array, fn strings, fn as_u64, enum DocumentIdentifier, fn parse, fn parse_list, fn to_file_name, fn to_absolute_file_name
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

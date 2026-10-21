@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/methods.rs
+// UPSTREAM-LINES: 520
+// PORT-STATUS: pending
+// ITEMS: enum Owner, enum Status, struct MethodInfo, const METHODS, fn method_info, const PARAMS_TYPES, fn params_type
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

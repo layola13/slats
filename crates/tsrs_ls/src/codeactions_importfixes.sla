@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/codeactions_importfixes.rs
+// UPSTREAM-LINES: 537
+// PORT-STATUS: pending
+// ITEMS: static IMPORT_FIX_PROVIDER
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

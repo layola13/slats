@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_compiler/src/projectreferencefilemapper.rs
+// UPSTREAM-LINES: 405
+// PORT-STATUS: pending
+// ITEMS: struct projectReferenceFileMapper, struct projectReferenceFileMapperBuilder, fn resolution_host_for, fn as_resolved_project_reference, fn new, fn resolution_host, fn root_config_path, fn get_parse_file_redirect, fn get_resolved_project_references, fn get_project_reference_from_source, fn get_project_reference_from_output_dts, fn is_source_from_project_reference, fn get_compiler_options_for_file, fn get_redirect_parsed_command_line_for_resolution, fn get_redirect_for_resolution, fn get_resolved_reference_for, fn range_resolved_project_reference, fn range_resolved_project_reference_in_child_config, fn take_mapper, fn get_parse_file_redirect, fn get_redirect_for_resolution, fn get_compiler_options_for_file, fn get_redirect_parsed_command_line_for_resolution
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,17 @@
+// PORT-MIRROR: crates/tsrs_module/src/lib.rs
+// UPSTREAM-LINES: 18
+// PORT-STATUS: pending
+// ITEMS: mod packagejson, mod symlinks
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "packagejson/mod.sla"
+@import "symlinks/mod.sla"
+@import "cache.sla"
+@import "resolver.sla"
+@import "scratch.sla"
+@import "types.sla"
+@import "util.sla"
+@import "oracle_test.sla"
+@import "resolver_test.sla"

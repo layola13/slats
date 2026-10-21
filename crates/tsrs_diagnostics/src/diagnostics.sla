@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_diagnostics/src/diagnostics.rs
+// UPSTREAM-LINES: 191
+// PORT-STATUS: pending
+// ITEMS: enum Category, fn name, struct Key, fn as_str, struct Message, fn code, fn category, fn key, fn text, fn reports_unnecessary, fn elided_in_compatibility_pyramid, fn reports_deprecated, fn localize, fn format, fn key_to_message, fn localize, fn format, fn format_strings, fn stringify_args, fn new_ad_hoc_message
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

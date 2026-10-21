@@ -1,0 +1,26 @@
+// PORT-MIRROR: crates/tsrs_lsp/src/lib.rs
+// UPSTREAM-LINES: 34
+// PORT-STATUS: pending
+// ITEMS: mod lsptestutil, mod lspwatcher
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "dynamic_queue.sla"
+@import "logger.sla"
+@import "lsconsts.sla"
+@import "lsptestutil.sla"
+@import "lspwatcher.sla"
+@import "progress.sla"
+@import "server.sla"
+@import "stack_sanitizer.sla"
+@import "workerpool.sla"
+@import "dynamic_queue_test.sla"
+@import "lspwatcher_test.sla"
+@import "progress_test.sla"
+@import "server_flakydiagnostics_test.sla"
+@import "server_progress_test.sla"
+@import "server_projectinfo_test.sla"
+@import "server_test.sla"
+@import "stack_sanitizer_test.sla"
+@import "workerpool_test.sla"

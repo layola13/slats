@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_core/src/json/json.rs
+// UPSTREAM-LINES: 597
+// PORT-STATUS: pending
+// ITEMS: enum Value, fn marshal, fn marshal_with_capacity, fn marshal_indent, fn write_compact, fn write_compact_string, fn write_compact_int, fn marshal_string, fn marshal_f64, fn unmarshal
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

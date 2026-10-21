@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_checker/src/flowmemo.rs
+// UPSTREAM-LINES: 623
+// PORT-STATUS: pending
+// ITEMS: const FLOW_DEPTH_LIMIT, const UNTAINTED, const FLAG_EFFECTS, const FLAG_TYPE_CACHE, const FLAG_COUNT_RESET, enum FlowMemoMode, struct SavedFlowTypeCache, struct ShadowHit, struct MemoHit, fn flags, struct FlowFrame, struct FrameTaint, fn is_pure, struct FlowMemo, fn new, fn source_now, fn next_serial, fn end_transparent, fn raise_height, fn add_flags, fn save_height, fn restore_height, fn taint, fn taint_reference, fn lookup, fn store, fn shadow_hit, trait KeySink, fn flow_frame_begin, fn flow_frame_end, fn flow_frame_end_with, fn flow_memo_consume, fn flow_memo_key, fn serialize_flow_memo_key, fn flow_memo_consult_ok, fn take_flow_type_cache, fn restore_flow_type_cache
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

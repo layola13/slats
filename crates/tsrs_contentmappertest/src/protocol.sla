@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_contentmappertest/src/protocol.rs
+// UPSTREAM-LINES: 135
+// PORT-STATUS: pending
+// ITEMS: fn no_notifications, fn initialize_result, fn identity_mapped_output, struct staticProjectHandler, trait projectLifecycleHandler, trait testHandler, fn unmarshal_params, fn marshal_span_map, fn raw_text, fn unexpected_method, fn quote
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

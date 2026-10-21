@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_project/src/session.rs
+// UPSTREAM-LINES: 2312
+// PORT-STATUS: pending
+// ITEMS: enum UpdateReason, const ErrNoProjectForUnknownScriptKind, fn is_err_no_project_for_unknown_script_kind, struct ContentMapperContributions, struct SessionOptions, struct SessionInit, struct Session, fn new_session, fn snapshot_host, fn fs, fn get_current_directory, fn default_library_path, fn config, fn with_current_locale, fn configure, fn initialize_with_user_config, fn did_open_file, fn set_content_mapper_contributions, fn did_close_file, fn did_change_file, fn did_save_file, fn did_change_watched_files, fn did_change_compiler_options_for_inferred_projects, fn schedule_diagnostics_refresh, fn schedule_snapshot_update, fn start_performance_telemetry, fn snapshot, fn get_language_service, fn get_language_service_and_projects_for_file, fn get_projects_for_file, fn get_language_services_for_documents_loading_project_tree, fn get_language_service_for_project_with_file, fn with_snapshot_loading_project_tree, fn with_snapshot_for_document, fn get_current_language_service_with_auto_imports, fn with_language_service_and_snapshot, fn get_language_service_with_auto_imports, fn try_adopt_snapshot_in_background, fn update_snapshot, fn update_snapshot_ref, fn wait_for_background_tasks, fn close, fn npm_install, fn enqueue_publish_global_diagnostics, type AsyncWork
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

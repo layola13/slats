@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api_transport/src/message.rs
+// UPSTREAM-LINES: 222
+// PORT-STATUS: pending
+// ITEMS: const CODE_PARSE_ERROR, const CODE_INVALID_REQUEST, const CODE_METHOD_NOT_FOUND, const CODE_INVALID_PARAMS, const CODE_INTERNAL_ERROR, enum Id, fn string, fn to_json, struct ResponseError, fn internal, struct Message, fn is_request, fn is_notification, fn is_response, fn params_bytes, enum Response, fn null, fn json, struct ApiError, fn internal, enum TransportError, fn is_eof, const DEFAULT_MAX_FRAME_BYTES, fn read_exact_bounded
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

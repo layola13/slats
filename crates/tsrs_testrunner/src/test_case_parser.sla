@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_testrunner/src/test_case_parser.rs
+// UPSTREAM-LINES: 353
+// PORT-STATUS: pending
+// ITEMS: static OPTION_REGEX, type RawCompilerSettings, struct TestUnit, struct TestCaseContent, fn make_units_from_test, struct ParseTestFilesOptions, fn parse_test_files_and_symlinks, fn parse_test_files_and_symlinks_with_options, fn extract_compiler_settings
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

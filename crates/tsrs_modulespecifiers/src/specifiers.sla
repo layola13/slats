@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_modulespecifiers/src/specifiers.rs
+// UPSTREAM-LINES: 1909
+// PORT-STATUS: pending
+// ITEMS: fn get_module_specifiers, fn get_module_specifiers_with_info, fn get_module_specifiers_for_file_with_info, fn try_get_module_name_from_ambient_module, fn get_info, fn get_all_module_paths, fn get_all_module_paths_worker, fn contains_ignored_path, fn contains_node_modules, fn get_each_file_name_of_module, fn compute_module_specifiers, fn get_local_module_specifier, fn process_ending, fn try_get_module_name_from_root_dirs, fn try_get_module_name_as_node_module, fn try_directory_with_package_json, fn try_get_module_name_from_exports, fn try_get_module_name_from_package_json_imports, fn try_get_module_name_from_paths, fn validate_ending, fn try_get_module_name_from_exports_or_imports, fn get_module_specifier, fn update_module_specifier, fn get_module_specifier_with_preferences
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

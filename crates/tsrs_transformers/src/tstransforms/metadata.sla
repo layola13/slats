@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/tstransforms/metadata.rs
+// UPSTREAM-LINES: 541
+// PORT-STATUS: pending
+// ITEMS: const USE_NEW_TYPE_METADATA_FORMAT, struct MetadataTransformer, fn new_metadata_transformer
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

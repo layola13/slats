@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_scanner/src/utilities.rs
+// UPSTREAM-LINES: 174
+// PORT-STATUS: pending
+// ITEMS: fn token_is_identifier_or_keyword, fn identifier_to_keyword_kind, fn get_source_text_of_node_from_source_file, fn is_jsdoc_type_expression_or_child, fn normalize_jsdoc_type_source_text, fn get_text_of_node_from_source_text, fn get_text_of_node, fn get_text_of_jsdoc_comment, fn declaration_name_to_string, fn is_identifier_text, fn is_intrinsic_jsx_name
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

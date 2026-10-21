@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/parsinghelpers.rs
+// UPSTREAM-LINES: 1098
+// PORT-STATUS: pending
+// ITEMS: fn parse_tristate, fn parse_string_array, fn parse_string_map, fn parse_string, fn parse_number, fn parse_number_int, struct ProjectReferenceParseResult, fn parse_project_reference, fn parse_content_mapper, fn parse_string_array_strict, fn parse_json_to_string_key, trait OptionParser, struct CompilerOptionsParser, struct WatchOptionsParser, struct TypeAcquisitionParser, struct BuildOptionsParser, fn parse_compiler_options, fn parse_compiler_options_worker, fn parse_watch_options, fn parse_type_acquisition, fn parse_build_options, trait IsZero, trait OptionFieldValue, trait ToOptionsValue, fn for_each_compiler_option_value, fn merge_compiler_options, fn convert_to_options_with_absolute_paths, fn convert_option_to_absolute_path
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

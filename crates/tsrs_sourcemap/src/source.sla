@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_sourcemap/src/source.rs
+// UPSTREAM-LINES: 19
+// PORT-STATUS: pending
+// ITEMS: trait Source
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

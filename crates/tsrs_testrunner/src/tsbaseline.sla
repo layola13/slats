@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_testrunner/src/tsbaseline.rs
+// UPSTREAM-LINES: 322
+// PORT-STATUS: pending
+// ITEMS: static TS_EXTENSION, fn do_error_baseline, fn get_error_baseline, fn remove_test_path_prefixes, fn is_default_library_file
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

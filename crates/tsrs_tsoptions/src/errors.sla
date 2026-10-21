@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/errors.rs
+// UPSTREAM-LINES: 178
+// PORT-STATUS: pending
+// ITEMS: fn create_diagnostic_for_invalid_enum_type, fn format_enum_type_keys, fn get_compiler_option_value_type_string, fn create_unknown_option_error, fn create_unknown_option_error, fn create_diagnostic_for_node_in_source_file, fn create_diagnostic_for_node_in_source_file_or_compiler_diagnostic, fn extra_key_diagnostics, fn extra_key_did_you_mean_diagnostics
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

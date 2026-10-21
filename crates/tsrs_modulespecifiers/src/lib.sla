@@ -1,0 +1,12 @@
+// PORT-MIRROR: crates/tsrs_modulespecifiers/src/lib.rs
+// UPSTREAM-LINES: 24
+// PORT-STATUS: pending
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "compare.sla"
+@import "preferences.sla"
+@import "specifiers.sla"
+@import "types.sla"
+@import "util.sla"

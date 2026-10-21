@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_core/src/stringutil/util.rs
+// UPSTREAM-LINES: 432
+// PORT-STATUS: pending
+// ITEMS: fn is_white_space_like, fn is_white_space_single_line, fn is_line_break, fn is_digit, fn is_octal_digit, fn is_hex_digit, fn is_ascii_letter, fn split_lines, fn guess_indentation, fn encode_uri, fn remove_byte_order_mark, fn add_utf8_byte_order_mark, fn strip_quotes, fn unquote_string, fn lower_first_char, fn truncate_by_runes, const SURROGATE_LOW_START, fn is_high_surrogate, fn is_low_surrogate, fn is_surrogate, fn surrogate_pair_to_code_point, fn code_point_to_surrogate_pair, fn encode_js_string_rune, fn decode_js_string_rune, fn decode_js_string_rune_bytes, fn combine_surrogate_pairs
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

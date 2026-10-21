@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/checker/handlers_types.rs
+// UPSTREAM-LINES: 775
+// PORT-STATUS: pending
+// ITEMS: fn get_type_at_location, fn get_type_at_locations, fn get_type_at_position, fn get_types_at_positions, enum TypeProperty, fn resolve_type_property, enum TypeArrayProperty, fn resolve_type_array_property, enum TypeSymbolProperty, fn resolve_type_symbol_property, enum TypeOp, fn type_op, enum TypeListOp, fn type_list_op, enum TypePredicateOp, fn type_predicate_op, fn is_type_assignable_to, fn get_properties_of_type, fn get_apparent_properties_of_type, fn get_property_of_type, fn get_type_of_property_of_type, fn get_index_infos_of_type, fn get_index_info_of_type, fn get_signatures_of_type, enum NodeTypeOp, fn node_type_op, fn get_contextual_type_for_argument, fn is_context_sensitive, fn get_type_of_symbol_at_location, fn get_constant_value, fn get_resolved_signature, fn get_signature_from_declaration, fn get_type_parameters_of_signature, enum SignatureProperty, fn signature_property, enum SignatureTypeOp, fn signature_type_op, enum ParameterAt, fn signature_parameter_at, fn get_type_predicate_of_signature, enum Intrinsic, fn get_intrinsic_type, fn get_well_known_symbols, fn get_well_known_signatures, fn type_to_string, fn type_to_type_node, fn signature_to_signature_declaration
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

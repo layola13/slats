@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/moduletransforms/commonjsmodule_3.rs
+// UPSTREAM-LINES: 451
+// PORT-STATUS: pending
+// ITEMS: fn visit_top_level_variable_statement, fn visit_top_level_nested_for_statement, fn visit_top_level_nested_for_in_or_of_statement, fn visit_top_level_nested_do_statement, fn visit_top_level_nested_while_statement, fn visit_top_level_nested_labeled_statement, fn visit_top_level_nested_with_statement, fn visit_top_level_nested_if_statement, fn visit_top_level_nested_switch_statement, fn visit_top_level_nested_case_block, fn visit_top_level_nested_case_or_default_clause, fn visit_top_level_nested_try_statement, fn visit_top_level_nested_catch_clause, fn visit_top_level_nested_block
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

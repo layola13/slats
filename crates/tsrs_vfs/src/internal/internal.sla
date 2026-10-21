@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_vfs/src/internal/internal.rs
+// UPSTREAM-LINES: 275
+// PORT-STATUS: pending
+// ITEMS: trait IoFS, struct IoDirEntry, fn valid_path, type RootForFn, struct Common, fn root_length, fn split_path, fn root_and_path, fn stat, fn file_exists, fn directory_exists, fn get_accessible_entries, fn read_file, fn decode_bytes
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

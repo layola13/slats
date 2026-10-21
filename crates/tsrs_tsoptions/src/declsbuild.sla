@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/declsbuild.rs
+// UPSTREAM-LINES: 101
+// PORT-STATUS: pending
+// ITEMS: static TSC_BUILD_OPTION, static OPTIONS_FOR_BUILD, static BUILD_OPTS
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

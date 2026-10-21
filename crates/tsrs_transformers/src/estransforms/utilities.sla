@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/estransforms/utilities.rs
+// UPSTREAM-LINES: 419
+// PORT-STATUS: pending
+// ITEMS: fn convert_class_declaration_to_class_expression, fn create_not_null_condition, struct superAccessState, fn init_super_access_visitor, fn visit_super_access_node, fn substitute_super_accesses_in_body, fn substitute_call_expression_with_super_access, fn create_super_element_access_in_async_method, fn create_super_access_variable_statement, fn track_super_access, fn create_accessor_property_backing_field
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

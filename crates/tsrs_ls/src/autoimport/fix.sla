@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/autoimport/fix.rs
+// UPSTREAM-LINES: 1885
+// PORT-STATUS: pending
+// ITEMS: struct newImportBinding, struct Fix, struct addToExistingImportFix, fn edits, fn add_import_type, fn add_namespace_qualifier, fn get_add_to_existing_import_fix, fn add_to_existing_import, fn get_new_imports, fn get_new_requires, fn insert_imports, fn get_fixes, fn get_import_kind_for_import_statement, struct existingImport, fn compare_fixes_for_sorting, fn compare_fixes_for_ranking
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

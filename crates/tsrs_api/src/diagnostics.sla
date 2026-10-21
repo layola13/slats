@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/diagnostics.rs
+// UPSTREAM-LINES: 167
+// PORT-STATUS: pending
+// ITEMS: fn diagnostic_response, fn diagnostic_responses, fn diagnostic_from_response
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

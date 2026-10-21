@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_compiler/src/processing_diagnostic.rs
+// UPSTREAM-LINES: 214
+// PORT-STATUS: pending
+// ITEMS: enum processingDiagnosticKind, struct processingDiagnostic, fn unknown_reference, fn explaining, struct includeExplainingDiagnostic, fn to_diagnostic
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

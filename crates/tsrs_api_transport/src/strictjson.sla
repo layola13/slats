@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api_transport/src/strictjson.rs
+// UPSTREAM-LINES: 525
+// PORT-STATUS: pending
+// ITEMS: const MAX_DEPTH, fn validate
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

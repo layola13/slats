@@ -1,0 +1,10 @@
+// PORT-MIRROR: crates/tsrs_diagnostics/src/lib.rs
+// UPSTREAM-LINES: 15
+// PORT-STATUS: pending
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "diagnostics.sla"
+@import "generated.sla"
+@import "tests.sla"

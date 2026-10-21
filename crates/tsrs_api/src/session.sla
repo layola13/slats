@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/session.rs
+// UPSTREAM-LINES: 559
+// PORT-STATUS: pending
+// ITEMS: type SnapshotID, struct SessionOptions, fn new, struct OpenState, struct SnapshotData, fn get_program, struct CheckerSetup, struct Session, fn new, fn id, fn set_build_backend, fn build_backend, fn default_library_path, fn weak_self, fn snapshot_host_fs, fn next_batch_page_id, fn set_connection, fn connection, fn binary_responses, fn current_directory, fn base_fs, fn to_path, fn use_case_sensitive_file_names, fn close, fn snapshot_data, fn setup_checker, fn register_snapshot, fn release_snapshot, fn scratch, fn parse_params, fn json_response
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

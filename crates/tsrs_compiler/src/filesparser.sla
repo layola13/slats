@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_compiler/src/filesparser.rs
+// UPSTREAM-LINES: 1481
+// PORT-STATUS: pending
+// ITEMS: type TaskId, type DataId, struct parseTask, const NO_DATA, struct parseTaskLoaded, fn new, fn with_path, fn data_hint, fn data, fn data_ref, fn metadata, fn take_processing_diagnostics, fn reason_path, struct resolvedRef, struct parseTaskData, struct TasksByCasing, fn get_key_value, struct filesParser, fn new, fn parse, fn get_processed_files
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

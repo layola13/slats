@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_sourcemap/src/generator.rs
+// UPSTREAM-LINES: 615
+// PORT-STATUS: pending
+// ITEMS: enum SourceIndex, const fn, enum NameIndex, const fn, const MISSING_SOURCE, const MISSING_NAME, struct Generator, struct RawSourceMap, fn to_json, fn from_json, fn new_generator, fn sources, fn add_source, fn set_source_content, fn add_name, fn add_generated_mapping, fn add_source_mapping, fn add_named_source_mapping, fn raw_source_map, fn string, fn base64_data_url, fn base64_format_encode
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

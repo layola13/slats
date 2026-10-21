@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_compiler/src/outputpaths.rs
+// UPSTREAM-LINES: 131
+// PORT-STATUS: pending
+// ITEMS: fn get_computed_common_source_directory, fn get_common_source_directory, fn get_source_file_path_in_new_dir_worker
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

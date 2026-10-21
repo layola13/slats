@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/semantictokens.rs
+// UPSTREAM-LINES: 756
+// PORT-STATUS: pending
+// ITEMS: fn semantic_tokens_legend, fn provide_semantic_tokens, fn provide_semantic_tokens_range
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,6 @@
+// PORT-MIRROR: crates/tsrs_cli/tests/base_type_cycle_entry.rs
+// UPSTREAM-LINES: 55
+// PORT-STATUS: pending
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

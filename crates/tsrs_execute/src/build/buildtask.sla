@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_execute/src/build/buildtask.rs
+// UPSTREAM-LINES: 1846
+// PORT-STATUS: pending
+// ITEMS: enum buildKind, struct upstreamTask, struct buildInfoEntry, struct taskResult, fn new, struct closeSignal, fn reset, fn close, fn wait, fn wake, struct BuildTask, fn new, fn content_mapper_project_opt, fn set_content_mapper_project_err, fn build_info_snapshot, fn package_jsons, fn refresh_content_mapper_project, fn close_content_mapper_project, fn reset_status, fn reset_config, fn take_build_info_entry, fn set_build_info_entry, fn resolved_opt, fn report, fn build_project, fn watch_program, fn watch_incremental_program, fn free_built_program, fn add_live_watch_files, fn set_watch_changes, fn update_watch, fn clean_project, fn load_or_store_build_info, fn is_content_mapper_supplemental_build_info_path
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

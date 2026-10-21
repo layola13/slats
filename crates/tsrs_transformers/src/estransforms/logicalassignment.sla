@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/estransforms/logicalassignment.rs
+// UPSTREAM-LINES: 124
+// PORT-STATUS: pending
+// ITEMS: struct logicalAssignmentTransformer, fn new_logical_assignment_transformer
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

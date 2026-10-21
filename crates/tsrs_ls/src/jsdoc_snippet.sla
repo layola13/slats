@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/jsdoc_snippet.rs
+// UPSTREAM-LINES: 751
+// PORT-STATUS: pending
+// ITEMS: fn get_jsdoc_snippet_completion, fn is_potentially_valid_jsdoc_snippet_completion_position
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

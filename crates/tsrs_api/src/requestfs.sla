@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/requestfs.rs
+// UPSTREAM-LINES: 1109
+// PORT-STATUS: pending
+// ITEMS: enum Kind, struct RequestParams, fn parse, struct RequestFileSystem, fn new_for_update, fn is_full
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

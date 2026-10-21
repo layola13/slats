@@ -1,0 +1,15 @@
+// PORT-MIRROR: crates/tsrs_parser/src/lib.rs
+// UPSTREAM-LINES: 16
+// PORT-STATUS: pending
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "jsdoc.sla"
+@import "parser_1.sla"
+@import "parser_2.sla"
+@import "parser_3.sla"
+@import "references.sla"
+@import "reparser.sla"
+@import "types.sla"
+@import "utilities.sla"

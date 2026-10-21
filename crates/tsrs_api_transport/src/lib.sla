@@ -1,0 +1,21 @@
+// PORT-MIRROR: crates/tsrs_api_transport/src/lib.rs
+// UPSTREAM-LINES: 31
+// PORT-STATUS: pending
+// ITEMS: mod base64, mod callbackfs, mod conn_async, mod conn_sync, mod handler, mod jsonrpc, mod message, mod msgpack, mod protocol, mod reentrancy, mod strictjson, mod timing, mod transport
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "base64.sla"
+@import "callbackfs.sla"
+@import "conn_async.sla"
+@import "conn_sync.sla"
+@import "handler.sla"
+@import "jsonrpc.sla"
+@import "message.sla"
+@import "msgpack.sla"
+@import "protocol.sla"
+@import "reentrancy.sla"
+@import "strictjson.sla"
+@import "timing.sla"
+@import "transport.sla"

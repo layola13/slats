@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_lsproto/src/lsproto_jsonrpc.rs
+// UPSTREAM-LINES: 242
+// PORT-STATUS: pending
+// ITEMS: fn new_id, struct Message, fn as_request, fn as_response, fn into_request, fn into_response, struct RequestMessage, fn message, struct ResponseMessage, fn message
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

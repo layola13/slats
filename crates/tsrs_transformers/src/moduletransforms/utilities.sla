@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/moduletransforms/utilities.rs
+// UPSTREAM-LINES: 160
+// PORT-STATUS: pending
+// ITEMS: fn is_declaration_name_of_enum_or_namespace, fn rewrite_module_specifier, fn create_empty_imports, fn get_external_module_name_literal, fn try_get_module_name_from_file, fn try_get_module_name_from_declaration, fn try_rename_external_module, fn is_file_level_reserved_generated_identifier, fn is_simple_inlineable_expression
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

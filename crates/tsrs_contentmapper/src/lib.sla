@@ -1,0 +1,14 @@
+// PORT-MIRROR: crates/tsrs_contentmapper/src/lib.rs
+// UPSTREAM-LINES: 26
+// PORT-STATUS: pending
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "host.sla"
+@import "hostimpl.sla"
+@import "process.sla"
+@import "transform.sla"
+@import "host_test.sla"
+@import "process_test.sla"
+@import "transform_test.sla"

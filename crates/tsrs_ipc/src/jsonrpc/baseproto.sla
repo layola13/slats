@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ipc/src/jsonrpc/baseproto.rs
+// UPSTREAM-LINES: 159
+// PORT-STATUS: pending
+// ITEMS: const ERR_INVALID_HEADER, const ERR_INVALID_CONTENT_LENGTH, const ERR_NO_CONTENT_LENGTH, struct Reader, fn new_reader, fn read, struct Writer, fn new_writer, fn write, fn go_quote
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_vfs/src/walkdir.rs
+// UPSTREAM-LINES: 242
+// PORT-STATUS: pending
+// ITEMS: enum WalkDirError, fn walk_dir, struct DirEntry, fn name, fn is_dir, fn type_, fn info
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

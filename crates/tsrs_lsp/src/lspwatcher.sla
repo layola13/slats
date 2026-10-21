@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_lsp/src/lspwatcher.rs
+// UPSTREAM-LINES: 663
+// PORT-STATUS: pending
+// ITEMS: trait watcherBackend, type OnChanges, struct Watcher, fn new, fn new_with_fs_watcher, fn new_with_backend, fn watch_files, fn unwatch_files, fn close, fn root_from_glob_for_test
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

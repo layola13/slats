@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/hovericon.rs
+// UPSTREAM-LINES: 182
+// PORT-STATUS: pending
+// ITEMS: fn get_vs_hover_image_id, fn build_vs_hover_raw_content
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

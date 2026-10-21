@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/moduletransforms/commonjsmodule_2.rs
+// UPSTREAM-LINES: 495
+// PORT-STATUS: pending
+// ITEMS: fn append_export_statement, fn create_export_statement, fn create_export_expression, fn create_require_call, fn visit_top_level_import_declaration, fn visit_top_level_import_equals_declaration, fn visit_top_level_export_declaration, fn visit_top_level_export_assignment, fn visit_top_level_function_declaration, fn visit_top_level_class_declaration
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

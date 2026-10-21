@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_contentmappertest/src/registry.rs
+// UPSTREAM-LINES: 80
+// PORT-STATUS: pending
+// ITEMS: const TRANSFORMING_MAPPER, const VERBATIM_MAPPER, const MODULE_VERBATIM_MAPPER, const DYNAMIC_VERBATIM_MAPPER, const DIAGNOSTIC_CODE_COLLISION_MAPPER, const FAILING_MAPPER, const SYNTHESIZING_MAPPER, const COMPONENT_MAPPER, const DUPLICATE_MAPPER, const LISP_MAPPER, const SUPPLEMENTAL_MAPPER, const SUPPLEMENTAL_DIAGNOSTICS_MAPPER, const SUPPLEMENTAL_GLOBALS_MAPPER, const SUPPLEMENTAL_MODULE_MAPPER, const PREFIXED_SUPPLEMENTAL_MAPPER, const UNMAPPED_FOLDING_MAPPER, const HOISTING_MAPPER, const DUPLICATE_PROJECTION_MAPPER, fn handler_for_mapper
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

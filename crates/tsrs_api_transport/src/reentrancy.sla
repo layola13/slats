@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api_transport/src/reentrancy.rs
+// UPSTREAM-LINES: 404
+// PORT-STATUS: pending
+// ITEMS: const DEFAULT_ASYNC_GRACE, struct RequestState, struct CallbackState, fn new, fn waiting_on_client, fn unattributed_waiting, fn enter, struct WaitingGuard, fn with_request, fn current_request, struct RequestScope, fn current, fn enter, struct Holder, fn current, struct ContentionWait, fn new, fn set_holder, fn may_deadlock, fn blocking_may_deadlock, fn reentrancy_error, struct RequestGuard, fn lock_for_request
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

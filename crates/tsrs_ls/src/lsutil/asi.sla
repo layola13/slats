@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/lsutil/asi.rs
+// UPSTREAM-LINES: 116
+// PORT-STATUS: pending
+// ITEMS: fn position_is_asi_candidate, fn syntax_may_be_asi_candidate, fn syntax_requires_trailing_comma_or_semicolon_or_asi, fn syntax_requires_trailing_function_block_or_semicolon_or_asi, fn syntax_requires_trailing_module_block_or_semicolon_or_asi, fn syntax_requires_trailing_semicolon_or_asi, fn node_is_asi_candidate
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

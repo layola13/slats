@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_checker/src/mapper.rs
+// UPSTREAM-LINES: 665
+// PORT-STATUS: pending
+// ITEMS: enum TypeMapperKind, struct TypeMapper, enum TypeMapperData, struct DeferredTypeMapper, fn array_sources_targets, fn data, fn escaped, fn map, fn kind, fn maps_this_only, fn escape_mapper, fn recycle_mapper, fn recycle_mapping, fn recycle_mapper_with_targets, struct MapperCell, fn new, fn get, fn set, fn get_mapped_type, fn combine_type_mappers, fn map_type_with_composite_mapper, fn new_backreference_mapper, fn new_inference_type_mapper, fn new_type_mapper, fn merge_type_mappers, fn prepend_type_mapping, fn append_type_mapping, fn new_simple_type_mapper, fn new_array_type_mapper, fn new_array_to_single_type_mapper, fn new_deferred_type_mapper, fn new_function_type_mapper, fn new_merged_type_mapper, fn new_composite_type_mapper
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

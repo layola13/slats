@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_printer/src/textwriter.rs
+// UPSTREAM-LINES: 248
+// PORT-STATUS: pending
+// ITEMS: fn last_rune_is_white_space_like, struct textWriter, fn new_with, fn get_default_indent_size, fn get_indent_string, fn new_text_writer
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

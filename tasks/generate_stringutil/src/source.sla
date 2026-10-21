@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/generate_stringutil/src/source.rs
+// UPSTREAM-LINES: 191
+// PORT-STATUS: pending
+// ITEMS: fn load, fn scalar, fn mapping, fn code_points
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

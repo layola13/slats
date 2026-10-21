@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_vfs/src/bundled/bundled.rs
+// UPSTREAM-LINES: 44
+// PORT-STATUS: pending
+// ITEMS: const EMBEDDED, fn wrap_fs, fn lib_path, fn default_lib_path, fn default_lib_path_from, fn embedded_file, fn testing_lib_path
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

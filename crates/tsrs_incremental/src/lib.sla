@@ -1,0 +1,25 @@
+// PORT-MIRROR: crates/tsrs_incremental/src/lib.rs
+// UPSTREAM-LINES: 36
+// PORT-STATUS: pending
+// ITEMS: mod emit
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "affectedfileshandler.sla"
+@import "buildinfo.sla"
+@import "buildinfo_contentmapper_test.sla"
+@import "buildinfotosnapshot.sla"
+@import "emit.sla"
+@import "emitfileshandler.sla"
+@import "emitfileshandler_test.sla"
+@import "host.sla"
+@import "incremental.sla"
+@import "program.sla"
+@import "programtosnapshot.sla"
+@import "programtosnapshot_test.sla"
+@import "referencemap.sla"
+@import "signatures_test.sla"
+@import "snapshot.sla"
+@import "snapshot_test.sla"
+@import "snapshottobuildinfo.sla"

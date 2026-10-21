@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_compiler/src/file_include.rs
+// UPSTREAM-LINES: 551
+// PORT-STATUS: pending
+// ITEMS: enum fileIncludeKind, struct FileIncludeReason, fn new, fn new_referenced, struct referencedFileData, struct referenceFileLocation, fn text, fn diagnostic_at, struct automaticTypeDirectiveFileData, fn as_index, fn as_lib_file_index, fn is_referenced_file, fn is_root_file, fn as_referenced_file_data, fn as_automatic_type_directive_file_data, fn is_referenced_file, fn get_referenced_location, fn to_diagnostic, fn to_related_info
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

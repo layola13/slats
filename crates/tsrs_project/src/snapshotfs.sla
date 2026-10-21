@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_project/src/snapshotfs.rs
+// UPSTREAM-LINES: 1229
+// PORT-STATUS: pending
+// ITEMS: trait FileHandleSource, trait FileSource, struct cachedLayeredFileSystem, fn new_cached_layered_file_system, struct realpathAliasSet, fn add, type CacheDirectories, struct SnapshotFS, fn new_snapshot_fs, struct snapshotFSBuilder, fn new_snapshot_fs_builder_from_source, fn to_path, fn finalize, fn delete_cache_entry, fn reload_entry_if_needed, fn watch_changes_overlap_cache, fn invalidate_cache, fn invalidate_node_modules_cache, fn mark_dirty_files, fn expand_and_filter_watch_events, fn convert_open_and_close_to_changes, fn expand_realpath_aliases, fn is_relevant_extension, fn is_node_modules_path, struct sourceFS, fn new_source_fs, fn to_path, fn source, fn set_source, fn seen_files, fn set_seen_files, fn disable_tracking, fn track, fn seen_file, fn seen_file_or_missing_parent_directory
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

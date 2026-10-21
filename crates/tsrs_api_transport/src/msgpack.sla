@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api_transport/src/msgpack.rs
+// UPSTREAM-LINES: 260
+// PORT-STATUS: pending
+// ITEMS: enum MessageType, fn from_u8, const MSGPACK_FIXED_ARRAY3, const MSGPACK_BIN8, const MSGPACK_BIN16, const MSGPACK_BIN32, const MSGPACK_U8, const ERR_INVALID_REQUEST, struct Tuple, struct MessagePackReader, fn new, fn with_limit, fn read_tuple, struct MessagePackWriter, fn new, fn write_tuple, fn encode_tuple
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api_transport/src/jsonrpc.rs
+// UPSTREAM-LINES: 283
+// PORT-STATUS: pending
+// ITEMS: const ERR_INVALID_HEADER, const ERR_INVALID_CONTENT_LENGTH, const ERR_NO_CONTENT_LENGTH, const MAX_HEADER_LINE_BYTES, struct FrameReader, fn new, fn with_limit, fn read_frame, fn decode_message, struct FrameWriter, fn new, fn write_frame, fn validate_json, fn encode_request, fn encode_response, fn encode_error
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

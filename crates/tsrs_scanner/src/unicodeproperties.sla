@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_scanner/src/unicodeproperties.rs
+// UPSTREAM-LINES: 596
+// PORT-STATUS: pending
+// ITEMS: static NON_BINARY_UNICODE_PROPERTIES, fn non_binary_unicode_properties, static BINARY_UNICODE_PROPERTIES, static BINARY_UNICODE_PROPERTIES_OF_STRINGS, static SCRIPT_VALUES, static GENERAL_CATEGORY_VALUES, fn binary_unicode_properties, fn binary_unicode_properties_of_strings, fn general_category_values, fn values_of_non_binary_unicode_properties, fn values_list_of_non_binary_unicode_properties
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

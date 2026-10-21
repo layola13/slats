@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/format/rulesmap.rs
+// UPSTREAM-LINES: 177
+// PORT-STATUS: pending
+// ITEMS: fn get_rules, struct RulesPosition, const StopRulesSpecific, const StopRulesAny, const ContextRulesSpecific, const ContextRulesAny, const NoContextRulesSpecific, const NoContextRulesAny
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

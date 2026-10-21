@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ast/src/lazylist.rs
+// UPSTREAM-LINES: 329
+// PORT-STATUS: pending
+// ITEMS: const PENDING, const DEFERRED, const UNBOUND, const FORCING, const DONE, const CLASS_MEMBERS, fn is_lazy_head, struct LazyBindContext, struct LazyNodeList, type ParseHook, type BindHook, fn set_parse_hook, fn set_bind_hook, fn new, fn head_ref, fn from_head, fn fills_exports, fn state, fn set_owner, fn owner, fn defer, fn mark_unbound, fn bind_context, fn parse_now, fn force_nodes, fn ensure, fn force_inline
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

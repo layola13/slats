@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_transformers/src/moduletransforms/impliedmodule.rs
+// UPSTREAM-LINES: 64
+// PORT-STATUS: pending
+// ITEMS: struct ImpliedModuleTransformer, fn new_implied_module_transformer
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

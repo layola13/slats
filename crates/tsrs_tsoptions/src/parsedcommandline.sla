@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_tsoptions/src/parsedcommandline.rs
+// UPSTREAM-LINES: 692
+// PORT-STATUS: pending
+// ITEMS: fn file_glob_patterns, struct ParsedCommandLine, fn empty, fn new_parsed_command_line, fn with_file_names, fn config_name, fn source_to_project_reference, fn output_dts_to_project_reference, fn parse_input_output_names, fn common_source_directory, fn check_source_files_belong_to_path, fn get_current_directory, fn use_case_sensitive_file_names, fn get_output_declaration_and_source_file_names, fn get_output_file_names, fn get_build_info_file_name, fn wildcard_directories, fn wildcard_directory_globs, fn literal_file_names, fn set_parsed_options, fn set_compiler_options, fn compiler_options, fn set_type_acquisition, fn type_acquisition, fn file_names, fn file_names_by_path, fn project_references, fn project_references_is_nil, fn content_mappers, fn content_mapper_extensions, fn get_content_mapper_for_file_name, fn resolved_project_reference_paths, fn extended_source_files, fn get_config_file_parsing_diagnostics, fn possibly_matches_file_name, fn possibly_matches_directory_name, fn get_matched_file_spec, fn get_matched_include_spec, fn reload_file_names_of_parsed_command_line, struct SourceOutputAndProjectReference, struct SourceAndOutputMaps
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

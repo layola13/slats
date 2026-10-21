@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/format/util.rs
+// UPSTREAM-LINES: 174
+// PORT-STATUS: pending
+// ITEMS: fn range_is_on_one_line, fn get_open_token_for_list, fn get_close_token_for_open_token, fn get_line_start_position_for_position, fn find_immediately_preceding_token_of_kind, fn find_outermost_node_within_list_level, fn is_member_list_element
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,32 @@
+// PORT-MIRROR: crates/tsrs_ast/src/lib.rs
+// UPSTREAM-LINES: 47
+// PORT-STATUS: pending
+// ITEMS: mod ast, mod checkflags, mod deepclone, mod diagnostic, mod flow, mod functionflags, mod generated, mod identifier, mod ids, mod kind, mod lazylist, mod modifierflags, mod nodeflags, mod parseoptions, mod positionmap, mod precedence, mod subtreefacts, mod symbol, mod symbolflags, mod tokenflags, mod utilities_1, mod utilities_2, mod utilities_3, mod visitor
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "ast.sla"
+@import "checkflags.sla"
+@import "deepclone.sla"
+@import "diagnostic.sla"
+@import "flow.sla"
+@import "functionflags.sla"
+@import "generated.sla"
+@import "identifier.sla"
+@import "ids.sla"
+@import "kind.sla"
+@import "lazylist.sla"
+@import "modifierflags.sla"
+@import "nodeflags.sla"
+@import "parseoptions.sla"
+@import "positionmap.sla"
+@import "precedence.sla"
+@import "subtreefacts.sla"
+@import "symbol.sla"
+@import "symbolflags.sla"
+@import "tokenflags.sla"
+@import "utilities_1.sla"
+@import "utilities_2.sla"
+@import "utilities_3.sla"
+@import "visitor.sla"

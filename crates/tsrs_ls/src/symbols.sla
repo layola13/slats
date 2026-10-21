@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/symbols.rs
+// UPSTREAM-LINES: 997
+// PORT-STATUS: pending
+// ITEMS: type DocSym, struct DocSymData, fn doc_sym_to_lsp, fn provide_document_symbols, fn get_document_symbols_for_children, fn new_document_symbol, fn get_interior_module, fn provide_workspace_symbols, fn is_inside_node_modules, fn get_symbol_kind_from_node
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

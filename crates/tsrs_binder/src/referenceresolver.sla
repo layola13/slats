@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_binder/src/referenceresolver.rs
+// UPSTREAM-LINES: 363
+// PORT-STATUS: pending
+// ITEMS: struct ReferenceResolverHooks, struct ReferenceResolver, fn new_reference_resolver, fn get_referenced_export_container, fn get_referenced_import_declaration, fn get_referenced_value_declaration, fn get_referenced_value_declarations, fn get_element_access_expression_name, fn get_referenced_member_value_declaration
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_core/src/tristate.rs
+// UPSTREAM-LINES: 78
+// PORT-STATUS: pending
+// ITEMS: enum Tristate, fn is_true, fn is_true_or_unknown, fn is_false, fn is_false_or_unknown, fn is_unknown, fn default_if_unknown, fn unmarshal_json, fn marshal_json, fn string, fn bool_to_tristate
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

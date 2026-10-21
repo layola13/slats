@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_ls/src/import_tracker.rs
+// UPSTREAM-LINES: 1076
+// PORT-STATUS: pending
+// ITEMS: enum ImpExpKind, struct ImportExportSymbol, enum ExportKind, struct ExportInfo, struct LocationAndSymbol, struct ImportsResult, struct ImportTracker, enum ModuleReferenceKind, struct ModuleReference, fn create_import_tracker, fn call, fn get_direct_imports_map, fn for_each_import, fn for_each_possible_import_or_export_statement, fn get_source_file_like_for_import_declaration, fn is_ambient_module_declaration, fn get_statements_of_source_file_like, fn get_importers_for_export, fn get_containing_module_symbol, fn find_namespace_re_exports, fn get_searches_from_direct_imports, fn get_import_or_export_symbol, fn get_export_info, fn get_export_node, fn is_node_import, fn is_external_module_import_equals, fn skip_export_specifier_symbol, fn get_export_equals_local_symbol, fn symbol_name_no_default, fn find_module_references
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_module/src/packagejson/jsonvalue.rs
+// UPSTREAM-LINES: 134
+// PORT-STATUS: pending
+// ITEMS: enum JSONValueType, enum JSONData, fn type_, fn is_present, fn is_falsy, fn as_object, fn as_array, fn as_string, fn from_json, struct JSONValue, fn from_json
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

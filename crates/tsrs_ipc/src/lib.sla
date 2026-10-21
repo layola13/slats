@@ -1,0 +1,16 @@
+// PORT-MIRROR: crates/tsrs_ipc/src/lib.rs
+// UPSTREAM-LINES: 30
+// PORT-STATUS: pending
+// ITEMS: mod jsonrpc
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+
+@import "conn.sla"
+@import "conn_async.sla"
+@import "error.sla"
+@import "jsonrpc/mod.sla"
+@import "protocol.sla"
+@import "protocol_jsonrpc.sla"
+@import "stream.sla"
+@import "conn_async_test.sla"

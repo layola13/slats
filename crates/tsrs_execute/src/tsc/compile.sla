@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_execute/src/tsc/compile.rs
+// UPSTREAM-LINES: 253
+// PORT-STATUS: pending
+// ITEMS: trait System, struct DiagnosticTimer, fn new, fn elapsed, fn new_content_mapper_host, struct contentMapperCloser, fn format_local_time_03_04_05_pm, fn format_local_time_03_04_05_pm, enum ExitStatus, trait CommandLineTesting, type SyncWriter, type MTimesCache, fn get_trace_with_writer_from_sys, trait Watcher, struct CommandLineResult, struct CompileTimes, struct CompileAndEmitResult
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

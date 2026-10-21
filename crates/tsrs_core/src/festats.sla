@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_core/src/festats.rs
+// UPSTREAM-LINES: 126
+// PORT-STATUS: pending
+// ITEMS: enum Cat, const CATS, const NAMES, fn is_count, fn is_max, fn enabled, fn add, fn add_max, fn timed, fn timed_counted, fn take_thread
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

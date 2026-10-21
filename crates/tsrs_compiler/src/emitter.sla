@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_compiler/src/emitter.rs
+// UPSTREAM-LINES: 921
+// PORT-STATUS: pending
+// ITEMS: fn source_file_may_be_emitted, fn get_source_files_to_emit, fn get_declaration_diagnostics, enum EmitOnly, struct emitter, fn emit_mem_log, struct pendingPrint, fn transform, fn print, fn get_source_mapping_url, struct declarationMapSource, fn new_declaration_map_source, fn get_script_transformers, fn should_emit_source_maps, fn get_source_root
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

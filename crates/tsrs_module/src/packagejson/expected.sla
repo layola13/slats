@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_module/src/packagejson/expected.rs
+// UPSTREAM-LINES: 217
+// PORT-STATUS: pending
+// ITEMS: trait ExpectedValue, struct Expected, fn unmarshal_json, fn is_present, fn get_value, fn is_valid, fn expected_json_type, fn actual_json_type, fn expected_of
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

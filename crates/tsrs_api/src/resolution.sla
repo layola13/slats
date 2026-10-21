@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api/src/resolution.rs
+// UPSTREAM-LINES: 152
+// PORT-STATUS: pending
+// ITEMS: fn handle_get_mode_for_usage_location, fn handle_get_mode_for_resolution_at_index, fn handle_get_resolved_module, fn handle_get_resolved_module_from_module_specifier, fn handle_get_resolved_type_reference_directive, fn handle_get_resolved_type_reference_directive_from_reference
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

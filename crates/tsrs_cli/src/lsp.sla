@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_cli/src/lsp.rs
+// UPSTREAM-LINES: 387
+// PORT-STATUS: pending
+// ITEMS: fn run_lsp, struct flagSet, fn new, fn bool, fn string, fn int, fn bool_value, fn string_value, fn int_value, fn parse
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

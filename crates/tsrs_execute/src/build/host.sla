@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_execute/src/build/host.rs
+// UPSTREAM-LINES: 300
+// PORT-STATUS: pending
+// ITEMS: type mTimeCache, struct host, fn load_or_store_m_time, fn store_m_time, fn store_m_time_from_old_cache, fn get_m_time, fn set_m_time, struct incrementalHost
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

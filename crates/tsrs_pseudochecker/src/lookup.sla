@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_pseudochecker/src/lookup.rs
+// UPSTREAM-LINES: 961
+// PORT-STATUS: pending
+// ITEMS: fn get_return_type_of_signature, fn get_type_of_accessor, fn get_type_of_expression, fn get_type_of_declaration, fn type_from_property_assignment, fn type_from_expando_property, fn type_from_property, fn type_from_variable, fn type_from_accessor, fn get_type_annotation_from_all_accessor_declarations, fn get_type_annotation_from_accessor, fn is_value_signature_declaration, fn create_return_from_signature, fn type_from_single_return_expression, fn type_from_expression, fn type_from_object_literal, fn get_accessor_member, fn can_get_type_from_object_literal, fn type_from_array_literal, fn can_get_type_from_array_literal, fn is_const_context_propagating_kind, fn is_in_const_context, fn type_from_primitive_literal_prefix, fn type_from_type_assertion, fn type_from_function_like_expression, fn clone_type_parameters, fn is_undefined_pseudo_type, fn type_node_could_refer_to_undefined, fn could_already_refer_to_undefined_type, fn is_optional_initialized_or_rest_parameter, fn last_required_param_index, fn add_undefined_if_definitely_required, fn type_from_parameter, fn type_from_parameter_worker, fn clone_parameters, fn is_contextually_typed
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

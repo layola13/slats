@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_project/src/projectcollectionbuilder.rs
+// UPSTREAM-LINES: 2255
+// PORT-STATUS: pending
+// ITEMS: enum projectLoadKind, enum projectEntry, struct ProjectCollectionBuilder, fn new_project_collection_builder, fn inferred_project_value, fn take_created_programs, fn finalize, fn handle_api_request, fn did_change_files, fn did_change_content_mapper_contributions, fn did_request_file, fn did_request_project, fn did_request_project_trees, fn did_update_ata_state, fn did_change_custom_config_file_name, fn did_change_user_preferences, fn update_inferred_project, struct searchNodeKey, struct searchResult
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.

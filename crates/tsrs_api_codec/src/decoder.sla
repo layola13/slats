@@ -1,0 +1,7 @@
+// PORT-MIRROR: crates/tsrs_api_codec/src/decoder.rs
+// UPSTREAM-LINES: 634
+// PORT-STATUS: pending
+// ITEMS: enum DecodeError, struct DecodedNode, fn root, fn region, fn decode_nodes, fn decode_source_file, fn decode_nodes_in_current_region, struct Decoder, fn kind_from_u32, fn is_wtf8, fn read_ext, fn get_string, fn node_at_opt, fn list_at, fn modifier_list_at, fn single_child, fn single_node_list_child, fn decode_extended_data_source_file, fn decode_extended_data_template_head, fn decode_extended_data_template_middle, fn decode_extended_data_template_tail, fn decode_extended_data_string_literal, fn decode_extended_data_numeric_literal, fn decode_extended_data_big_int_literal, fn decode_extended_data_regular_expression_literal, fn decode_extended_data_no_substitution_template_literal, struct ChildIter, fn new, fn next_if, trait FromChild, fn from_node, fn from_list, trait Absent, fn absent, fn decode_node_common_data_synthetic_expression
+//
+// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
+// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
