@@ -11,6 +11,9 @@ Upstream: `oxc-project/tsrs` at `0.18.0-ts7.1.0-dev.20260929` (833 `.rs` files, 
 | `crates/tsrs_core/src/goslices.sla` | ported | `sort_u32`, `binary_search_u32`, `lower_bound_u32` |
 | `crates/tsrs_spanmap/src/spanmap.sla` | ported | full crate: validate, index build, both mapping directions, marshal/unmarshal |
 | `crates/tsrs_spanmap/src/spanmap_test.sla` | ported | 15 `@test` blocks (the upstream benchmark is not ported) |
+| `crates/tsrs_core/src/{tristate,scriptkind,languagevariant,version,pattern,textchange,buildoptions}.sla` | ported | `tsrs_core` leaf modules; `Tristate`/`PatternKind`/`ScriptKind`/`LanguageVariant` are Copy structs (LIM-009), `Pattern` text is bytes (DEV-003) |
+| `crates/tsrs_core/src/stringeq.sla` | ported | SLA support module: `string_eq` (DEV-008) |
+| `crates/tsrs_core/src/core_small_test.sla` | ported | 12 `@test` blocks covering the modules above |
 
 ## Pending
 

@@ -1,7 +1,63 @@
 // PORT-MIRROR: crates/tsrs_core/src/tristate.rs
 // UPSTREAM-LINES: 78
-// PORT-STATUS: pending
-// ITEMS: enum Tristate, fn is_true, fn is_true_or_unknown, fn is_false, fn is_false_or_unknown, fn is_unknown, fn default_if_unknown, fn unmarshal_json, fn marshal_json, fn string, fn bool_to_tristate
+// PORT-STATUS: ported
+// ITEMS: type Tristate, fn is_true, fn is_true_or_unknown, fn is_false, fn is_false_or_unknown, fn is_unknown, fn default_if_unknown, fn unmarshal_json, fn marshal_json, fn string, fn bool_to_tristate
 //
-// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
-// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+// LIM-009: Rust `enum Tristate { Unknown = 0, False = 1, True = 2 }` is Copy and fieldless. SLA enums
+// are move-only, so the three variants become a `@derive(Copy)` struct carrying the same discriminant.
+// DEV-008: JSON input is compared byte-wise via `string_eq`, because String `==` is identity in SLA.
+
+@import "stringeq.sla"
+
+@derive(Copy)
+struct Tristate { code: u8 }
+
+fn tristate_unknown() -> Tristate { return Tristate { code: 0u8 }; }
+fn tristate_false() -> Tristate { return Tristate { code: 1u8 }; }
+fn tristate_true() -> Tristate { return Tristate { code: 2u8 }; }
+
+impl Tristate {
+    fn is_true(self) -> bool { return self.code == 2u8; }
+
+    fn is_true_or_unknown(self) -> bool { return self.code == 2u8 || self.code == 0u8; }
+
+    fn is_false(self) -> bool { return self.code == 1u8; }
+
+    fn is_false_or_unknown(self) -> bool { return self.code == 1u8 || self.code == 0u8; }
+
+    fn is_unknown(self) -> bool { return self.code == 0u8; }
+
+    fn default_if_unknown(self, value: Tristate) -> Tristate {
+        if self.code == 0u8 { return value; };
+        return self;
+    }
+
+    fn unmarshal_json(data: &String) -> Tristate {
+        let t = format("{}", "true");
+        if string_eq(data, &t) { return tristate_true(); };
+        let f = format("{}", "false");
+        if string_eq(data, &f) { return tristate_false(); };
+        return tristate_unknown();
+    }
+
+    fn marshal_json(self) -> String {
+        if self.code == 2u8 { return format("{}", "true"); };
+        if self.code == 1u8 { return format("{}", "false"); };
+        return format("{}", "null");
+    }
+
+    fn string(self) -> String {
+        if self.code == 0u8 { return format("{}", "TSUnknown"); };
+        if self.code == 1u8 { return format("{}", "TSFalse"); };
+        return format("{}", "TSTrue");
+    }
+
+    fn format(self) -> String {
+        return self.string();
+    }
+}
+
+fn bool_to_tristate(b: bool) -> Tristate {
+    if b { return tristate_true(); };
+    return tristate_false();
+}

@@ -1,7 +1,141 @@
 // PORT-MIRROR: crates/tsrs_core/src/pattern.rs
 // UPSTREAM-LINES: 102
-// PORT-STATUS: pending
-// ITEMS: enum PatternKind, struct Pattern, fn try_parse_pattern, fn is_valid, fn matches, fn matched_text, fn find_best_pattern_match
+// PORT-STATUS: ported
+// ITEMS: type PatternKind, struct Pattern, fn try_parse_pattern, fn is_valid, fn matches, fn matched_text, fn find_best_pattern_match
 //
-// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
-// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+// Port notes:
+// - LIM-009: Copy enum `PatternKind` -> `@derive(Copy)` struct with `tag` (0 invalid, 1 exact, 2 wildcard)
+//   plus the wildcard `star` index. Constructors `pattern_kind_invalid()/exact()/wildcard(i)`.
+// - DEV-003: `&str` byte views are miscompiled, so pattern/candidate text is `&Vec<u8>`; `matched_text`
+//   returns an owned `Vec<u8>` instead of a borrowed slice.
+// - LIM-001: `find_best_pattern_match` takes `&Vec<Pattern>` directly (SLA has no closures), preserving
+//   the prefix-length tie-break and the "exact resets the longest prefix" rule.
+
+@derive(Copy)
+struct PatternKind { tag: u8, star: u32 }
+
+fn pattern_kind_invalid() -> PatternKind { return PatternKind { tag: 0u8, star: 0u32 }; }
+fn pattern_kind_exact() -> PatternKind { return PatternKind { tag: 1u8, star: 0u32 }; }
+fn pattern_kind_wildcard(star: u32) -> PatternKind { return PatternKind { tag: 2u8, star: star }; }
+
+struct Pattern {
+    text: Vec<u8>,
+    kind: PatternKind,
+}
+
+fn pattern_default() -> Pattern {
+    let text: Vec<u8> = Vec::new();
+    return Pattern { text: text, kind: pattern_kind_invalid() };
+}
+
+fn try_parse_pattern(pattern: &Vec<u8>) -> Pattern {
+    let star_index: i64 = -1;
+    let star_count = 0u32;
+    let i = 0usize;
+    while i < len(pattern) {
+        if pattern[i] == 42u8 {
+            if star_index < 0 {
+                star_index = i as i64;
+            };
+            star_count = star_count + 1u32;
+        };
+        i = i + 1;
+    }
+    let text: Vec<u8> = Vec::new();
+    i = 0usize;
+    while i < len(pattern) {
+        text.push(pattern[i]);
+        i = i + 1;
+    }
+    if star_count == 0u32 {
+        return Pattern { text: text, kind: pattern_kind_exact() };
+    };
+    if star_count == 1u32 {
+        return Pattern { text: text, kind: pattern_kind_wildcard(star_index as u32) };
+    };
+    return pattern_default();
+}
+
+impl Pattern {
+    fn is_valid(self) -> bool {
+        if self.kind.tag == 0u8 { return false; };
+        if self.kind.tag == 1u8 { return true; };
+        return self.kind.star < len(self.text);
+    }
+
+    fn matches(self, candidate: &Vec<u8>) -> bool {
+        if self.kind.tag == 0u8 { return false; };
+        if self.kind.tag == 1u8 { return bytes_equal(&self.text, candidate); };
+        let star = self.kind.star as usize;
+        if candidate.len() + 1 < len(self.text) { return false; };
+        let i = 0usize;
+        while i < star {
+            if i >= candidate.len() { return false; };
+            if candidate[i] != self.text[i] { return false; };
+            i = i + 1;
+        }
+        let suffix_len = len(self.text) - star - 1;
+        let j = 0usize;
+        while j < suffix_len {
+            let ci = candidate.len() - suffix_len + j;
+            let ti = star + 1 + j;
+            if candidate[ci] != self.text[ti] { return false; };
+            j = j + 1;
+        }
+        return true;
+    }
+
+    fn matched_text(self, candidate: &Vec<u8>) -> Vec<u8> {
+        if !self.matches(candidate) { panic("candidate does not match pattern"); };
+        let out: Vec<u8> = Vec::new();
+        if self.kind.tag == 1u8 { return out; };
+        if self.kind.tag == 0u8 { panic("matches() rejected an invalid pattern"); };
+        let star = self.kind.star as usize;
+        let start = star;
+        let end = candidate.len() + star + 1 - len(self.text);
+        let i = start;
+        while i < end {
+            out.push(candidate[i]);
+            i = i + 1;
+        }
+        return out;
+    }
+}
+
+fn bytes_equal(a: &Vec<u8>, b: &Vec<u8>) -> bool {
+    if a.len() != b.len() { return false; };
+    let i = 0usize;
+    while i < a.len() {
+        if a[i] != b[i] { return false; };
+        i = i + 1;
+    }
+    return true;
+}
+
+fn find_best_pattern_match(values: &Vec<Pattern>, candidate: &Vec<u8>) -> (Pattern, bool) {
+    let best: Pattern = pattern_default();
+    let has_best = false;
+    let longest: u32 = 0u32;
+    let has_longest = false;
+    let i = 0usize;
+    while i < len(values) {
+        let pattern = values[i];
+        let kind_tag = pattern.kind.tag;
+        if kind_tag != 0u8 {
+            let is_exact = kind_tag == 1u8;
+            let prefix_length = pattern.kind.star;
+            let matched = pattern.matches(candidate);
+            if matched {
+                let better = is_exact || !has_longest || prefix_length > longest;
+                if better {
+                    best = pattern;
+                    has_best = true;
+                    longest = prefix_length;
+                    has_longest = !is_exact;
+                };
+            };
+        };
+        i = i + 1;
+    }
+    return (best, has_best);
+}

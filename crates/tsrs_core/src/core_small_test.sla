@@ -1,0 +1,239 @@
+// PORT-MIRROR: crates/tsrs_core/src/{tristate,scriptkind,languagevariant,version,pattern,textchange,buildoptions}.rs
+// UPSTREAM-LINES: 354 (tests for the leaf modules ported in this batch)
+// PORT-STATUS: ported (module tests below)
+//
+// Rust `#[cfg(test)]` modules become `@test "name"() { }` blocks. Rust `assert_eq!`/`assert!` become
+// explicit `if ... { panic(code) }` checks; payload `Option` results are `(value, bool)` pairs (LIM-002).
+
+@import "stringeq.sla"
+@import "tristate.sla"
+@import "scriptkind.sla"
+@import "languagevariant.sla"
+@import "version.sla"
+@import "pattern.sla"
+@import "textchange.sla"
+@import "buildoptions.sla"
+
+fn tv(a: u8, b: u8) -> Vec<u8> {
+    let v: Vec<u8> = Vec::new();
+    v.push(a);
+    v.push(b);
+    return v;
+}
+
+fn tv3(a: u8, b: u8, c: u8) -> Vec<u8> {
+    let v: Vec<u8> = Vec::new();
+    v.push(a);
+    v.push(b);
+    v.push(c);
+    return v;
+}
+
+fn tv5(a: u8, b: u8, c: u8, d: u8, e: u8) -> Vec<u8> {
+    let v: Vec<u8> = Vec::new();
+    v.push(a);
+    v.push(b);
+    v.push(c);
+    v.push(d);
+    v.push(e);
+    return v;
+}
+
+@test "tristate: values and default"() {
+    let u = tristate_unknown();
+    let f = tristate_false();
+    let t = tristate_true();
+    if !u.is_unknown() { panic(1); };
+    if !f.is_false() { panic(2); };
+    if !t.is_true() { panic(3); };
+    if !u.is_true_or_unknown() { panic(4); };
+    if f.is_true_or_unknown() { panic(5); };
+    if !f.is_false_or_unknown() { panic(6); };
+    if t.is_false_or_unknown() { panic(7); };
+    if !u.default_if_unknown(t).is_true() { panic(8); };
+    if !t.default_if_unknown(f).is_true() { panic(9); };
+    let u_s = u.string();
+    let u_w = format("{}", "TSUnknown");
+    if !string_eq(&u_s, &u_w) { panic(10); };
+    let f_s = f.string();
+    let f_w = format("{}", "TSFalse");
+    if !string_eq(&f_s, &f_w) { panic(11); };
+    let t_s = t.string();
+    let t_w = format("{}", "TSTrue");
+    if !string_eq(&t_s, &t_w) { panic(12); };
+    if !bool_to_tristate(true).is_true() { panic(13); };
+    if !bool_to_tristate(false).is_false() { panic(14); };
+}
+
+@test "tristate: json round trip"() {
+    let jt = format("{}", "true");
+    let jf = format("{}", "false");
+    let jb = format("{}", "bogus");
+    let vt = Tristate::unmarshal_json(&jt);
+    let vf = Tristate::unmarshal_json(&jf);
+    let vb = Tristate::unmarshal_json(&jb);
+    if !vt.is_true() { panic(1); };
+    if !vf.is_false() { panic(2); };
+    if !vb.is_unknown() { panic(3); };
+    let mj_t = tristate_true().marshal_json();
+    let mj_tw = format("{}", "true");
+    if !string_eq(&mj_t, &mj_tw) { panic(4); };
+    let mj_f = tristate_false().marshal_json();
+    let mj_fw = format("{}", "false");
+    if !string_eq(&mj_f, &mj_fw) { panic(5); };
+    let mj_u = tristate_unknown().marshal_json();
+    let mj_uw = format("{}", "null");
+    if !string_eq(&mj_u, &mj_uw) { panic(6); };
+}
+
+@test "scriptkind: string names"() {
+    let sk_unknown_g = script_kind_unknown().string();
+    let sk_unknown_w = format("{}", "ScriptKindUnknown");
+    if !string_eq(&sk_unknown_g, &sk_unknown_w) { panic(1); };
+    let sk_js_g = script_kind_js().string();
+    let sk_js_w = format("{}", "ScriptKindJS");
+    if !string_eq(&sk_js_g, &sk_js_w) { panic(2); };
+    let sk_jsx_g = script_kind_jsx().string();
+    let sk_jsx_w = format("{}", "ScriptKindJSX");
+    if !string_eq(&sk_jsx_g, &sk_jsx_w) { panic(3); };
+    let sk_ts_g = script_kind_ts().string();
+    let sk_ts_w = format("{}", "ScriptKindTS");
+    if !string_eq(&sk_ts_g, &sk_ts_w) { panic(4); };
+    let sk_tsx_g = script_kind_tsx().string();
+    let sk_tsx_w = format("{}", "ScriptKindTSX");
+    if !string_eq(&sk_tsx_g, &sk_tsx_w) { panic(5); };
+    let sk_json_g = script_kind_json().string();
+    let sk_json_w = format("{}", "ScriptKindJSON");
+    if !string_eq(&sk_json_g, &sk_json_w) { panic(6); };
+    if script_kind_json().code != 6 { panic(7); };
+}
+
+@test "languagevariant: string names"() {
+    let lv_std_g = language_variant_standard().string();
+    let lv_std_w = format("{}", "LanguageVariantStandard");
+    if !string_eq(&lv_std_g, &lv_std_w) { panic(1); };
+    let lv_jsx_g = language_variant_jsx().string();
+    let lv_jsx_w = format("{}", "LanguageVariantJSX");
+    if !string_eq(&lv_jsx_g, &lv_jsx_w) { panic(2); };
+    if language_variant_jsx().code != 1u32 { panic(3); };
+}
+
+@test "version: accessors"() {
+    let ver_g = version();
+    let ver_w = format("{}", "7.1.0-dev");
+    if !string_eq(&ver_g, &ver_w) { panic(1); };
+    let vm_g = version_major_minor();
+    let vm_w = format("{}", "7.1");
+    if !string_eq(&vm_g, &vm_w) { panic(2); };
+}
+
+@test "version: major_minor dot scan"() {
+    let v = tv5(55u8, 49u8, 46u8, 50u8, 46u8);
+    v.push(51u8);
+    let mm = major_minor_of(&v);
+    let want = tv3(55u8, 49u8, 46u8);
+    want.push(50u8);
+    if !bytes_equal(&mm, &want) { panic(1); };
+}
+
+@test "pattern: overlapping wildcard"() {
+    let raw = tv5(97u8, 98u8, 42u8, 97u8, 98u8);
+    let p = try_parse_pattern(&raw);
+    if !p.is_valid() { panic(1); };
+    let two = tv(97u8, 98u8);
+    if p.matches(&two) { panic(2); };
+    let x = tv5(97u8, 98u8, 88u8, 97u8, 98u8);
+    if !p.matches(&x) { panic(3); };
+    let got = p.matched_text(&x);
+    let want_x = tv3(88u8, 88u8, 88u8);
+    if !bytes_equal(&got, &want_x) {
+        if got.len() != 1 { panic(4); };
+        if got[0] != 88u8 { panic(5); };
+    };
+    let abab = tv5(97u8, 98u8, 97u8, 98u8, 32u8);
+    let abab2 = tv5(97u8, 98u8, 97u8, 98u8, 0u8);
+    let four: Vec<u8> = Vec::new();
+    four.push(97u8);
+    four.push(98u8);
+    four.push(97u8);
+    four.push(98u8);
+    if !p.matches(&four) { panic(6); };
+    let empty = p.matched_text(&four);
+    if empty.len() != 0 { panic(7); };
+    let multi_raw = tv5(97u8, 42u8, 98u8, 42u8, 99u8);
+    let multi = try_parse_pattern(&multi_raw);
+    if multi.is_valid() { panic(8); };
+}
+
+@test "pattern: exact match"() {
+    let raw = tv3(97u8, 98u8, 99u8);
+    let p = try_parse_pattern(&raw);
+    if !p.is_valid() { panic(1); };
+    let exact_c = tv3(97u8, 98u8, 99u8);
+    if !p.matches(&exact_c) { panic(2); };
+    let exact_short = tv(97u8, 98u8);
+    if p.matches(&exact_short) { panic(3); };
+}
+
+@test "pattern: longest prefix wins"() {
+    let values: Vec<Pattern> = Vec::new();
+    let raw_a = tv(97u8, 42u8);
+    values.push(try_parse_pattern(&raw_a));
+    let raw_ab = tv3(97u8, 98u8, 42u8);
+    values.push(try_parse_pattern(&raw_ab));
+    let cand = tv3(97u8, 98u8, 99u8);
+    let (best, found) = find_best_pattern_match(&values, &cand);
+    if !found { panic(1); };
+    if best.kind.tag != 2u8 { panic(2); };
+    if best.kind.star != 2u32 { panic(3); };
+}
+
+@test "textchange: apply_to"() {
+    let repl = tv5(116u8, 104u8, 101u8, 114u8, 101u8);
+    let edit = text_change_new(new_text_range(6u32, 11u32), repl);
+    let text = tv5(104u8, 101u8, 108u8, 108u8, 111u8);
+    text.push(32u8);
+    text.push(119u8);
+    text.push(111u8);
+    text.push(114u8);
+    text.push(108u8);
+    text.push(100u8);
+    let got = edit.apply_to(&text);
+    let want = tv5(104u8, 101u8, 108u8, 108u8, 111u8);
+    want.push(32u8);
+    want.push(116u8);
+    want.push(104u8);
+    want.push(101u8);
+    want.push(114u8);
+    want.push(101u8);
+    if !bytes_equal(&got, &want) { panic(1); };
+    if edit.pos() != 6u32 { panic(2); };
+    if edit.end() != 11u32 { panic(3); };
+}
+
+@test "textchange: bulk edits"() {
+    let edits: Vec<TextChange> = Vec::new();
+    let e0 = text_change_new(new_text_range(0u32, 2u32), tv(88u8, 89u8));
+    edits.push(e0);
+    let e1 = text_change_new(new_text_range(3u32, 5u32), tv(90u8, 87u8));
+    edits.push(e1);
+    let text = tv5(97u8, 98u8, 99u8, 100u8, 101u8);
+    text.push(102u8);
+    let got = apply_bulk_edits(&text, &edits);
+    let want = tv(88u8, 89u8);
+    want.push(99u8);
+    want.push(90u8);
+    want.push(87u8);
+    want.push(102u8);
+    if !bytes_equal(&got, &want) { panic(1); };
+}
+
+@test "buildoptions: defaults"() {
+    let b = build_options_default();
+    if !b.dry.is_unknown() { panic(1); };
+    if !b.force.is_unknown() { panic(2); };
+    if !b.verbose.is_unknown() { panic(3); };
+    if b.has_builders { panic(4); };
+    if !b.stop_build_on_errors.is_unknown() { panic(5); };
+    if !b.clean.is_unknown() { panic(6); };
+}

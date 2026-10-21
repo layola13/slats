@@ -24,10 +24,13 @@ recorded here.
 | --- | --- | --- | --- |
 | DEV-001 | unstable pdqsort | stable merge sort | Determinism, no in-place partitioning on borrowed vectors. |
 | DEV-002 | `OnceLock<OriginalIndex>` | built eagerly in `new` | No interior mutability; identical results. |
-| DEV-003 | `&str` / `[]byte` | `&Vec<u8>` | `String::bytes()` traps; byte offsets and lengths are unchanged. |
+| DEV-003 | `&str` / `[]byte` | `&Vec<u8>` | Byte views stay bytes; bind `s.bytes()` to a local before indexing (inline `a.bytes()[i]` fails). |
 | DEV-004 | `P<SpanMap>` | `SpanMap` by value | No refcounted pointers; the map is small and copied explicitly. |
 | DEV-005 | short-circuit `&&` / `\|\|` | nested `if`s when the right side indexes | SLA evaluates both operands: `i < len(v) && v[i] == x` reads out of bounds at `i == len(v)`. |
 | DEV-006 | `vec.push(x)` in a loop | unchanged | Requires the `sa` patch in `patches/`; otherwise it is a false `PhiStateConflict`. |
+| DEV-007 | `version_major_minor` dot-scan | constants + `major_minor_of` reference | `VERSION` is compile-time; a non-void fn cannot `panic` in SLA, so the helper returns `[]` for invalid input. |
+| DEV-008 | `a == b` on `String` | `string_eq(&a, &b)` (`stringeq.sla`) | SLA `==` compares buffer identity, not contents (two equal formatted strings compare unequal). |
+| DEV-009 | by-value `String` parameters | bind the argument to a local first | Passing a temporary (e.g. a string literal or `format(...)` result) moves a stack allocation and traps `StackEscape`. |
 
 ## Backend quirks
 

@@ -1,7 +1,65 @@
 // PORT-MIRROR: crates/tsrs_core/src/textchange.rs
 // UPSTREAM-LINES: 38
-// PORT-STATUS: pending
+// PORT-STATUS: ported
 // ITEMS: struct TextChange, fn pos, fn end, fn apply_to, fn apply_bulk_edits
 //
-// Not yet converted. Structure is mirrored 1:1; port order and current limits are tracked
-// in PORT_STATUS.md and PORTING.md. Do not add code here without recording the port.
+// DEV-003: text and replacement text are byte vectors (`&Vec<u8>` / `Vec<u8>`), because Rust `&str`
+// slicing in SLA is miscompiled; `pos`/`end` still use TextRange's absolute byte offsets.
+
+@import "text.sla"
+
+struct TextChange {
+    text_range: TextRange,
+    new_text: Vec<u8>,
+}
+
+// LIM-005: cross-module struct literals are rejected, so the struct is built through a constructor.
+fn text_change_new(text_range: TextRange, new_text: Vec<u8>) -> TextChange {
+    return TextChange { text_range: text_range, new_text: new_text };
+}
+
+impl TextChange {
+    fn pos(self) -> u32 {
+        let msg = format("{}", "text changes require a source position");
+        return self.text_range.pos().expect_source(msg);
+    }
+
+    fn end(self) -> u32 {
+        let msg = format("{}", "text changes require a source position");
+        return self.text_range.end().expect_source(msg);
+    }
+
+    fn apply_to(self, text: &Vec<u8>) -> Vec<u8> {
+        let out: Vec<u8> = Vec::new();
+        let p = self.pos() as usize;
+        let e = self.end() as usize;
+        let i = 0usize;
+        while i < p { out.push(text[i]); i = i + 1; }
+        i = 0usize;
+        while i < len(self.new_text) { out.push(self.new_text[i]); i = i + 1; }
+        i = e;
+        while i < len(text) { out.push(text[i]); i = i + 1; }
+        return out;
+    }
+}
+
+fn apply_bulk_edits(text: &Vec<u8>, edits: &Vec<TextChange>) -> Vec<u8> {
+    let out: Vec<u8> = Vec::new();
+    let last_end = 0usize;
+    let k = 0usize;
+    while k < len(edits) {
+        let e = edits[k];
+        let start = e.pos() as usize;
+        if start != last_end {
+            let i = last_end;
+            while i < start { out.push(text[i]); i = i + 1; }
+        };
+        let j = 0usize;
+        while j < len(e.new_text) { out.push(e.new_text[j]); j = j + 1; }
+        last_end = e.end() as usize;
+        k = k + 1;
+    }
+    let i = last_end;
+    while i < len(text) { out.push(text[i]); i = i + 1; }
+    return out;
+}

@@ -1,0 +1,21 @@
+// PORT-MIRROR: (SLA support module; no upstream counterpart)
+// UPSTREAM-LINES: 0
+// PORT-STATUS: ported
+// ITEMS: fn string_eq
+//
+// DEV-008: `a == b` on two `String` values compares buffer identity, not contents (verified: two
+// separately formatted copies of "x" compare unequal). Every Rust `&str`/`String` equality in the port
+// therefore goes through this byte-wise helper. `&String` parameters avoid consuming move-only Strings;
+// `.bytes()` is safe when the byte view is bound to a local first (DEV-003).
+
+fn string_eq(a: &String, b: &String) -> bool {
+    let ab = a.bytes();
+    let bb = b.bytes();
+    if ab.len() != bb.len() { return false; };
+    let i = 0usize;
+    while i < ab.len() {
+        if ab[i] != bb[i] { return false; };
+        i = i + 1;
+    }
+    return true;
+}

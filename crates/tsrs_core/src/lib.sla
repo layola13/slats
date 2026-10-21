@@ -17,6 +17,7 @@
 @import "glob/mod.sla"
 @import "gocompat.sla"
 @import "goslices.sla"
+@import "stringeq.sla"
 @import "jsnum/mod.sla"
 @import "json/mod.sla"
 @import "lazymembers.sla"
